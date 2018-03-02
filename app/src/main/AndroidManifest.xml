@@ -18,5 +18,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name="com.honeydo5.honeydo.app.MainScreen"
+            android:label="@string/title_activity_main_screen">
+        </activity>
+
+        <activity
+            android:name="com.honeydo5.honeydo.app.AddTask">
+        </activity>
+
     </application>
 </manifest>
