@@ -11,19 +11,9 @@ import com.android.volley.toolbox.Volley;
 
 public class AppController extends Application {
 
-<<<<<<< HEAD
-<<<<<<< HEAD
     public static final String TAG = AppController.class.getSimpleName();
 
     public static final String defaultBaseUrl = "http://api.honeydo5.com";
-=======
-    public static final String TAG = AppController.class
-            .getSimpleName();
->>>>>>> 3a0d4b3d5629e846e944ce02d0bf84e95ee7d4af
-=======
-    public static final String TAG = AppController.class
-            .getSimpleName();
->>>>>>> 3a0d4b3d5629e846e944ce02d0bf84e95ee7d4af
 
     private RequestQueue mRequestQueue;
     private ImageLoader mImageLoader;
