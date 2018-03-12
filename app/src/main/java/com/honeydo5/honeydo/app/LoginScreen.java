@@ -35,9 +35,6 @@ public class LoginScreen extends AppCompatActivity {
     private TextView message;
     public JSONObject dummy;
 
-    private EditText email, password;
-    private Button loginBtn, newBtn;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,28 +66,11 @@ public class LoginScreen extends AppCompatActivity {
                         // TODO this is ugly, talk to backend...
                         Log.d("DEBUG", response);
 
-                        switch (response) {
-                            case "logged in":
-                                message.setText("Logged in!");
-                                Log.d("DEBUG", "Logged in!");
-                                break;
-
-                            case "you logged in already":
-                                message.setText("You are already logged in.");
-                                Log.d("DEBUG", "You are already logged in.");
-                                break;
-
-                            case "wrong email/password":
-                                message.setText("Incorrect email or password.");
-                                Log.d("DEBUG", "Incorrect email or password.");
-                                break;
-                        }
-
-                    /*Context context = getApplicationContext();
-                    Intent intent = new Intent(context, MainScreen.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME);
-                    startActivity(intent);
-                    context.finish();*/
+                        /*Context context = getApplicationContext();
+                        Intent intent = new Intent(context, MainScreen.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME);
+                        startActivity(intent);
+                        context.finish();*/
                     }
                 }, new Response.ErrorListener() {
             @Override
