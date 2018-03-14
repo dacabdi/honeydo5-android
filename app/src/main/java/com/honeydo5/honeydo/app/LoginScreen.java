@@ -54,17 +54,12 @@ public class LoginScreen extends AppCompatActivity {
     }
 
     private void attemptLogin() {
-        Log.d("DEBUG", "Trying to login.");
-
-        // TODO use JSON (the backend is not using JSON!)
-
         StringRequest loginRequest = new StringRequest(
                 Request.Method.POST, AppController.defaultBaseUrl + "/login",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        // TODO this is ugly, talk to backend...
-                        Log.d("DEBUG", response);
+
 
                         /*Context context = getApplicationContext();
                         Intent intent = new Intent(context, MainScreen.class);

@@ -1,4 +1,4 @@
-package honeydo.squad5.honeydo;
+package com.honeydo5.honeydo;
 
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
@@ -11,6 +11,6 @@ public class SettingsActivity extends PreferenceActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        addPreferencesFromResource(R.xml.preferences);
+        addPreferencesFromResource(R.layout.preferences);
     }
 }
