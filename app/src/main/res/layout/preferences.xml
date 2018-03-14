@@ -1,0 +1,77 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="General"
+        android:key="header0">
+        <EditTextPreference
+            android:capitalize="words"
+            android:defaultValue="Your Name"
+            android:inputType="textCapWords"
+            android:key="example_text"
+            android:maxLines="1"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="Display Name" />
+
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Notifications"
+        android:key="header1">
+        <CheckBoxPreference
+            android:key="pref_notifications"
+            android:title="Receive Notifications"
+            android:summary=""
+            android:defaultValue="true" />
+        <CheckBoxPreference
+            android:key="pref_sound"
+            android:title="Sound"
+            android:defaultValue="true" />
+        <CheckBoxPreference
+            android:key="pref_vibrate"
+            android:title="Vibrate"
+            android:defaultValue="true" />
+        <!--<ListPreference
+            android:dependency="pref_sync"
+            android:key="pref_syncConnectionType"
+            android:title="na"
+            android:dialogTitle="asdf"
+            android:entries="asdf"
+            android:entryValues="asdf"
+            android:defaultValue="asdf" />-->
+        <ListPreference
+            android:defaultValue="-1"
+            android:entries="@array/pref_example_list_titles"
+            android:entryValues="@array/pref_example_list_values"
+            android:key="example_list"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null"
+            android:title="Notification Frequency" />
+        <MultiSelectListPreference
+            android:defaultValue="-1"
+            android:entries="@array/pref_example_list_titles"
+            android:entryValues="@array/pref_example_list_values"
+            android:key="example_list2"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null"
+            android:title="Notifications by Category" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Theme"
+        android:key="header3">
+        <ListPreference
+            android:defaultValue="-1"
+            android:entries="@array/pref_example_list_titles"
+            android:entryValues="@array/pref_example_list_values"
+            android:key="example_list3"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null"
+            android:title="Theme Color" />
+        <CheckBoxPreference
+            android:key="pref_amoled"
+            android:title="Night Mode"
+            android:defaultValue="false" />
+    </PreferenceCategory>
+
+</PreferenceScreen>
