@@ -1,5 +1,6 @@
 package com.honeydo5.honeydo.app;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.honeydo5.honeydo.R;
 
@@ -16,7 +17,10 @@ import com.android.volley.VolleyError;
 import com.android.volley.Response;
 
 import org.json.JSONObject;
-import org.json.JSONException;
+
+import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class LoginScreen extends AppCompatActivity {
@@ -44,37 +48,55 @@ public class LoginScreen extends AppCompatActivity {
 
     private void attemptLogin() {
 
-        JSONObject postMessage = new JSONObject();
-        try {
-            postMessage.put("email", email.getText());
-            postMessage.put("password", password.getText());
-        } catch (JSONException e) {
-            // TODO: do something about this exception, log it or something like that...
-        }
+        // create request body (key : value) pairs
+        HashMap<String, String> postMessage = new HashMap<>(); // assumes <String, String>
+        postMessage.put("email", email.getText().toString());
+        postMessage.put("password", password.getText().toString());
 
+        Log.d("API-LOGIN-POST", postMessage.toString());
+
+        // request object to be added to volley's request queue
         JsonObjectRequest loginReq = new JsonObjectRequest(
-                Request.Method.POST,
-                AppController.defaultBaseUrl + "/login",
-                postMessage,
+                Request.Method.POST, // request method
+                AppController.defaultBaseUrl + "/login", // target url
+                new JSONObject(postMessage), // json object from hashmap
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d("JSON-RESPONSE-LOGIN", response.toString());
 
-                    /*Context context = getApplicationContext();
-                    Intent intent = new Intent(context, MainScreen.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME);
-                    startActivity(intent);
-                    context.finish();*/
+                        // NOTE: use the logs for now
+                        // attach a debugger, look at logcat.
+
+                        Log.d("API-LOGIN-RESPONSE", response.toString());
+
+                        /*Context context = getApplicationContext();
+                        Intent intent = new Intent(context, MainScreen.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME);
+                        startActivity(intent);
+                        context.finish();*/
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e("ERROR", "Something happened in the way of heaven:" + error.getMessage());
+                Log.e("API-LOGIN-ERROR", "Something happened in the way of heaven : " + error.getMessage());
             }
-        });
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<>(); // assumes <String, String> template params
+                headers.put("Content-Type", "application/json; charset=utf-8");
+                return headers;
+            }
+        };
 
-        AppController.getInstance().addToRequestQueue(loginReq);
+        try {
+            Log.d("API-LOGIN-BODY", new String(loginReq.getBody(), "UTF-8"));
+            Log.d("API-LOGIN-BODYCTYPE", loginReq.getBodyContentType());
+        } catch(UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        AppController.getInstance().addToRequestQueue(loginReq, "login");
     }
 }
 
