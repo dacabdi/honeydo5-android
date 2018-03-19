@@ -24,6 +24,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.honeydo5.honeydo.R;
 
@@ -59,7 +60,7 @@ public class LoginScreen extends AppCompatActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-
+                        Toast.makeText(getApplicationContext(), "Response made", Toast.LENGTH_LONG);
 
                         /*Context context = getApplicationContext();
                         Intent intent = new Intent(context, MainScreen.class);
@@ -85,6 +86,11 @@ public class LoginScreen extends AppCompatActivity {
         };
 
         AppController.getInstance().addToRequestQueue(loginRequest);
+
+        Intent intent = new Intent(this, MainScreen.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME);
+        startActivity(intent);
+        this.finish();
     }
 }
 
