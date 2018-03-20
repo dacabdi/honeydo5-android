@@ -31,7 +31,9 @@
                 android:layout_toLeftOf="@+id/settings"
                 android:layout_toStartOf="@+id/settings"
                 android:layout_weight="1"
-                android:text="Rewards" />
+                android:text="Rewards"
+                android:tint="@color/colorIcon"
+                android:drawableLeft="@drawable/ic_star_black_24dp"/>
 
             <Button
                 android:id="@+id/settings"
@@ -41,7 +43,9 @@
                 android:layout_alignParentRight="true"
                 android:layout_alignParentTop="true"
                 android:layout_weight="1"
-                android:text="Settings" />
+                android:text="Settings"
+                android:tint="@color/colorIcon"
+                android:drawableRight="@drawable/ic_settings_black_24dp"/>
 
         </LinearLayout>
 
