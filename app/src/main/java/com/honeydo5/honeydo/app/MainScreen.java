@@ -7,25 +7,17 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
-import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.JsonRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.honeydo5.honeydo.R;
+import com.honeydo5.honeydo.util.DateHelper;
 
 import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class MainScreen extends AppCompatActivity {
 
@@ -46,14 +38,15 @@ public class MainScreen extends AppCompatActivity {
         taskListView.setLayoutManager(new LinearLayoutManager(this));
 
         // dummy tasks
-        TaskSystem.addTask(new Task("Test body", "Test 1", true, null, null, null));
-        TaskSystem.addTask(new Task("Test body", "Test 2", true, null, null, null));
-        TaskSystem.addTask(new Task("Test body", "Test 3", true, null, null, null));
-        TaskSystem.addTask(new Task("Test body", "Test 4", true, null, null, null));
-        TaskSystem.addTask(new Task("Test body", "Test 5", true, null, null, null));
+            TaskSystem.addTask(new Task("Test body", "Get Eggs", true, null, DateHelper.getDate(2018, 2, 5, 12, 15), null));
+        TaskSystem.addTask(new Task("Test body", "Do software engineering hw", true, null, DateHelper.getDate(2018, 2, 7, 7, 45), null));
+        TaskSystem.addTask(new Task("Test body", "Study COP", true, null, DateHelper.getDate(2018, 2, 23, 6, 30), null));
+        TaskSystem.addTask(new Task("Test body", "do laundry!!!!!", true, null, DateHelper.getDate(2018, 3, 5, 4, 0), null));
+        TaskSystem.addTask(new Task("Test body", "test this app (meta!)", true, null, DateHelper.getDate(2018, 4, 17, 2, 15), null));
 
         adapter = new TaskAdapter(this, TaskSystem.getTaskList());
         taskListView.setAdapter(adapter);
+        taskListView.scrollTo(0,2);
 
         getTaskList();
 

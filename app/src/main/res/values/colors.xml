@@ -4,6 +4,8 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
+    <color name="textOld">#666666</color>
+
     <color name="colorIcon">#CCCCCC</color>
 
     <color name="col1">#0DFF78</color>

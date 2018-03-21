@@ -31,9 +31,9 @@
                 android:layout_toLeftOf="@+id/settings"
                 android:layout_toStartOf="@+id/settings"
                 android:layout_weight="1"
+                android:drawableLeft="@drawable/ic_star_black_24dp"
                 android:text="Rewards"
-                android:tint="@color/colorIcon"
-                android:drawableLeft="@drawable/ic_star_black_24dp"/>
+                android:tint="@color/colorIcon" />
 
             <Button
                 android:id="@+id/settings"
@@ -43,9 +43,9 @@
                 android:layout_alignParentRight="true"
                 android:layout_alignParentTop="true"
                 android:layout_weight="1"
+                android:drawableRight="@drawable/ic_settings_black_24dp"
                 android:text="Settings"
-                android:tint="@color/colorIcon"
-                android:drawableRight="@drawable/ic_settings_black_24dp"/>
+                android:tint="@color/colorIcon" />
 
         </LinearLayout>
 
@@ -55,14 +55,14 @@
             android:layout_height="match_parent">
 
             <android.support.v7.widget.RecyclerView
+                android:id="@+id/task_list"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentTop="true"
-                android:scrollbars="vertical"
-                android:id="@+id/task_list">
+                android:scrollbars="vertical">
 
             </android.support.v7.widget.RecyclerView>
 
