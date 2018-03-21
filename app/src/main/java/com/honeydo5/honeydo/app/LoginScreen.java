@@ -20,7 +20,6 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -73,19 +72,29 @@ public class LoginScreen extends AppCompatActivity {
         buttonTestLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loginSuccess();
+                // launch a new thread,
+                // the test request is sync (blocking)
+                // and we don't wanna block the main thread
+                new Thread(new Runnable() { public void run() {
+                    String message = getString(R.string.message_endpoint_200);
+                    if(!AppController.getInstance().tryEndpoint(tag)) //will land at baseUrl
+                        message = getString(R.string.message_communication_problem);
+
+                    Log.i(tag, message);
+                }}).start();
             }
         });
     }
 
     private void attemptLogin() {
+        AppController.getInstance().cancelPendingRequests(tag);
+
         // create request body (key : value) pairs
         HashMap<String, String> postMessage = new HashMap<>(); // assumes <String, String>
         postMessage.put("email", inputEmail.getText().toString());
         postMessage.put("password", inputPassword.getText().toString());
 
         Log.d(tag, "API /login Request POST Body : " + postMessage.toString());
-
 
         // request object to be added to volley's request queue
         Log.d(tag, "API /login creating request object.");
@@ -97,16 +106,21 @@ public class LoginScreen extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d(tag, "API /login raw response : " + response.toString());
-
                         try {
                             switch (response.get("status").toString())
                             {
                                 case "success" : case "logged in" :
-                                    loginSuccess();
+                                    // login success or already on session (no need for method,
+                                    // this code is only called from one place)
+                                    Log.d(tag, "Successful Login, intent onto MainScreen, finish LoginScreen");
+                                    Intent intent = new Intent(LoginScreen.this, MainScreen.class);
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME);
+                                    startActivity(intent);
+                                    LoginScreen.this.finish();
                                 break;
 
                                 case "wrong email/password" :
-                                    textMessage.setText("FIX THIS!"); // TODO: use string!
+                                    textMessage.setText(R.string.message_wrong_credentials);
                                     textMessage.setVisibility(View.VISIBLE);
                                 break;
 
@@ -129,33 +143,12 @@ public class LoginScreen extends AppCompatActivity {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e(tag,"API /login Request Failed.");
-
-                // on no response, return immediately
-                if (error == null || error.networkResponse == null){
-                    Log.e(tag,"Null response from server, no error information.");
-                    return;
-                }
-
-                String responseBody = null;
-                // get response body and parse with appropriate encoding
-                try {
-                    responseBody = new String(error.networkResponse.data,"UTF-8");
-                } catch (UnsupportedEncodingException e) {
-                    Log.e(tag, "Error network response error: " + e.getMessage());
-                    Log.getStackTraceString(e);
-                }
-
-                //get status code here
-                String statusCode = String.valueOf(error.networkResponse.statusCode);
-
+                // log the error
+                AppController.getInstance().requestNetworkError(error, tag, "/login");
                 // print a message for the user
                 String errorMessage = getString(R.string.message_communication_problem);
                 textMessage.setText(errorMessage);
                 textMessage.setVisibility(View.VISIBLE);
-
-                // log everything
-                Log.e(tag, "Network Response: (STATUS:" + statusCode + ") " + responseBody);
             }
         }) {
             @Override
@@ -167,15 +160,7 @@ public class LoginScreen extends AppCompatActivity {
         };
 
         Log.d(tag, "API /login adding request object to request queue.");
-        AppController.getInstance().addToRequestQueue(loginReq, "tag");
-    }
-
-    void loginSuccess()
-    {
-        Intent intent = new Intent(this, MainScreen.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME);
-        startActivity(intent);
-        this.finish();
+        AppController.getInstance().addToRequestQueue(loginReq, tag);
     }
 }
 
