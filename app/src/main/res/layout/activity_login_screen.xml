@@ -6,6 +6,14 @@
     android:layout_height="match_parent"
     tools:context="com.honeydo5.honeydo.app.LoginScreen">
 
+    <ImageView
+        android:id="@+id/LoginScreenImageViewImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/logo"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp" />
+
     <EditText
         android:id="@+id/LoginScreenEditTextEmail"
         android:layout_width="wrap_content"
@@ -42,18 +50,6 @@
         app:layout_constraintTop_toBottomOf="@+id/LoginScreenEditTextPassword" />
 
     <Button
-        android:id="@+id/test_login"
-        style="?android:attr/borderlessButtonStyle"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="76dp"
-        android:text="Test Login"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintEnd_toStartOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/LoginScreenButtonLogin" />
-
-    <Button
         android:id="@+id/LoginScreenButtonSignup"
         style="?android:attr/borderlessButtonStyle"
         android:layout_width="200dp"
@@ -66,32 +62,25 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/LoginScreenButtonLogin" />
 
-    <ImageView
-        android:id="@+id/LoginScreenImageViewImageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/logo"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp" />
-
     <TextView
-        android:id="@+id/loginErrorText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Wrong Login Credentials"
+        android:id="@+id/LoginScreenTextViewMessage"
+        android:layout_width="298dp"
+        android:layout_height="47dp"
         android:textColor="@android:color/holo_red_light"
         android:visibility="invisible"
-        tools:layout_editor_absoluteX="116dp"
-        tools:layout_editor_absoluteY="152dp" />
+        tools:layout_editor_absoluteX="43dp"
+        tools:layout_editor_absoluteY="318dp" />
 
-    <TextView
-        android:id="@+id/serverErrorText"
-        android:layout_width="wrap_content"
+    <Button
+        android:id="@+id/LoginScreenButtonTestLogin"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:text="Unable to Talk to Server"
-        android:textColor="@android:color/holo_red_light"
-        android:visibility="invisible"
-        tools:layout_editor_absoluteX="116dp"
-        tools:layout_editor_absoluteY="152dp" />
+        android:layout_marginTop="76dp"
+        android:text="@string/label_test_login"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/LoginScreenButtonLogin" />
 
 </android.support.constraint.ConstraintLayout>

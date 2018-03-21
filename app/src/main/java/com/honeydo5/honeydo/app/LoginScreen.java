@@ -27,47 +27,50 @@ import java.util.Map;
 
 
 public class LoginScreen extends AppCompatActivity {
-    private EditText email, password;
-    private Button loginBtn, newBtn;
-    private TextView message;
-    private TextView errorText, serverErrorText;
+    private String tag = "LOGINSCREEN";
 
-    private Button testLoginBtn;
+    // views and components
+    private EditText inputEmail, inputPassword;
+    private Button buttonLogin, buttonSignup, buttonTestLogin;
+    private TextView textMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Log.d(tag, "Setting LoginScreen activity content view.");
         setContentView(R.layout.activity_login_screen);
 
-        email = findViewById(R.id.LoginScreenEditTextEmail);
-        password = findViewById(R.id.LoginScreenEditTextPassword);
-        loginBtn = findViewById(R.id.LoginScreenButtonLogin);
-        newBtn = findViewById(R.id.LoginScreenButtonSignup);
-        message = findViewById(R.id.message);
+        // grab in order top to bottom of page
+        Log.d(tag, "Finding components and views.");
+        inputEmail = findViewById(R.id.LoginScreenEditTextEmail);
+        inputPassword = findViewById(R.id.LoginScreenEditTextPassword);
+        textMessage = findViewById(R.id.LoginScreenTextViewMessage);
+        buttonLogin = findViewById(R.id.LoginScreenButtonLogin);
+        buttonSignup = findViewById(R.id.LoginScreenButtonSignup);
+        buttonTestLogin = findViewById(R.id.LoginScreenButtonTestLogin);
 
-        // for when the server isn't responding
-        testLoginBtn = (Button) findViewById(R.id.test_login);
+        // set event handlers --------------------------------------
+        Log.d(tag, "Attaching event handlers.");
 
-        errorText = findViewById(R.id.loginErrorText);
-        serverErrorText = findViewById(R.id.serverErrorText);
-
-        loginBtn.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                attemptLogin();
-            }
+        // attempt login
+        buttonLogin.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) { attemptLogin(); }
         });
 
-        
-        newBtn.setOnClickListener(new View.OnClickListener() {
+        // intent to sign up activity
+        buttonSignup.setOnClickListener(new View.OnClickListener() {
               @Override
               public void onClick(View view) {
                   Intent intent = new Intent(LoginScreen.this, SignUpActivity.class);
                   intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                  Log.d(tag, "Starting SignUpActivity.");
                   startActivity(intent);
+                  // TODO: determine if we should finish the current activity?
               }
         });
 
-        testLoginBtn.setOnClickListener(new View.OnClickListener() {
+        buttonTestLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 loginSuccess();
@@ -78,12 +81,14 @@ public class LoginScreen extends AppCompatActivity {
     private void attemptLogin() {
         // create request body (key : value) pairs
         HashMap<String, String> postMessage = new HashMap<>(); // assumes <String, String>
-        postMessage.put("email", email.getText().toString());
-        postMessage.put("password", password.getText().toString());
+        postMessage.put("email", inputEmail.getText().toString());
+        postMessage.put("password", inputPassword.getText().toString());
 
-        Log.d("API-LOGIN-POST", postMessage.toString());
+        Log.d(tag, "API /login Request POST Body : " + postMessage.toString());
+
 
         // request object to be added to volley's request queue
+        Log.d(tag, "API /login creating request object.");
         JsonObjectRequest loginReq = new JsonObjectRequest(
                 Request.Method.POST, // request method
                 AppController.defaultBaseUrl + "/login", // target url
@@ -91,41 +96,66 @@ public class LoginScreen extends AppCompatActivity {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
+                        Log.d(tag, "API /login raw response : " + response.toString());
 
-                        // NOTE: use the logs for now
-                        // attach a debugger, look at logcat.
-
-                        Log.d("API-LOGIN-RESPONSE", response.toString());
-
-
-                        // test@ufl.edu
-                        // password
                         try {
-                            switch (response.get("status").toString()){
-                                case "success" :
+                            switch (response.get("status").toString())
+                            {
+                                case "success" : case "logged in" :
                                     loginSuccess();
                                 break;
-                                case "logged in":
-                                    loginSuccess();
-                                break;
+
                                 case "wrong email/password" :
-                                    errorText.setVisibility(View.VISIBLE);
+                                    textMessage.setText("FIX THIS!"); // TODO: use string!
+                                    textMessage.setVisibility(View.VISIBLE);
                                 break;
 
                                 case "you must specify email and password" :
-                                    errorText.setVisibility(View.VISIBLE);
+                                    textMessage.setText(R.string.message_specify_email_password);
+                                    textMessage.setVisibility(View.VISIBLE);
                                 break;
                             }
-                        } catch(JSONException e)
-                        {
+                        } catch(JSONException e) {
+                            // print a message for the user
+                            String errorMessage = getString(R.string.message_communication_problem);
+                            textMessage.setText(errorMessage);
+                            textMessage.setVisibility(View.VISIBLE);
 
+                            // log and do a stack trace
+                            Log.e(tag, "API /login error parsing response: " + e.getMessage());
+                            Log.getStackTraceString(e);
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e("API-LOGIN-ERROR", "Something happened in the way of heaven : " + error.getMessage());
-                serverErrorText.setVisibility(View.VISIBLE);
+                Log.e(tag,"API /login Request Failed.");
+
+                // on no response, return immediately
+                if (error == null || error.networkResponse == null){
+                    Log.e(tag,"Null response from server, no error information.");
+                    return;
+                }
+
+                String responseBody = null;
+                // get response body and parse with appropriate encoding
+                try {
+                    responseBody = new String(error.networkResponse.data,"UTF-8");
+                } catch (UnsupportedEncodingException e) {
+                    Log.e(tag, "Error network response error: " + e.getMessage());
+                    Log.getStackTraceString(e);
+                }
+
+                //get status code here
+                String statusCode = String.valueOf(error.networkResponse.statusCode);
+
+                // print a message for the user
+                String errorMessage = getString(R.string.message_communication_problem);
+                textMessage.setText(errorMessage);
+                textMessage.setVisibility(View.VISIBLE);
+
+                // log everything
+                Log.e(tag, "Network Response: (STATUS:" + statusCode + ") " + responseBody);
             }
         }) {
             @Override
@@ -136,15 +166,8 @@ public class LoginScreen extends AppCompatActivity {
             }
         };
 
-
-        try {
-            Log.d("API-LOGIN-BODY", new String(loginReq.getBody(), "UTF-8"));
-            Log.d("API-LOGIN-BODYCTYPE", loginReq.getBodyContentType());
-        } catch(UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-
-        AppController.getInstance().addToRequestQueue(loginReq, "login");
+        Log.d(tag, "API /login adding request object to request queue.");
+        AppController.getInstance().addToRequestQueue(loginReq, "tag");
     }
 
     void loginSuccess()
