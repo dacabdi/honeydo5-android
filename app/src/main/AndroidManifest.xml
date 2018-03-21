@@ -1,18 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.honeydo5.honeydo">
 
-    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name="com.honeydo5.honeydo.app.AppController"
+        android:name=".app.AppController"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar">
-
-        <activity android:name="com.honeydo5.honeydo.app.LoginScreen">
+        <activity android:name=".app.LoginScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -20,12 +20,17 @@
         </activity>
 
         <activity
-            android:name="com.honeydo5.honeydo.app.MainScreen"
+            android:name=".app.MainScreen"
             android:label="@string/title_activity_main_screen">
         </activity>
 
         <activity
-            android:name="com.honeydo5.honeydo.app.AddTask">
+            android:name=".app.AddTask">
+        </activity>
+
+        <activity
+            android:name=".app.SignUpActivity"
+            android:label="@string/title_activity_signup">
         </activity>
 
     </application>

@@ -1,9 +1,5 @@
 package com.honeydo5.honeydo.util;
 
-/**
- * Created by aaron on 3/21/2018.
- */
-
 import java.util.Calendar;
 import java.util.Date;
 

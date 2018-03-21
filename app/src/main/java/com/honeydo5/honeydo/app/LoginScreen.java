@@ -1,5 +1,7 @@
 package com.honeydo5.honeydo.app;
 
+import com.honeydo5.honeydo.R;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -14,7 +16,6 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.honeydo5.honeydo.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -55,10 +56,19 @@ public class LoginScreen extends AppCompatActivity {
             }
         });
 
+<<<<<<< HEAD
+        newBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(LoginScreen.this, SignUpActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+=======
         testLoginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 loginSuccess();
+>>>>>>> dev
             }
         });
     }
