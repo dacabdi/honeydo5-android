@@ -13,10 +13,13 @@
         android:layout_height="wrap_content"
         android:text="@string/label_signup"
         android:textSize="36sp"
+
         app:layout_constraintBottom_toTopOf="parent"
         app:layout_constraintEnd_toStartOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+        tools:layout_editor_absoluteX="131dp"
+        tools:layout_editor_absoluteY="16dp" />
 
     <TextView
         android:id="@+id/SignUpTextViewLabelEmail"
@@ -28,6 +31,8 @@
         app:layout_constraintEnd_toStartOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="97dp" />
 
     <EditText
         android:id="@+id/SignUpEditTextEmail"
@@ -40,6 +45,8 @@
         app:layout_constraintEnd_toStartOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+        tools:layout_editor_absoluteX="110dp"
+        tools:layout_editor_absoluteY="97dp" />
 
     <TextView
         android:id="@+id/SignUpTextViewLabelName"
@@ -51,6 +58,8 @@
         app:layout_constraintEnd_toStartOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="165dp" />
 
     <EditText
         android:id="@+id/SignUpEditTextName"
@@ -63,6 +72,8 @@
         app:layout_constraintEnd_toStartOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+        tools:layout_editor_absoluteX="110dp"
+        tools:layout_editor_absoluteY="166dp" />
 
     <TextView
         android:id="@+id/labelSignupPassword"
@@ -74,6 +85,8 @@
         app:layout_constraintEnd_toStartOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="235dp" />
 
     <EditText
         android:id="@+id/SignUpEditTextPassword"
@@ -86,6 +99,8 @@
         app:layout_constraintEnd_toStartOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+        tools:layout_editor_absoluteX="162dp"
+        tools:layout_editor_absoluteY="238dp" />
 
     <EditText
         android:id="@+id/SignUpEditTextPasswordRe"
@@ -98,6 +113,8 @@
         app:layout_constraintEnd_toStartOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+        tools:layout_editor_absoluteX="162dp"
+        tools:layout_editor_absoluteY="295dp" />
 
     <TextView
         android:id="@+id/SignUpTextViewMessage"
@@ -108,6 +125,8 @@
         app:layout_constraintEnd_toStartOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+        tools:layout_editor_absoluteX="17dp"
+        tools:layout_editor_absoluteY="378dp" />
 
     <Button
         android:id="@+id/SignUpButtonSubmit"
@@ -118,4 +137,6 @@
         app:layout_constraintEnd_toStartOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+        tools:layout_editor_absoluteX="124dp"
+        tools:layout_editor_absoluteY="483dp" />
 </android.support.constraint.ConstraintLayout>
