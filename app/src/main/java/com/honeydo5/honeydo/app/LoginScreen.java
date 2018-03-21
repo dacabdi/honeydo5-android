@@ -58,6 +58,15 @@ public class LoginScreen extends AppCompatActivity {
         });
 
         newBtn.setOnClickListener(new View.OnClickListener() {
+<<<<<<< HEAD
+              @Override
+              public void onClick(View view) {
+                  Intent intent = new Intent(LoginScreen.this, SignUpActivity.class);
+                  intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                  startActivity(intent);
+              }
+        };
+=======
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(LoginScreen.this, SignUpActivity.class);
@@ -65,6 +74,7 @@ public class LoginScreen extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+>>>>>>> origin/dev
 
         testLoginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
