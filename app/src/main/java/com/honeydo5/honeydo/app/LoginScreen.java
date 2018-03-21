@@ -33,10 +33,10 @@ public class LoginScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_screen);
 
-        email = findViewById(R.id.email);
-        password = findViewById(R.id.password);
-        loginBtn = findViewById(R.id.login);
-        newBtn = findViewById(R.id.signup);
+        email = findViewById(R.id.LoginScreenEditTextEmail);
+        password = findViewById(R.id.LoginScreenEditTextPassword);
+        loginBtn = findViewById(R.id.LoginScreenButtonLogin);
+        newBtn = findViewById(R.id.LoginScreenButtonSignup);
         message = findViewById(R.id.message);
 
         loginBtn.setOnClickListener(new View.OnClickListener() {
