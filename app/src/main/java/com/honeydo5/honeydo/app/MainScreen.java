@@ -30,11 +30,11 @@ public class MainScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_screen);
 
-        Button settings = (Button) findViewById(R.id.settings);
-        Button rewards = (Button) findViewById(R.id.rewards);
+        Button settings = (Button) findViewById(R.id.MainScreenButtonSettings);
+        Button rewards = (Button) findViewById(R.id.MainScreenButtonRewards);
         Button add = (Button) findViewById(R.id.add);
 
-        taskListView = findViewById(R.id.task_list);
+        taskListView = findViewById(R.id.MainScreenRecyclerTaskList);
         taskListView.setHasFixedSize(true);
         taskListView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -51,7 +51,7 @@ public class MainScreen extends AppCompatActivity {
         taskListView.setAdapter(adapter);
         //taskListView.scrollTo(0,2);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.addTaskBtn);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.MainScreenButtonAddTask);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
