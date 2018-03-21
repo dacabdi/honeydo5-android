@@ -10,7 +10,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.honeydo5.honeydo.R;
+import com.honeydo5.honeydo.util.DateHelper;
+
+import org.json.JSONObject;
 
 public class MainScreen extends AppCompatActivity {
 
@@ -30,14 +37,18 @@ public class MainScreen extends AppCompatActivity {
         taskListView.setHasFixedSize(true);
         taskListView.setLayoutManager(new LinearLayoutManager(this));
 
-        TaskSystem.addTask(new Task("Test body", "Test 1", true, null, null, null));
-        TaskSystem.addTask(new Task("Test body", "Test 2", true, null, null, null));
-        TaskSystem.addTask(new Task("Test body", "Test 3", true, null, null, null));
-        TaskSystem.addTask(new Task("Test body", "Test 4", true, null, null, null));
-        TaskSystem.addTask(new Task("Test body", "Test 5", true, null, null, null));
+        // dummy tasks
+            TaskSystem.addTask(new Task("Test body", "Get Eggs", true, null, DateHelper.getDate(2018, 2, 5, 12, 15), null));
+        TaskSystem.addTask(new Task("Test body", "Do software engineering hw", true, null, DateHelper.getDate(2018, 2, 7, 7, 45), null));
+        TaskSystem.addTask(new Task("Test body", "Study COP", true, null, DateHelper.getDate(2018, 2, 23, 6, 30), null));
+        TaskSystem.addTask(new Task("Test body", "do laundry!!!!!", true, null, DateHelper.getDate(2018, 3, 5, 4, 0), null));
+        TaskSystem.addTask(new Task("Test body", "test this app (meta!)", true, null, DateHelper.getDate(2018, 4, 17, 2, 15), null));
 
         adapter = new TaskAdapter(this, TaskSystem.getTaskList());
         taskListView.setAdapter(adapter);
+        taskListView.scrollTo(0,2);
+
+        getTaskList();
 
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         //setSupportActionBar(toolbar);
@@ -50,12 +61,36 @@ public class MainScreen extends AppCompatActivity {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
 
-                addTask();
+                createNewTask();
             }
         });
     }
 
-    void addTask()
+    void parseResponseToAdapter(JSONObject response) {
+        // iterate addTask() with JSON data
+
+    }
+
+    void getTaskList() {
+        JsonObjectRequest taskRequest = new JsonObjectRequest (
+                Request.Method.GET, AppController.defaultBaseUrl + "/tasks", null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        parseResponseToAdapter(response);
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }
+                );
+
+        AppController.getInstance().addToRequestQueue(taskRequest);
+    }
+
+    void createNewTask()
     {
         Intent intent = new Intent(this, AddTask.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME);
