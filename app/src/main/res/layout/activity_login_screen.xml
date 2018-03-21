@@ -42,9 +42,6 @@
         app:layout_constraintTop_toBottomOf="@+id/LoginScreenEditTextPassword" />
 
     <Button
-<<<<<<< HEAD
-        android:id="@+id/LoginScreenButtonSignup"
-=======
         android:id="@+id/test_login"
         style="?android:attr/borderlessButtonStyle"
         android:layout_width="200dp"
@@ -54,11 +51,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintEnd_toStartOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/login" />
+        app:layout_constraintTop_toBottomOf="@+id/LoginScreenButtonLogin" />
 
     <Button
-        android:id="@+id/signup"
->>>>>>> c574131d9718ef734a541c65e6cd97cde9146700
+        android:id="@+id/LoginScreenButtonSignup"
         style="?android:attr/borderlessButtonStyle"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
