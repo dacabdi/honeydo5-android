@@ -56,7 +56,6 @@ public class LoginScreen extends AppCompatActivity {
             }
         });
 
-//<<<<<<< HEAD
         newBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -65,12 +64,11 @@ public class LoginScreen extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-//=======
+
         testLoginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 loginSuccess();
-//>>>>>>> dev
             }
         });
     }
