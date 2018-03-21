@@ -4,7 +4,7 @@
     android:layout_height="match_parent">
 
     <EditText
-        android:id="@+id/editText3"
+        android:id="@+id/Name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -16,28 +16,16 @@
         android:text="Name" />
 
     <EditText
-        android:id="@+id/editText4"
+        android:id="@+id/Description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/editText3"
+        android:layout_below="@+id/Name"
         android:layout_marginTop="33dp"
         android:ems="10"
         android:inputType="textMultiLine"
         android:text="Description" />
-
-    <EditText
-        android:id="@+id/editText5"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/editText4"
-        android:layout_marginTop="31dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Tags" />
 
     <Spinner
         android:id="@+id/spinner"
@@ -45,35 +33,61 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/editText5"
-        android:layout_marginTop="23dp" />
-
-    <Spinner
-        android:id="@+id/spinner2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/spinner"
-        android:layout_marginTop="44dp" />
-
-    <Spinner
-        android:id="@+id/spinner3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/spinner2"
-        android:layout_marginLeft="38dp"
-        android:layout_marginStart="38dp"
-        android:layout_toEndOf="@+id/spinner2"
-        android:layout_toRightOf="@+id/spinner2" />
+        android:layout_below="@+id/timeText"
+        android:layout_marginTop="25dp" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/date"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/dateText"
+        android:layout_toEndOf="@+id/dateText"
+        android:layout_toRightOf="@+id/dateText"
+        android:tint="@color/colorIcon"
+        android:drawableLeft="@drawable/ic_date_range_black_24dp" />
+
+    <Button
+        android:id="@+id/time"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/timeText"
+        android:layout_toEndOf="@+id/timeText"
+        android:layout_toRightOf="@+id/timeText"
+        android:tint="@color/colorIcon"
+        android:drawableLeft="@drawable/ic_access_time_black_24dp" />
+
+    <Button
+        android:id="@+id/button2"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="27dp"
+        android:text="Add" />
+
+    <EditText
+        android:id="@+id/dateText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:text="Back" />
+        android:layout_below="@+id/Description"
+        android:layout_marginTop="32dp"
+        android:ems="10"
+        android:inputType="date" />
+
+    <EditText
+        android:id="@+id/timeText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/dateText"
+        android:layout_alignRight="@+id/dateText"
+        android:layout_below="@+id/dateText"
+        android:layout_marginTop="21dp"
+        android:ems="10"
+        android:inputType="time" />
 
 </RelativeLayout>

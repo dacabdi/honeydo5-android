@@ -1,6 +1,7 @@
 package com.honeydo5.honeydo.app;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,8 @@ import android.widget.TextView;
 import com.honeydo5.honeydo.R;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 /**
  * Created by aaron on 2/24/2018.
@@ -20,26 +23,40 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
     private Context context;
     private ArrayList<Task> taskList;
 
+    private Date currentDate;
+
     public TaskAdapter(Context context, ArrayList<Task> taskList)
     {
         this.context = context;
         this.taskList = taskList;
+
+        currentDate = GregorianCalendar.getInstance().getTime();
     }
 
     @Override
     public TaskViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflator = LayoutInflater.from(context);
-        View view = inflator.inflate(R.layout.task_list_fragment, null);
+        View view = inflator.inflate(R.layout.task_list_fragment, null, false);
+        RecyclerView.LayoutParams lp = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        view.setLayoutParams(lp);
         return new TaskViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(TaskViewHolder holder, int position) {
+
+
         Task t = taskList.get(position);
 
         holder.title.setText(t.getHeader());
-        holder.date.setText("DATE");
-        holder.time.setText("TIME" + position);
+        holder.date.setText(android.text.format.DateFormat.format("MM-dd-yyyy", t.getDue()));
+        holder.time.setText(android.text.format.DateFormat.format("hh:mm a", t.getDue()));
+
+        if(t.getDue().before(currentDate)) {
+            holder.title.setTextColor(ContextCompat.getColor(context, R.color.textOld));
+            holder.date.setTextColor(ContextCompat.getColor(context, R.color.textOld));
+            holder.time.setTextColor(ContextCompat.getColor(context, R.color.textOld));
+        }
     }
 
     @Override

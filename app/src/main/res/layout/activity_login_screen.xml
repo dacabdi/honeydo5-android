@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:background="@color/col4"
     tools:context="com.honeydo5.honeydo.app.LoginScreen">
 
     <EditText
@@ -34,9 +33,9 @@
     <Button
         android:id="@+id/login"
         style="?android:attr/borderlessButtonStyle"
-        android:layout_marginTop="80dp"
-        android:layout_height="wrap_content"
         android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="76dp"
         android:text="Sign In"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -45,25 +44,22 @@
     <Button
         android:id="@+id/signup"
         style="?android:attr/borderlessButtonStyle"
-        android:layout_width="220dp"
-        android:layout_height="37dp"
-        android:layout_marginStart="80dp"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="Sign Up"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/login" />
 
-    <TextView
-        android:id="@+id/message"
-        android:visibility="visible"
-        tools:layout_editor_absoluteX="85dp"
-        tools:layout_editor_absoluteY="167dp"
-        android:layout_width="200dp"
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
-        android:text="Sign Up"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/login" />
+        app:srcCompat="@drawable/logo"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp" />
 
 </android.support.constraint.ConstraintLayout>
