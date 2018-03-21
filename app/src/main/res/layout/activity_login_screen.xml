@@ -10,7 +10,7 @@
         android:id="@+id/LoginScreenEditTextEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="159dp"
+        android:layout_marginTop="184dp"
         android:ems="10"
         android:hint="Email"
         android:inputType="textEmailAddress"
@@ -42,7 +42,23 @@
         app:layout_constraintTop_toBottomOf="@+id/LoginScreenEditTextPassword" />
 
     <Button
+<<<<<<< HEAD
         android:id="@+id/LoginScreenButtonSignup"
+=======
+        android:id="@+id/test_login"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="76dp"
+        android:text="Test Login"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/login" />
+
+    <Button
+        android:id="@+id/signup"
+>>>>>>> c574131d9718ef734a541c65e6cd97cde9146700
         style="?android:attr/borderlessButtonStyle"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
@@ -61,5 +77,25 @@
         app:srcCompat="@drawable/logo"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="0dp" />
+
+    <TextView
+        android:id="@+id/loginErrorText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Wrong Login Credentials"
+        android:textColor="@android:color/holo_red_light"
+        android:visibility="invisible"
+        tools:layout_editor_absoluteX="116dp"
+        tools:layout_editor_absoluteY="152dp" />
+
+    <TextView
+        android:id="@+id/serverErrorText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Unable to Talk to Server"
+        android:textColor="@android:color/holo_red_light"
+        android:visibility="invisible"
+        tools:layout_editor_absoluteX="116dp"
+        tools:layout_editor_absoluteY="152dp" />
 
 </android.support.constraint.ConstraintLayout>

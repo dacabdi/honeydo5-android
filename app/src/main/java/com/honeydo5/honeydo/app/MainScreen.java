@@ -7,6 +7,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -38,20 +39,17 @@ public class MainScreen extends AppCompatActivity {
         taskListView.setLayoutManager(new LinearLayoutManager(this));
 
         // dummy tasks
-            TaskSystem.addTask(new Task("Test body", "Get Eggs", true, null, DateHelper.getDate(2018, 2, 5, 12, 15), null));
+        TaskSystem.addTask(new Task("Test body", "Get Eggs", true, null, DateHelper.getDate(2018, 2, 5, 12, 15), null));
         TaskSystem.addTask(new Task("Test body", "Do software engineering hw", true, null, DateHelper.getDate(2018, 2, 7, 7, 45), null));
         TaskSystem.addTask(new Task("Test body", "Study COP", true, null, DateHelper.getDate(2018, 2, 23, 6, 30), null));
         TaskSystem.addTask(new Task("Test body", "do laundry!!!!!", true, null, DateHelper.getDate(2018, 3, 5, 4, 0), null));
         TaskSystem.addTask(new Task("Test body", "test this app (meta!)", true, null, DateHelper.getDate(2018, 4, 17, 2, 15), null));
 
-        adapter = new TaskAdapter(this, TaskSystem.getTaskList());
-        taskListView.setAdapter(adapter);
-        taskListView.scrollTo(0,2);
-
         getTaskList();
 
-        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        //setSupportActionBar(toolbar);
+        adapter = new TaskAdapter(this, TaskSystem.getTaskList());
+        taskListView.setAdapter(adapter);
+        //taskListView.scrollTo(0,2);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.MainScreenButtonAddTask);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -73,7 +71,7 @@ public class MainScreen extends AppCompatActivity {
 
     void getTaskList() {
         JsonObjectRequest taskRequest = new JsonObjectRequest (
-                Request.Method.GET, AppController.defaultBaseUrl + "/tasks", null,
+                Request.Method.GET, AppController.defaultBaseUrl + "/get_tasks", null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -82,10 +80,10 @@ public class MainScreen extends AppCompatActivity {
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-
+                        Log.e("API-LOGIN-ERROR", "Something happened in the way of heaven : " + error.getMessage());
                     }
                 }
-                );
+        );
 
         AppController.getInstance().addToRequestQueue(taskRequest);
     }

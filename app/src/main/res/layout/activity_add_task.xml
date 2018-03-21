@@ -3,63 +3,121 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <EditText
-        android:id="@+id/Name"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="55dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Name" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/Description"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/Name"
-        android:layout_marginTop="33dp"
-        android:ems="10"
-        android:inputType="textMultiLine"
-        android:text="Description" />
+        <TextView
+            android:id="@+id/add_task_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Add Task"
+            android:textSize="36sp" />
 
-    <Spinner
-        android:id="@+id/spinner"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/timeText"
-        android:layout_marginTop="25dp" />
+        <EditText
+            android:id="@+id/nameText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="30dp"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="Name" />
+
+        <EditText
+            android:id="@+id/descriptionText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/nameText"
+            android:layout_marginTop="33dp"
+            android:ems="10"
+            android:inputType="textMultiLine"
+            android:text="Description" />
+
+        <Spinner
+            android:id="@+id/spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/timeText"
+            android:layout_marginTop="25dp" />
+
+        <GridLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:columnCount="2"
+            android:rowCount="2">
+
+            <EditText
+                android:id="@+id/dateText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/descriptionText"
+                android:layout_marginTop="31dp"
+                android:ems="10"
+                android:inputType="date" />
+
+            <ImageButton
+                android:id="@+id/date"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignTop="@+id/dateText"
+                android:layout_toEndOf="@+id/dateText"
+                android:layout_toRightOf="@+id/dateText"
+                android:scaleType="fitStart"
+                android:src="@drawable/ic_date_range_black_24dp"
+                android:tint="@color/colorIcon" />
+
+            <EditText
+                android:id="@+id/timeText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@+id/dateText"
+                android:layout_alignRight="@+id/dateText"
+                android:layout_below="@+id/dateText"
+                android:layout_marginTop="21dp"
+                android:ems="10"
+                android:inputType="time" />
+
+            <ImageButton
+                android:id="@+id/time"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignBottom="@+id/timeText"
+                android:layout_toEndOf="@+id/timeText"
+                android:layout_toRightOf="@+id/timeText"
+                android:scaleType="fitStart"
+                android:src="@drawable/ic_access_time_black_24dp"
+                android:tint="@color/colorIcon" />
+
+        </GridLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingTop="20dp">
+
+            <Switch
+                android:id="@+id/prioritySwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Priority "
+                android:textSize="24sp" />
+        </LinearLayout>
+    </LinearLayout>
 
     <Button
-        android:id="@+id/date"
-        style="?android:attr/borderlessButtonStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/dateText"
-        android:layout_toEndOf="@+id/dateText"
-        android:layout_toRightOf="@+id/dateText"
-        android:tint="@color/colorIcon"
-        android:drawableLeft="@drawable/ic_date_range_black_24dp" />
-
-    <Button
-        android:id="@+id/time"
-        style="?android:attr/borderlessButtonStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/timeText"
-        android:layout_toEndOf="@+id/timeText"
-        android:layout_toRightOf="@+id/timeText"
-        android:tint="@color/colorIcon"
-        android:drawableLeft="@drawable/ic_access_time_black_24dp" />
-
-    <Button
-        android:id="@+id/button2"
+        android:id="@+id/add_task_btn"
         style="?android:attr/borderlessButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -67,27 +125,5 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="27dp"
         android:text="Add" />
-
-    <EditText
-        android:id="@+id/dateText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/Description"
-        android:layout_marginTop="32dp"
-        android:ems="10"
-        android:inputType="date" />
-
-    <EditText
-        android:id="@+id/timeText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/dateText"
-        android:layout_alignRight="@+id/dateText"
-        android:layout_below="@+id/dateText"
-        android:layout_marginTop="21dp"
-        android:ems="10"
-        android:inputType="time" />
 
 </RelativeLayout>
