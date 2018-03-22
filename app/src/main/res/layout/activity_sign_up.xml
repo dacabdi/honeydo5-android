@@ -13,6 +13,11 @@
         android:layout_height="wrap_content"
         android:text="@string/label_signup"
         android:textSize="36sp"
+
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
         tools:layout_editor_absoluteX="131dp"
         tools:layout_editor_absoluteY="16dp" />
 
@@ -22,6 +27,10 @@
         android:layout_height="0dp"
         android:text="@string/label_email"
         android:textSize="30sp"
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
         tools:layout_editor_absoluteX="16dp"
         tools:layout_editor_absoluteY="97dp" />
 
@@ -32,6 +41,10 @@
         android:ems="10"
         android:hint="@string/placeholder_email"
         android:inputType="textEmailAddress"
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
         tools:layout_editor_absoluteX="110dp"
         tools:layout_editor_absoluteY="97dp" />
 
@@ -41,6 +54,10 @@
         android:layout_height="0dp"
         android:text="@string/label_name"
         android:textSize="30sp"
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
         tools:layout_editor_absoluteX="16dp"
         tools:layout_editor_absoluteY="165dp" />
 
@@ -51,6 +68,10 @@
         android:ems="10"
         android:hint="@string/placeholder_username"
         android:inputType="text"
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
         tools:layout_editor_absoluteX="110dp"
         tools:layout_editor_absoluteY="166dp" />
 
@@ -60,6 +81,10 @@
         android:layout_height="0dp"
         android:text="@string/label_password"
         android:textSize="30sp"
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
         tools:layout_editor_absoluteX="16dp"
         tools:layout_editor_absoluteY="235dp" />
 
@@ -70,6 +95,10 @@
         android:ems="10"
         android:hint="@string/placeholder_password"
         android:inputType="textPassword"
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
         tools:layout_editor_absoluteX="162dp"
         tools:layout_editor_absoluteY="238dp" />
 
@@ -80,6 +109,10 @@
         android:ems="10"
         android:hint="@string/placeholder_reenter_password"
         android:inputType="textPassword"
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
         tools:layout_editor_absoluteX="162dp"
         tools:layout_editor_absoluteY="295dp" />
 
@@ -88,6 +121,10 @@
         android:layout_width="351dp"
         android:layout_height="71dp"
         android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
         tools:layout_editor_absoluteX="17dp"
         tools:layout_editor_absoluteY="378dp" />
 
@@ -96,6 +133,10 @@
         android:layout_width="136dp"
         android:layout_height="68dp"
         android:text="@string/label_submit"
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
         tools:layout_editor_absoluteX="124dp"
         tools:layout_editor_absoluteY="483dp" />
 </android.support.constraint.ConstraintLayout>

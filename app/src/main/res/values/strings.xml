@@ -14,6 +14,15 @@
     <string name="label_reenter_password">Reenter password</string>
     <string name="placeholder_reenter_password">Reenter password</string>
 
+    <string name="label_test_server">Hit server!</string>
+    <string name="message_specify_email_password">You must specify email and password.</string>
+
+    <string name="message_wrong_credentials">Wrong email or password.</string>
+    <string name="message_communication_problem">Communication problems.</string>
+    <string name="message_endpoint_200">Endpoint alive and OK.</string>
+
+  
+  
     <!-- Strings related to Settings -->
 
     <!-- Example General settings -->
