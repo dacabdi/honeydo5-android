@@ -84,7 +84,7 @@ public class LoginScreen extends AppCompatActivity {
                 }}).start();
             }
         });
-
+        /*
         newBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -92,7 +92,8 @@ public class LoginScreen extends AppCompatActivity {
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             }
-        });
+        }); */
+
     }
 
     private void attemptLogin() {
