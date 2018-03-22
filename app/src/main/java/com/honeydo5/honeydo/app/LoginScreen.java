@@ -16,6 +16,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.honeydo5.honeydo.util.DateHelper;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -30,7 +31,7 @@ public class LoginScreen extends AppCompatActivity {
 
     // views and components
     private EditText inputEmail, inputPassword;
-    private Button buttonLogin, buttonSignup, buttonTestLogin;
+    private Button buttonLogin, buttonSignup, hitServerButton, testLoginButton;
     private TextView textMessage;
 
     @Override
@@ -47,7 +48,8 @@ public class LoginScreen extends AppCompatActivity {
         textMessage = findViewById(R.id.LoginScreenTextViewMessage);
         buttonLogin = findViewById(R.id.LoginScreenButtonLogin);
         buttonSignup = findViewById(R.id.LoginScreenButtonSignup);
-        buttonTestLogin = findViewById(R.id.LoginScreenButtonTestLogin);
+        hitServerButton = findViewById(R.id.loginScreenButtonHitServer);
+        testLoginButton = findViewById(R.id.loginScreenButtonTestLogin);
 
         // set event handlers --------------------------------------
         Log.d(tag, "Attaching event handlers.");
@@ -69,7 +71,7 @@ public class LoginScreen extends AppCompatActivity {
               }
         });
 
-        buttonTestLogin.setOnClickListener(new View.OnClickListener() {
+        hitServerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // launch a new thread,
@@ -85,7 +87,24 @@ public class LoginScreen extends AppCompatActivity {
             }
         });
 
-        newBtn.setOnClickListener(new View.OnClickListener() {
+        testLoginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // dummy tasks
+                TaskSystem.addTask(new Task("Test body", "Get Eggs", true, null, DateHelper.getDate(2018, 2, 5, 12, 15), null));
+                TaskSystem.addTask(new Task("Test body", "Do software engineering hw", false, null, DateHelper.getDate(2018, 2, 7, 7, 45), null));
+                TaskSystem.addTask(new Task("Test body", "Study COP", true, null, DateHelper.getDate(2018, 2, 23, 6, 30), null));
+                TaskSystem.addTask(new Task("Test body", "do laundry!!!!!", false, null, DateHelper.getDate(2018, 3, 5, 4, 0), null));
+                TaskSystem.addTask(new Task("Test body", "test this app (meta!)", true, null, DateHelper.getDate(2018, 4, 17, 2, 15), null));
+
+                Intent intent = new Intent(LoginScreen.this, MainScreen.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME);
+                startActivity(intent);
+                LoginScreen.this.finish();
+            }
+        });
+
+        buttonSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(LoginScreen.this, SignUpActivity.class);

@@ -21,11 +21,14 @@
 
         <activity
             android:name=".app.MainScreen"
-            android:label="@string/title_activity_main_screen">
+            android:label="@string/title_activity_main_screen"
+            android:alwaysRetainTaskState="true"
+            android:launchMode="singleInstance">
         </activity>
 
         <activity
-            android:name=".app.AddTask">
+            android:name=".app.AddTask"
+            android:label="Add Task">
         </activity>
 
         <activity

@@ -49,18 +49,18 @@ public class AddTask extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_task);
 
-        nameText = (EditText) findViewById(R.id.nameText);
-        descriptionText = (EditText) findViewById(R.id.descriptionText);
+        nameText = (EditText) findViewById(R.id.addTaskEditViewName);
+        descriptionText = (EditText) findViewById(R.id.addTaskEditTextDescription);
 
-        dateBtn = (ImageButton) findViewById(R.id.date);
-        timeBtn = (ImageButton) findViewById(R.id.time);
+        dateBtn = (ImageButton) findViewById(R.id.addTaskDatePickerDate);
+        timeBtn = (ImageButton) findViewById(R.id.addTaskTimePickerTime);
 
-        addBtn = (Button) findViewById(R.id.add_task_btn);
+        addBtn = (Button) findViewById(R.id.addTaskButtonAdd);
 
-        timeText = (EditText) findViewById(R.id.timeText);
-        dateText = (EditText) findViewById(R.id.dateText);
+        timeText = (EditText) findViewById(R.id.addTaskEditTextTimeText);
+        dateText = (EditText) findViewById(R.id.addTaskEditTextDateText);
 
-        prioritySwitch = (Switch) findViewById(R.id.prioritySwitch);
+        prioritySwitch = (Switch) findViewById(R.id.addTaskSwitchPriority);
 
         showDate();
         showTime();
@@ -69,7 +69,7 @@ public class AddTask extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Date due = DateHelper.getDate(y, m, d, hr, min);
-                Task t = new Task(nameText.getText().toString(), descriptionText.getText().toString(), prioritySwitch.isChecked(), null, due, null);
+                Task t = new Task(descriptionText.getText().toString(), nameText.getText().toString(), prioritySwitch.isChecked(), null, due, null);
                 sendNewTaskToServer(t);
                 TaskSystem.addTask(t);
 
@@ -156,7 +156,7 @@ public class AddTask extends AppCompatActivity {
     public void onBackPressed() {
         //super.onBackPressed();
         Intent intent = new Intent(this, MainScreen.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME);
+        intent.setFlags(Intent.FLAG_ACTIVITY_TASK_ON_HOME);
         startActivity(intent);
         this.finish();
     }

@@ -1,6 +1,7 @@
 package com.honeydo5.honeydo.app;
 
 import android.content.Context;
+import android.graphics.Paint;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -45,13 +46,18 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
     @Override
     public void onBindViewHolder(TaskViewHolder holder, int position) {
 
-
         Task t = taskList.get(position);
 
         holder.title.setText(t.getHeader());
         holder.date.setText(android.text.format.DateFormat.format("MM-dd-yyyy", t.getDue()));
         holder.time.setText(android.text.format.DateFormat.format("hh:mm a", t.getDue()));
 
+        // Underline priority tasks
+        if(t.isPriority()) {
+            holder.title.setPaintFlags(holder.title.getPaintFlags() |   Paint.UNDERLINE_TEXT_FLAG);
+        }
+
+        // Dull out previous tasks
         if(t.getDue().before(currentDate)) {
             holder.title.setTextColor(ContextCompat.getColor(context, R.color.textOld));
             holder.date.setTextColor(ContextCompat.getColor(context, R.color.textOld));
@@ -71,9 +77,9 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
         public TaskViewHolder(View itemView) {
             super(itemView);
 
-            title = itemView.findViewById(R.id.task_title);
-            date = itemView.findViewById(R.id.task_date);
-            time = itemView.findViewById(R.id.task_time);
+            title = itemView.findViewById(R.id.taskListFragTextViewTitle);
+            date = itemView.findViewById(R.id.taskListFragTextViewDate);
+            time = itemView.findViewById(R.id.taskListFragTextViewTime);
         }
     }
 }
