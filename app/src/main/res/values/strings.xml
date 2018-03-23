@@ -26,8 +26,10 @@
     <string name="message_communication_problem">Communication problems.</string>
     <string name="message_endpoint_200">Endpoint alive and OK.</string>
 
-  
-  
+    <string name="message_passwords_do_not_match">Passwords entered do not match.</string>
+    <string name="message_invalid_username">Invalid username.</string>
+
+
     <!-- Strings related to Settings -->
 
     <!-- Example General settings -->
