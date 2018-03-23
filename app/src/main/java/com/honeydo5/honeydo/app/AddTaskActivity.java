@@ -31,7 +31,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-public class AddTask extends AppCompatActivity {
+public class AddTaskActivity extends AppCompatActivity {
     private String tag = "ADDTASK";
 
     int y, m, d, hr, min;
@@ -162,7 +162,7 @@ public class AddTask extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         //super.onBackPressed();
-        Intent intent = new Intent(this, MainScreen.class);
+        Intent intent = new Intent(this, MainScreenActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_TASK_ON_HOME);
         startActivity(intent);
         this.finish();
