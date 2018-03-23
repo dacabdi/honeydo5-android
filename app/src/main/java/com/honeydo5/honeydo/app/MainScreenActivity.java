@@ -16,11 +16,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.honeydo5.honeydo.R;
-import com.honeydo5.honeydo.util.DateHelper;
 
 import org.json.JSONObject;
 
-public class MainScreen extends AppCompatActivity {
+public class MainScreenActivity extends AppCompatActivity {
 
     RecyclerView taskListView;
     TaskAdapter adapter;
@@ -89,7 +88,7 @@ public class MainScreen extends AppCompatActivity {
 
     void createNewTask()
     {
-        Intent intent = new Intent(this, AddTask.class);
+        Intent intent = new Intent(this, AddTaskActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME);
         startActivity(intent);
     }

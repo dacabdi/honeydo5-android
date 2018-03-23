@@ -6,8 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 
-import com.honeydo5.honeydo.R;
-
 /**
  * Created by aaron on 2/27/2018.
  */
@@ -22,7 +20,7 @@ public class SettingsActivity extends PreferenceActivity {
     @Override
     public void onBackPressed() {
         //super.onBackPressed();
-        Intent i = new Intent(SettingsActivity.this, MainScreen.class);
+        Intent i = new Intent(SettingsActivity.this, MainScreenActivity.class);
         startActivity(i);
     }
 }

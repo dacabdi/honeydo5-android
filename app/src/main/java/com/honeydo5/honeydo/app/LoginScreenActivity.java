@@ -26,7 +26,7 @@ import java.util.Map;
 
 
 
-public class LoginScreen extends AppCompatActivity {
+public class LoginScreenActivity extends AppCompatActivity {
     private String tag = "LOGINSCREEN";
 
     // views and components
@@ -38,7 +38,7 @@ public class LoginScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Log.d(tag, "Setting LoginScreen activity content view.");
+        Log.d(tag, "Setting LoginScreenActivity activity content view.");
         setContentView(R.layout.activity_login_screen);
 
         // grab in order top to bottom of page
@@ -63,7 +63,7 @@ public class LoginScreen extends AppCompatActivity {
         buttonSignup.setOnClickListener(new View.OnClickListener() {
               @Override
               public void onClick(View view) {
-                  Intent intent = new Intent(LoginScreen.this, SignUpActivity.class);
+                  Intent intent = new Intent(LoginScreenActivity.this, SignUpActivity.class);
                   intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                   Log.d(tag, "Starting SignUpActivity.");
                   startActivity(intent);
@@ -97,17 +97,17 @@ public class LoginScreen extends AppCompatActivity {
                 TaskSystem.addTask(new Task("Test body", "do laundry!!!!!", false, null, DateHelper.getDate(2018, 3, 5, 4, 0), null));
                 TaskSystem.addTask(new Task("Test body", "test this app (meta!)", true, null, DateHelper.getDate(2018, 4, 17, 2, 15), null));
 
-                Intent intent = new Intent(LoginScreen.this, MainScreen.class);
+                Intent intent = new Intent(LoginScreenActivity.this, MainScreenActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME);
                 startActivity(intent);
-                LoginScreen.this.finish();
+                LoginScreenActivity.this.finish();
             }
         });
 
         buttonSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(LoginScreen.this, SignUpActivity.class);
+                Intent intent = new Intent(LoginScreenActivity.this, SignUpActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             }
@@ -140,11 +140,11 @@ public class LoginScreen extends AppCompatActivity {
                                 case "success" : case "logged in" :
                                     // login success or already on session (no need for method,
                                     // this code is only called from one place)
-                                    Log.d(tag, "Successful Login, intent onto MainScreen, finish LoginScreen");
-                                    Intent intent = new Intent(LoginScreen.this, MainScreen.class);
+                                    Log.d(tag, "Successful Login, intent onto MainScreenActivity, finish LoginScreenActivity");
+                                    Intent intent = new Intent(LoginScreenActivity.this, MainScreenActivity.class);
                                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME);
                                     startActivity(intent);
-                                    LoginScreen.this.finish();
+                                    LoginScreenActivity.this.finish();
                                 break;
 
                                 case "wrong email/password" :
