@@ -89,7 +89,7 @@ public class MainScreen extends AppCompatActivity {
 
     void createNewTask()
     {
-        Intent intent = new Intent(this, AddTask.class);
+        Intent intent = new Intent(this, AddTaskActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME);
         startActivity(intent);
         this.finish();
