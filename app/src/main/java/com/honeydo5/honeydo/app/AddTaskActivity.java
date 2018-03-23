@@ -32,6 +32,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class AddTask extends AppCompatActivity {
+    private String tag = "ADDTASK";
 
     int y, m, d, hr, min;
     static final int date_dialog_id = 0;
@@ -73,6 +74,8 @@ public class AddTask extends AppCompatActivity {
                 Task t = new Task(descriptionText.getText().toString(), nameText.getText().toString(), prioritySwitch.isChecked(), null, due, null);
                 sendNewTaskToServer(t);
                 TaskSystem.addTask(t);
+
+                Log.d(tag, "Sent task to server and local task system");
 
                 onBackPressed();
             }
@@ -149,6 +152,7 @@ public class AddTask extends AppCompatActivity {
     private TimePickerDialog.OnTimeSetListener tplistener = new TimePickerDialog.OnTimeSetListener() {
         @Override
         public void onTimeSet(TimePicker timePicker, int hour, int minute) {
+            Log.d(tag, "Set time to: " + hr + ":" + min + "");
             timeText.setText(hour + ":" + minute);
             hr = hour;
             min = minute;
@@ -180,6 +184,7 @@ public class AddTask extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d("API-LOGIN-RESPONSE", response.toString());
+                        Log.d(tag, "Added task to server");
                     }
                 }, new Response.ErrorListener() {
             @Override
