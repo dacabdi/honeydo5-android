@@ -9,14 +9,14 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/add_task_header"
+            android:id="@+id/addTaskTextViewHeader"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Add Task"
             android:textSize="36sp" />
 
         <EditText
-            android:id="@+id/nameText"
+            android:id="@+id/addTaskEditViewName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
@@ -28,24 +28,28 @@
             android:text="Name" />
 
         <EditText
-            android:id="@+id/descriptionText"
+            android:id="@+id/addTaskEditTextDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/nameText"
+            android:layout_below="@+id/addTaskEditViewName"
             android:layout_marginTop="33dp"
             android:ems="10"
             android:inputType="textMultiLine"
             android:text="Description" />
 
         <Spinner
+<<<<<<< HEAD
             android:id="@+id/AddTaskSpinnerTags"
+=======
+            android:id="@+id/addTaskSpinnerLabel"
+>>>>>>> dev
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/timeText"
+            android:layout_below="@+id/addTaskEditTextTimeText"
             android:layout_marginTop="25dp" />
 
         <GridLayout
@@ -55,45 +59,45 @@
             android:rowCount="2">
 
             <EditText
-                android:id="@+id/dateText"
+                android:id="@+id/addTaskEditTextDateText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/descriptionText"
+                android:layout_below="@+id/addTaskEditTextDescription"
                 android:layout_marginTop="31dp"
                 android:ems="10"
                 android:inputType="date" />
 
             <ImageButton
-                android:id="@+id/date"
+                android:id="@+id/addTaskDatePickerDate"
                 style="?android:attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_alignTop="@+id/dateText"
-                android:layout_toEndOf="@+id/dateText"
-                android:layout_toRightOf="@+id/dateText"
+                android:layout_alignTop="@+id/addTaskEditTextDateText"
+                android:layout_toEndOf="@+id/addTaskEditTextDateText"
+                android:layout_toRightOf="@+id/addTaskEditTextDateText"
                 android:scaleType="fitStart"
                 android:src="@drawable/ic_date_range_black_24dp"
                 android:tint="@color/colorIcon" />
 
             <EditText
-                android:id="@+id/timeText"
+                android:id="@+id/addTaskEditTextTimeText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignEnd="@+id/dateText"
-                android:layout_alignRight="@+id/dateText"
-                android:layout_below="@+id/dateText"
+                android:layout_alignEnd="@+id/addTaskEditTextDateText"
+                android:layout_alignRight="@+id/addTaskEditTextDateText"
+                android:layout_below="@+id/addTaskEditTextDateText"
                 android:layout_marginTop="21dp"
                 android:ems="10"
                 android:inputType="time" />
 
             <ImageButton
-                android:id="@+id/time"
+                android:id="@+id/addTaskTimePickerTime"
                 style="?android:attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_alignBottom="@+id/timeText"
-                android:layout_toEndOf="@+id/timeText"
-                android:layout_toRightOf="@+id/timeText"
+                android:layout_alignBottom="@+id/addTaskEditTextTimeText"
+                android:layout_toEndOf="@+id/addTaskEditTextTimeText"
+                android:layout_toRightOf="@+id/addTaskEditTextTimeText"
                 android:scaleType="fitStart"
                 android:src="@drawable/ic_access_time_black_24dp"
                 android:tint="@color/colorIcon" />
@@ -108,7 +112,7 @@
             android:paddingTop="20dp">
 
             <Switch
-                android:id="@+id/prioritySwitch"
+                android:id="@+id/addTaskSwitchPriority"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Priority "
@@ -117,7 +121,7 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/add_task_btn"
+        android:id="@+id/addTaskButtonAdd"
         style="?android:attr/borderlessButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

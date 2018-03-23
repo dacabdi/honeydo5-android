@@ -33,6 +33,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class AddTaskActivity extends AppCompatActivity {
+<<<<<<< HEAD:app/src/main/java/com/honeydo5/honeydo/app/AddTaskActivity.java
+=======
+    private String tag = "ADDTASK";
+>>>>>>> dev:app/src/main/java/com/honeydo5/honeydo/app/AddTaskActivity.java
 
     int y, m, d, hr, min;
     static final int date_dialog_id = 0;
@@ -53,18 +57,18 @@ public class AddTaskActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_task);
 
-        nameText = (EditText) findViewById(R.id.nameText);
-        descriptionText = (EditText) findViewById(R.id.descriptionText);
+        nameText = (EditText) findViewById(R.id.addTaskEditViewName);
+        descriptionText = (EditText) findViewById(R.id.addTaskEditTextDescription);
 
-        dateBtn = (ImageButton) findViewById(R.id.date);
-        timeBtn = (ImageButton) findViewById(R.id.time);
+        dateBtn = (ImageButton) findViewById(R.id.addTaskDatePickerDate);
+        timeBtn = (ImageButton) findViewById(R.id.addTaskTimePickerTime);
 
-        addBtn = (Button) findViewById(R.id.add_task_btn);
+        addBtn = (Button) findViewById(R.id.addTaskButtonAdd);
 
-        timeText = (EditText) findViewById(R.id.timeText);
-        dateText = (EditText) findViewById(R.id.dateText);
+        timeText = (EditText) findViewById(R.id.addTaskEditTextTimeText);
+        dateText = (EditText) findViewById(R.id.addTaskEditTextDateText);
 
-        prioritySwitch = (Switch) findViewById(R.id.prioritySwitch);
+        prioritySwitch = (Switch) findViewById(R.id.addTaskSwitchPriority);
 
         tagSpin = (Spinner) findViewById(R.id.AddTaskSpinnerTags);
 
@@ -75,9 +79,11 @@ public class AddTaskActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Date due = DateHelper.getDate(y, m, d, hr, min);
-                Task t = new Task(nameText.getText().toString(), descriptionText.getText().toString(), prioritySwitch.isChecked(), null, due, null);
+                Task t = new Task(descriptionText.getText().toString(), nameText.getText().toString(), prioritySwitch.isChecked(), null, due, null);
                 sendNewTaskToServer(t);
                 TaskSystem.addTask(t);
+
+                Log.d(tag, "Sent task to server and local task system");
 
                 onBackPressed();
             }
@@ -154,6 +160,7 @@ public class AddTaskActivity extends AppCompatActivity {
     private TimePickerDialog.OnTimeSetListener tplistener = new TimePickerDialog.OnTimeSetListener() {
         @Override
         public void onTimeSet(TimePicker timePicker, int hour, int minute) {
+            Log.d(tag, "Set time to: " + hr + ":" + min + "");
             timeText.setText(hour + ":" + minute);
             hr = hour;
             min = minute;
@@ -163,8 +170,8 @@ public class AddTaskActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         //super.onBackPressed();
-        Intent intent = new Intent(this, MainScreen.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME);
+        Intent intent = new Intent(this, MainScreenActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_TASK_ON_HOME);
         startActivity(intent);
         this.finish();
     }
@@ -185,6 +192,7 @@ public class AddTaskActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d("API-LOGIN-RESPONSE", response.toString());
+                        Log.d(tag, "Added task to server");
                     }
                 }, new Response.ErrorListener() {
             @Override

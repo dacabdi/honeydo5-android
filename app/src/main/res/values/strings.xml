@@ -102,4 +102,5 @@
 
     <string name="label_signup">Sign Up</string>
     <string name="label_submit">Submit</string>
+    <string name="label_test_login">Test Login</string>
 </resources>

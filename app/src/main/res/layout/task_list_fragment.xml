@@ -22,7 +22,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/task_title"
+                    android:id="@+id/taskListFragTextViewTitle"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="end"
@@ -40,7 +40,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/task_date"
+                    android:id="@+id/taskListFragTextViewDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
@@ -51,7 +51,7 @@
                     android:textSize="24sp" />
 
                 <TextView
-                    android:id="@+id/task_time"
+                    android:id="@+id/taskListFragTextViewTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
