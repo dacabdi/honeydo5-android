@@ -126,7 +126,7 @@ public class LoginScreenActivity extends AppCompatActivity {
 
         // request object to be added to volley's request queue
         Log.d(tag, "API /login creating request object.");
-        JsonObjectRequest loginReq = new JsonObjectRequest(
+        JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.POST, // request method
                 AppController.defaultBaseUrl + "/login", // target url
                 new JSONObject(postMessage), // json object from hashmap
@@ -188,7 +188,7 @@ public class LoginScreenActivity extends AppCompatActivity {
         };
 
         Log.d(tag, "API /login adding request object to request queue.");
-        AppController.getInstance().addToRequestQueue(loginReq, tag);
+        AppController.getInstance().addToRequestQueue(request, tag);
     }
 }
 
