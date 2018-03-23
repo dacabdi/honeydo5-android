@@ -15,12 +15,9 @@ public class InputValidation {
         return match(USERNAME_PATTERN, username);
     }
 
-    private static boolean match(String pattern, String str){
-        Pattern pattern;
-        Matcher matcher;
-        pattern = Pattern.compile(pattern);
-        matcher = pattern.matcher(str);
-
+    private static boolean match(String strPattern, String str){
+        Pattern pattern = Pattern.compile(strPattern);;
+        Matcher matcher = pattern.matcher(str);
         return matcher.matches();
     }
 }
