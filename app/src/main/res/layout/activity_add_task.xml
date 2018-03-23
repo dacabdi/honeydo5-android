@@ -40,7 +40,11 @@
             android:text="Description" />
 
         <Spinner
+<<<<<<< HEAD
+            android:id="@+id/AddTaskSpinnerTags"
+=======
             android:id="@+id/addTaskSpinnerLabel"
+>>>>>>> dev
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"

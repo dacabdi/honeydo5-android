@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TimePicker;
 
@@ -32,7 +33,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class AddTaskActivity extends AppCompatActivity {
+<<<<<<< HEAD:app/src/main/java/com/honeydo5/honeydo/app/AddTaskActivity.java
+=======
     private String tag = "ADDTASK";
+>>>>>>> dev:app/src/main/java/com/honeydo5/honeydo/app/AddTaskActivity.java
 
     int y, m, d, hr, min;
     static final int date_dialog_id = 0;
@@ -43,6 +47,8 @@ public class AddTaskActivity extends AppCompatActivity {
     ImageButton dateBtn, timeBtn;
     Button addBtn;
     EditText timeText, dateText;
+    Spinner tagSpin;
+
 
     Switch prioritySwitch;
 
@@ -63,6 +69,8 @@ public class AddTaskActivity extends AppCompatActivity {
         dateText = (EditText) findViewById(R.id.addTaskEditTextDateText);
 
         prioritySwitch = (Switch) findViewById(R.id.addTaskSwitchPriority);
+
+        tagSpin = (Spinner) findViewById(R.id.AddTaskSpinnerTags);
 
         showDate();
         showTime();
