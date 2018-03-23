@@ -21,7 +21,6 @@ import com.honeydo5.honeydo.util.InputValidation;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -55,46 +54,52 @@ public class SignUpActivity extends AppCompatActivity {
         buttonSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(validateFieldsInput()) {
-                    JSONObject data = getFieldsData();
-                    if(data != null) submitSignUpRequest(data);
-                    else {
-                        textMessage.setVisibility(View.VISIBLE);
-                        textMessage.setText(getString(R.string.message_communication_problem));
-                    }
+                JSONObject data = getFieldsData();
+                if(data != null) {
+                    Log.d(tag, "Submitting input data.");
+                    submitSignUpRequest(data);
                 }
             }
         });
-    }
-
-    private boolean validateFieldsInput(){
-        if(InputValidation.validateEmail(inputEmail.getText().toString())){
-            textMessage.setText(getString(R.string.message_passwords_do_not_match));
-            textMessage.setVisibility(View.VISIBLE);
-            return false;
-        }
-
-        if(InputValidation.validateUsername(inputName.getText().toString())){
-            textMessage.setText(getString(R.string.message_invalid_username));
-            textMessage.setVisibility(View.VISIBLE);
-            return false;
-        }
-
-        // check on passwords being equal
-        if(inputPassword.getText().toString() != inputPasswordRe.getText().toString()){
-            textMessage.setText(getString(R.string.message_passwords_do_not_match));
-            textMessage.setVisibility(View.VISIBLE);
-            return false;
-        }
-
-        return true;
     }
 
     @Nullable
     private JSONObject getFieldsData(){
         JSONObject json = new JSONObject();
 
+        Log.d(tag, "Gathering input data.");
+
         try{
+            Log.d(tag, "Validating email field.");
+            String email = inputEmail.getText().toString();
+            if(InputValidation.validateEmail(email)){
+                Log.d(tag, "Invalid email: " + email);
+                textMessage.setText(getString(R.string.message_invalid_email));
+                textMessage.setVisibility(View.VISIBLE);
+                return null;
+            }
+
+            Log.d(tag, "Validating username field.");
+            String username = inputName.getText().toString();
+            if(InputValidation.validateUsername(username)){
+                Log.d(tag, "Invalid username: " + username);
+                textMessage.setText(getString(R.string.message_invalid_username));
+                textMessage.setVisibility(View.VISIBLE);
+                return null;
+            }
+
+            String password = inputPassword.getText().toString();
+            String passwordRe = inputPasswordRe.getText().toString();
+            if(password.equals(passwordRe)){
+                Log.d(tag, "Password fields do not match : " + password + "->" + passwordRe);
+                textMessage.setText(getString(R.string.message_passwords_do_not_match));
+                textMessage.setVisibility(View.VISIBLE);
+                return null;
+            }
+
+            Log.d(tag, "All input fields are valid.");
+
+            Log.d(tag, "Adding fields to JSON object.");
             json.put("email", inputEmail.getText().toString());
             json.put("name", inputName.getText().toString());
             json.put("password", inputPassword.getText().toString());
