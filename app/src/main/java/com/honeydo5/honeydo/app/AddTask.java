@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TimePicker;
 
@@ -42,6 +43,8 @@ public class AddTask extends AppCompatActivity {
     ImageButton dateBtn, timeBtn;
     Button addBtn;
     EditText timeText, dateText;
+    Spinner tagSpin;
+
 
     Switch prioritySwitch;
 
@@ -62,6 +65,8 @@ public class AddTask extends AppCompatActivity {
         dateText = (EditText) findViewById(R.id.dateText);
 
         prioritySwitch = (Switch) findViewById(R.id.prioritySwitch);
+
+        tagSpin = (Spinner) findViewById(R.id.AddTaskSpinnerTags);
 
         showDate();
         showTime();

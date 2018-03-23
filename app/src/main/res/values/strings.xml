@@ -4,6 +4,11 @@
     <string name="title_activity_settings">Settings</string>
     <string name="title_activity_signup">Sign Up</string>
 
+    <string-array name="tags">
+        <item>School</item>
+        <item>Work</item>
+        <item>Chores</item>
+    </string-array>
 
     <string name="label_name">Name</string>
     <string name="placeholder_username">Input username</string>
