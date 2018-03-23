@@ -27,12 +27,8 @@
         </activity>
 
         <activity
-<<<<<<< HEAD
-            android:name=".app.AddTaskActivity">
-=======
             android:name=".app.AddTaskActivity"
             android:label="Add Task">
->>>>>>> dev
         </activity>
 
         <activity

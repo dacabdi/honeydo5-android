@@ -33,10 +33,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class AddTaskActivity extends AppCompatActivity {
-<<<<<<< HEAD:app/src/main/java/com/honeydo5/honeydo/app/AddTaskActivity.java
-=======
     private String tag = "ADDTASK";
->>>>>>> dev:app/src/main/java/com/honeydo5/honeydo/app/AddTaskActivity.java
 
     int y, m, d, hr, min;
     static final int date_dialog_id = 0;
