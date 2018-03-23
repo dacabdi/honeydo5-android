@@ -72,7 +72,7 @@ public class SignUpActivity extends AppCompatActivity {
         try{
             Log.d(tag, "Validating email field.");
             String email = inputEmail.getText().toString();
-            if(InputValidation.validateEmail(email)){
+            if(!InputValidation.validateEmail(email)){
                 Log.d(tag, "Invalid email: " + email);
                 textMessage.setText(getString(R.string.message_invalid_email));
                 textMessage.setVisibility(View.VISIBLE);
@@ -81,7 +81,7 @@ public class SignUpActivity extends AppCompatActivity {
 
             Log.d(tag, "Validating username field.");
             String username = inputName.getText().toString();
-            if(InputValidation.validateUsername(username)){
+            if(!InputValidation.validateUsername(username)){
                 Log.d(tag, "Invalid username: " + username);
                 textMessage.setText(getString(R.string.message_invalid_username));
                 textMessage.setVisibility(View.VISIBLE);
@@ -90,7 +90,7 @@ public class SignUpActivity extends AppCompatActivity {
 
             String password = inputPassword.getText().toString();
             String passwordRe = inputPasswordRe.getText().toString();
-            if(password.equals(passwordRe)){
+            if(!password.equals(passwordRe)){
                 Log.d(tag, "Password fields do not match : " + password + "->" + passwordRe);
                 textMessage.setText(getString(R.string.message_passwords_do_not_match));
                 textMessage.setVisibility(View.VISIBLE);

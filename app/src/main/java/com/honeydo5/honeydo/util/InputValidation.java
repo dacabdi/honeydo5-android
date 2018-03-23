@@ -16,7 +16,7 @@ public class InputValidation {
     }
 
     private static boolean match(String strPattern, String str){
-        Pattern pattern = Pattern.compile(strPattern);;
+        Pattern pattern = Pattern.compile(strPattern);
         Matcher matcher = pattern.matcher(str);
         return matcher.matches();
     }
