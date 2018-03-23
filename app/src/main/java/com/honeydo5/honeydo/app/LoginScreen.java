@@ -31,7 +31,7 @@ public class LoginScreen extends AppCompatActivity {
 
     // views and components
     private EditText inputEmail, inputPassword;
-    private Button buttonLogin, buttonSignup, hitServerButton, testLoginButton;
+    private Button buttonLogin, buttonSignup, buttonHitServer, buttonTestLogin;
     private TextView textMessage;
 
     @Override
@@ -48,8 +48,8 @@ public class LoginScreen extends AppCompatActivity {
         textMessage = findViewById(R.id.LoginScreenTextViewMessage);
         buttonLogin = findViewById(R.id.LoginScreenButtonLogin);
         buttonSignup = findViewById(R.id.LoginScreenButtonSignup);
-        hitServerButton = findViewById(R.id.loginScreenButtonHitServer);
-        testLoginButton = findViewById(R.id.loginScreenButtonTestLogin);
+        buttonHitServer = findViewById(R.id.loginScreenButtonHitServer);
+        buttonTestLogin = findViewById(R.id.loginScreenButtonTestLogin);
 
         // set event handlers --------------------------------------
         Log.d(tag, "Attaching event handlers.");
@@ -71,7 +71,7 @@ public class LoginScreen extends AppCompatActivity {
               }
         });
 
-        hitServerButton.setOnClickListener(new View.OnClickListener() {
+        buttonHitServer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // launch a new thread,
@@ -87,7 +87,7 @@ public class LoginScreen extends AppCompatActivity {
             }
         });
 
-        testLoginButton.setOnClickListener(new View.OnClickListener() {
+        buttonTestLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // dummy tasks

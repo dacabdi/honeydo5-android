@@ -26,6 +26,7 @@ import com.honeydo5.honeydo.util.DateHelper;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -102,11 +103,14 @@ public class AddTask extends AppCompatActivity {
     // Creates dialogs
     @Override
     public Dialog onCreateDialog(int id){
+        Calendar current = Calendar.getInstance();
         if(id == 0){
-            return new DatePickerDialog(this, dplistener, y, m, d);
+            return new DatePickerDialog(this, dplistener, current.get(Calendar.YEAR), current.get(Calendar.MONTH), current.get(Calendar.DAY_OF_MONTH));
+            //Current day
         }
         if(id == 1){
-            return new TimePickerDialog(this, tplistener, hr, min, false);
+            return new TimePickerDialog(this, tplistener, current.get(Calendar.HOUR_OF_DAY)+ 1, current.get(Calendar.MINUTE), false);
+            //One hour from "now"
         }
         return null;
     }
@@ -115,7 +119,6 @@ public class AddTask extends AppCompatActivity {
     private DatePickerDialog.OnDateSetListener dplistener = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker datePicker, int year, int monthOfYear, int dayOfMonth) {
-            dateText.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year );
             y = year;
             m = monthOfYear;
             d = dayOfMonth;
