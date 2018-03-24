@@ -17,6 +17,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.honeydo5.honeydo.R;
+import com.honeydo5.honeydo.util.RecyclerItemTouchHelper;
 import com.honeydo5.honeydo.util.TaskAdapter;
 import com.honeydo5.honeydo.util.TaskSystem;
 
@@ -26,7 +27,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MainScreenActivity extends AppCompatActivity {
+public class MainScreenActivity extends AppCompatActivity implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
     String tag = "MAINSCREEN";
 
     Button buttonSettings, buttonRewards, buttonAddTask;
@@ -135,5 +136,13 @@ public class MainScreenActivity extends AppCompatActivity {
         Intent intent = new Intent(this, AddTaskActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME);
         startActivity(intent);
+    }
+
+    // when item is swiped for deletion
+    @Override
+    public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
+        if(viewHolder instanceof TaskAdapter.TaskViewHolder) {
+            adapter.removeItem(viewHolder.getAdapterPosition());
+        }
     }
 }

@@ -4,9 +4,11 @@ import android.content.Context;
 import android.graphics.Paint;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.honeydo5.honeydo.R;
@@ -65,14 +67,21 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
         }
     }
 
+    public void removeItem(int position) {
+        Log.d("TASKADAPTER", "Removed item at " + position + " position");
+        taskList.remove(position);
+        notifyItemRemoved(position);
+    }
+
     @Override
     public int getItemCount() {
         return taskList.size();
     }
 
-    class TaskViewHolder extends RecyclerView.ViewHolder{
+    public class TaskViewHolder extends RecyclerView.ViewHolder{
 
         TextView title, date, time;
+        LinearLayout layoutForeground, layoutBackground;
 
         public TaskViewHolder(View itemView) {
             super(itemView);
@@ -80,6 +89,9 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
             title = itemView.findViewById(R.id.taskListFragTextViewTitle);
             date = itemView.findViewById(R.id.taskListFragTextViewDate);
             time = itemView.findViewById(R.id.taskListFragTextViewTime);
+
+            layoutForeground = itemView.findViewById(R.id.taskListFragForeground);
+            layoutBackground = itemView.findViewById(R.id.taskListFragBackground);
         }
     }
 }

@@ -1,25 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout
+        android:id="@+id/taskListFragBackground"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:background="@color/col4"
+        android:orientation="horizontal">
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0"
+            android:padding="15dp">
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="@dimen/ic_delete"
+                android:layout_height="@dimen/ic_delete"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_weight="0"
+                android:baselineAlignBottom="false"
+                android:tint="@color/colorIcon"
+                app:srcCompat="@drawable/ic_delete_black_24dp" />
+
+        </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/taskListFragForeground"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="?android:attr/colorBackground"
         android:orientation="horizontal">
 
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="5dp"
             android:orientation="vertical">
 
             <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="2dp"
-                android:layout_marginTop="5dp"
                 android:orientation="horizontal">
 
                 <TextView
@@ -28,16 +59,14 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
                     android:layout_weight="1"
-                    android:gravity="end"
                     android:text="Test Event Title"
-                    android:textAlignment="textStart"
                     android:textSize="24sp" />
             </LinearLayout>
 
             <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
+                android:layout_marginBottom="0dp"
                 android:orientation="horizontal">
 
                 <TextView
@@ -46,9 +75,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
                     android:layout_weight="1"
-                    android:gravity="end"
                     android:text="2/11"
-                    android:textAlignment="textStart"
                     android:textSize="20sp" />
 
                 <TextView
@@ -57,12 +84,11 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
                     android:layout_weight="3"
-                    android:gravity="end"
                     android:text="12:30 PM"
-                    android:textAlignment="textStart"
                     android:textSize="20sp" />
 
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
-</android.support.constraint.ConstraintLayout>
+
+</FrameLayout>
