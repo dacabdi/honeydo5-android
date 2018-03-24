@@ -114,22 +114,23 @@ public class SignUpActivity extends AppCompatActivity {
 
     private void submitSignUpRequest(JSONObject postMessage)
     {
-        AppController.getInstance().cancelPendingRequests(tag);
+        final String endpoint = "create_account";
+        AppController.getInstance().cancelPendingRequests(tag + ":" + endpoint);
 
-        Log.d(tag, "API /create_account Request POST Body : " + postMessage.toString());
+        Log.d(tag, "API /" + endpoint + " Request POST Body : " + postMessage.toString());
 
         // request object to be added to volley's request queue
-        Log.d(tag, "API /create_account creating request object.");
+        Log.d(tag, "API /" + endpoint + " creating request object.");
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.POST, // request method
-                AppController.defaultBaseUrl + "/create_account", // target url
-                postMessage, // json request object
+                AppController.defaultBaseUrl + "/" + endpoint, // target url
+                postMessage, // json object from hashmap
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d(tag, "API /create_account response is ready!");
+                        Log.d(tag, "API /" + endpoint + " response is ready!");
                         try {
-                            Log.d(tag, "API /create_account raw response : " + response.toString());
+                            Log.d(tag, "API /" + endpoint + " raw response : " + response.toString());
 
                             /*
                             API specification responses:
@@ -148,7 +149,7 @@ public class SignUpActivity extends AppCompatActivity {
                             textMessage.setText(getString(R.string.message_communication_problem));
                             textMessage.setVisibility(View.VISIBLE);
                             // log and do a stack trace
-                            Log.e(tag, "API /create_account error parsing response: " + e.getMessage());
+                            Log.e(tag, "API /" + endpoint + " error parsing response: " + e.getMessage());
                             Log.getStackTraceString(e);
                         }
                     }
@@ -171,7 +172,7 @@ public class SignUpActivity extends AppCompatActivity {
             }
         };
 
-        Log.d(tag, "API /create_account adding request object to request queue.");
-        AppController.getInstance().addToRequestQueue(request, tag);
+        Log.d(tag, "API /" + endpoint + " adding request object to request queue.");
+        AppController.getInstance().addToRequestQueue(request, tag + ":" + endpoint);
     }
 }

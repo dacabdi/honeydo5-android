@@ -11,40 +11,52 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.honeydo5.honeydo.R;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
-public class MainScreenActivity extends AppCompatActivity {
+import java.util.HashMap;
+import java.util.Map;
 
-    RecyclerView taskListView;
+public class MainScreenActivity extends AppCompatActivity {
+    String tag = "MAINSCREEN";
+
+    Button buttonSettings, buttonRewards, buttonAddTask;
+    FloatingActionButton FAButtonAddTask;
+    RecyclerView listViewTasks;
     TaskAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Log.d(tag, "Setting MainScreenActivity activity content view.");
         setContentView(R.layout.activity_main_screen);
 
-        Button settings = (Button) findViewById(R.id.MainScreenButtonSettings);
-        Button rewards = (Button) findViewById(R.id.MainScreenButtonRewards);
-        Button add = (Button) findViewById(R.id.add);
+        // grab in order top to bottom of page
+        Log.d(tag, "Finding components and views.");
+        buttonSettings = findViewById(R.id.MainScreenButtonSettings);
+        buttonRewards = findViewById(R.id.MainScreenButtonRewards);
+        FAButtonAddTask = findViewById(R.id.MainScreenButtonAddTask);
+        listViewTasks = findViewById(R.id.MainScreenRecyclerTaskList);
 
-        taskListView = findViewById(R.id.MainScreenRecyclerTaskList);
-        taskListView.setHasFixedSize(true);
-        taskListView.setLayoutManager(new LinearLayoutManager(this));
+        Log.d(tag, "Setting listViewTasks formatting and layout.");
+        listViewTasks.setHasFixedSize(true);
+        listViewTasks.setLayoutManager(new LinearLayoutManager(this));
 
+        Log.d(tag, "Calling /get_tasks to refresh the view.");
         getTaskList();
 
         adapter = new TaskAdapter(this, TaskSystem.getTaskList());
-        taskListView.setAdapter(adapter);
-        //taskListView.scrollTo(0,2);
+        listViewTasks.setAdapter(adapter);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.MainScreenButtonAddTask);
-        fab.setOnClickListener(new View.OnClickListener() {
+        FAButtonAddTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
@@ -55,35 +67,64 @@ public class MainScreenActivity extends AppCompatActivity {
         });
     }
 
+
     @Override
     protected void onResume() {
         super.onResume();
-
         adapter.notifyDataSetChanged();
     }
 
-    void parseResponseToAdapter(JSONObject response) {
-        // iterate addTask() with JSON data
 
+    void parseResponseToAdapter(JSONObject response) throws JSONException {
+        // iterate addTask() with JSON data
     }
 
+
     void getTaskList() {
-        JsonObjectRequest taskRequest = new JsonObjectRequest (
-                Request.Method.GET, AppController.defaultBaseUrl + "/get_tasks", null,
+        final String endpoint = "get_tasks";
+        AppController.getInstance().cancelPendingRequests(tag + ":" + endpoint);
+        JSONObject postMessage = null;
+
+        Log.d(tag, "API /" + endpoint + " Request POST Body : " + postMessage.toString());
+
+        // request object to be added to volley's request queue
+        Log.d(tag, "API /" + endpoint + " creating request object.");
+        JsonObjectRequest request = new JsonObjectRequest(
+                Request.Method.POST, // request method
+                AppController.defaultBaseUrl + "/" + endpoint, // target url
+                postMessage, // json object from hashmap
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        parseResponseToAdapter(response);
+                        Log.d(tag, "API /" + endpoint + " raw response : " + response.toString());
+                        try {
+                            // TODO: on success, update local storage with latest server response (stringify json object)
+                            parseResponseToAdapter(response);
+                        } catch(JSONException e) {
+                            // TODO: parsing data error, try local
+                            // log and do a stack trace
+                            Log.e(tag, "API /" + endpoint + " error parsing response: " + e.getMessage());
+                            Log.getStackTraceString(e);
+                        }
                     }
                 }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.e("API-LOGIN-ERROR", "Something happened in the way of heaven : " + error.getMessage());
-                    }
-                }
-        );
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                // log the error
+                AppController.getInstance().requestNetworkError(error, tag, "/" + endpoint);
+                // TODO: pull from local storage
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<>(); // assumes <String, String> template params
+                headers.put("Content-Type", "application/json; charset=utf-8");
+                return headers;
+            }
+        };
 
-        AppController.getInstance().addToRequestQueue(taskRequest);
+        Log.d(tag, "API /" + endpoint + " adding request object to request queue.");
+        AppController.getInstance().addToRequestQueue(request, tag + ":" + endpoint);
     }
 
     void createNewTask()
@@ -92,5 +133,4 @@ public class MainScreenActivity extends AppCompatActivity {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME);
         startActivity(intent);
     }
-
 }
