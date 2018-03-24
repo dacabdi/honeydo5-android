@@ -6,37 +6,38 @@
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="wrap_content"
         android:orientation="horizontal">
 
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="8"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="2dp"
+                android:layout_marginTop="5dp"
                 android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/taskListFragTextViewTitle"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="end"
                     android:layout_weight="1"
                     android:gravity="end"
                     android:text="Test Event Title"
-                    android:textAlignment="textEnd"
+                    android:textAlignment="textStart"
                     android:textSize="24sp" />
             </LinearLayout>
 
             <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="4"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
                 android:orientation="horizontal">
 
                 <TextView
@@ -44,22 +45,22 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
-                    android:layout_weight="7"
+                    android:layout_weight="1"
                     android:gravity="end"
                     android:text="2/11"
-                    android:textAlignment="textEnd"
-                    android:textSize="24sp" />
+                    android:textAlignment="textStart"
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/taskListFragTextViewTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
-                    android:layout_weight="1"
+                    android:layout_weight="3"
                     android:gravity="end"
                     android:text="12:30 PM"
-                    android:textAlignment="textEnd"
-                    android:textSize="24sp" />
+                    android:textAlignment="textStart"
+                    android:textSize="20sp" />
 
             </LinearLayout>
         </LinearLayout>

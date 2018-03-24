@@ -1,4 +1,4 @@
-package com.honeydo5.honeydo.app;
+package com.honeydo5.honeydo.util;
 
 import android.graphics.Color;
 

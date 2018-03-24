@@ -1,4 +1,4 @@
-package com.honeydo5.honeydo.app;
+package com.honeydo5.honeydo.util;
 
 import android.content.Context;
 import android.graphics.Paint;
@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.honeydo5.honeydo.R;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 /**
@@ -24,14 +24,14 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
     private Context context;
     private ArrayList<Task> taskList;
 
-    private Date currentDate;
+    private Calendar currentDate;
 
     public TaskAdapter(Context context, ArrayList<Task> taskList)
     {
         this.context = context;
         this.taskList = taskList;
 
-        currentDate = GregorianCalendar.getInstance().getTime();
+        currentDate = GregorianCalendar.getInstance();
     }
 
     @Override
@@ -49,8 +49,8 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
         Task t = taskList.get(position);
 
         holder.title.setText(t.getHeader());
-        holder.date.setText(android.text.format.DateFormat.format("MM-dd-yyyy", t.getDue()));
-        holder.time.setText(android.text.format.DateFormat.format("hh:mm a", t.getDue()));
+        holder.date.setText(android.text.format.DateFormat.format("MM/dd/yyyy", t.getDate()));
+        holder.time.setText(android.text.format.DateFormat.format("hh:mm a", t.getDate()));
 
         // Underline priority tasks
         if(t.isPriority()) {
@@ -58,7 +58,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
         }
 
         // Dull out previous tasks
-        if(t.getDue().before(currentDate)) {
+        if(t.getDate().before(currentDate)) {
             holder.title.setTextColor(ContextCompat.getColor(context, R.color.textOld));
             holder.date.setTextColor(ContextCompat.getColor(context, R.color.textOld));
             holder.time.setTextColor(ContextCompat.getColor(context, R.color.textOld));

@@ -26,12 +26,16 @@
     <string name="message_communication_problem">Communication problems.</string>
     <string name="message_endpoint_200">Endpoint alive and OK.</string>
 
+    <!-- time and date formats -->
+    <string name="standard_date_format">MM-dd-yyyy</string>
+    <string name="standard_time_format">hh:mm a</string>
+    <string name="standard_time24_format">HH:mm a</string>
+
 
     <!-- SignUpActivity -->
     <string name="message_invalid_email">Invalid email.</string>
     <string name="message_invalid_username">Invalid username.</string>
     <string name="message_passwords_do_not_match">Passwords entered do not match.</string>
-
 
     <!-- Strings related to Settings -->
 
