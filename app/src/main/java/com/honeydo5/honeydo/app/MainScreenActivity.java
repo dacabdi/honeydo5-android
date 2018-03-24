@@ -80,6 +80,7 @@ public class MainScreenActivity extends AppCompatActivity {
     }
 
 
+
     void getTaskList() {
         final String endpoint = "get_tasks";
         AppController.getInstance().cancelPendingRequests(tag + ":" + endpoint);
