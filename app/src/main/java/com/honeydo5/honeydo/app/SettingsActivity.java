@@ -6,8 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 
-import com.honeydo5.honeydo.R;
-
 /**
  * Created by aaron on 2/27/2018.
  */

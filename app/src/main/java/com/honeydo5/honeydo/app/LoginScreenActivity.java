@@ -117,25 +117,26 @@ public class LoginScreenActivity extends AppCompatActivity {
     }
 
     private void attemptLogin() {
-        AppController.getInstance().cancelPendingRequests(tag);
+        final String endpoint = "login";
+        AppController.getInstance().cancelPendingRequests(tag + ":" + endpoint);
 
         // create request body (key : value) pairs
         HashMap<String, String> postMessage = new HashMap<>(); // assumes <String, String>
         postMessage.put("email", inputEmail.getText().toString());
         postMessage.put("password", inputPassword.getText().toString());
 
-        Log.d(tag, "API /login Request POST Body : " + postMessage.toString());
+        Log.d(tag, "API /" + endpoint + " Request POST Body : " + postMessage.toString());
 
         // request object to be added to volley's request queue
-        Log.d(tag, "API /login creating request object.");
-        JsonObjectRequest loginReq = new JsonObjectRequest(
+        Log.d(tag, "API /" + endpoint + " creating request object.");
+        JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.POST, // request method
-                AppController.defaultBaseUrl + "/login", // target url
+                AppController.defaultBaseUrl + "/" + endpoint, // target url
                 new JSONObject(postMessage), // json object from hashmap
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d(tag, "API /login raw response : " + response.toString());
+                        Log.d(tag, "API /" + endpoint + " raw response : " + response.toString());
                         try {
                             switch (response.get("status").toString())
                             {
@@ -166,7 +167,7 @@ public class LoginScreenActivity extends AppCompatActivity {
                             textMessage.setVisibility(View.VISIBLE);
 
                             // log and do a stack trace
-                            Log.e(tag, "API /login error parsing response: " + e.getMessage());
+                            Log.e(tag, "API /" + endpoint + " error parsing response: " + e.getMessage());
                             Log.getStackTraceString(e);
                         }
                     }
@@ -174,7 +175,7 @@ public class LoginScreenActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 // log the error
-                AppController.getInstance().requestNetworkError(error, tag, "/login");
+                AppController.getInstance().requestNetworkError(error, tag, "/" + endpoint);
                 // print a message for the user
                 String errorMessage = getString(R.string.message_communication_problem);
                 textMessage.setText(errorMessage);
@@ -189,8 +190,7 @@ public class LoginScreenActivity extends AppCompatActivity {
             }
         };
 
-        Log.d(tag, "API /login adding request object to request queue.");
-        AppController.getInstance().addToRequestQueue(loginReq, tag);
+        Log.d(tag, "API /" + endpoint + " adding request object to request queue.");
+        AppController.getInstance().addToRequestQueue(request, tag + ":" + endpoint);
     }
 }
-
