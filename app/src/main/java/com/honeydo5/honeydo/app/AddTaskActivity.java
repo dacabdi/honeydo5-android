@@ -53,7 +53,7 @@ public class AddTaskActivity extends AppCompatActivity {
     ImageButton buttonDate, buttonTime;
     Button buttonAdd;
     EditText inputTime, inputDate;
-    Spinner tagSpin;
+    Spinner spinnerTag;
     ArrayAdapter<CharSequence> adapter;
 
     Switch switchPriority;
@@ -64,7 +64,7 @@ public class AddTaskActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_task);
 
         inputName = findViewById(R.id.addTaskEditViewName);
-        inputDescription = findViewById(R.id.addTaskEditTextDescription);
+        inputDescription = findViewById(R.id.addTaskMultiLineTaskDesc);
 
         textName = findViewById(R.id.addTaskTextViewNameLabel);
         textDescription = findViewById(R.id.addTaskTextViewDiscLabel);
@@ -90,11 +90,11 @@ public class AddTaskActivity extends AppCompatActivity {
         showTime();
 
         // tag spinner
-        tagSpin = (Spinner) findViewById(R.id.addTaskSpinnerTags);
+        spinnerTag = (Spinner) findViewById(R.id.addTaskSpinnerTags);
         adapter = ArrayAdapter.createFromResource(this, R.array.tags, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        tagSpin.setAdapter(adapter);
-        tagSpin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        spinnerTag.setAdapter(adapter);
+        spinnerTag.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 Toast.makeText(getBaseContext(), adapterView.getItemAtPosition(i) + " selected", Toast.LENGTH_LONG).show();
