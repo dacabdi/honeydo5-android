@@ -8,6 +8,9 @@
 
     <color name="colorIcon">#CCCCCC</color>
 
+    <color name="colorError">#ff6666</color>
+    <color name="textColor">#ffffff</color>
+
     <color name="col1">#0DFF78</color>
     <color name="col2">#FFFFA4</color>
     <color name="col3">#299E38</color>
