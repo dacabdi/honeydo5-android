@@ -4,14 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="5dp"
     tools:context="com.honeydo5.honeydo.app.SignUpActivity">
 
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp">
+        tools:layout_editor_absoluteX="5dp"
+        tools:layout_editor_absoluteY="223dp">
 
         <TextView
             android:id="@+id/SignUpTextViewMessage"
@@ -159,7 +160,8 @@
             app:layout_constraintEnd_toStartOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-    </RelativeLayout><![CDATA[
+    </RelativeLayout>
+    <![CDATA[
 
 
         tools:layout_editor_absoluteX="131dp"

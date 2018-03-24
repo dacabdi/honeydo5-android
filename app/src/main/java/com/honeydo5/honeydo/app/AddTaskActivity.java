@@ -46,7 +46,7 @@ public class AddTaskActivity extends AppCompatActivity {
     //int y, m, d, hr, min;
     static final int date_dialog_id = 0;
     static final int time_dialog_id = 1;
-
+  
     ArrayAdapter<CharSequence> adapter;
 
     //fields
@@ -64,7 +64,7 @@ public class AddTaskActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Log.d(tag, "Setting AddTaskActivity content view.");
         setContentView(R.layout.activity_add_task);
-
+      
         // get components -----------------------------------------
 
         Log.d(tag, "Finding components and views.");
