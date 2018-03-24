@@ -15,6 +15,20 @@ public class InputValidation {
         return match(USERNAME_PATTERN, username);
     }
 
+    public static boolean validateDate(String date) {
+        return true;
+        //TODO: David add a date regex
+    }
+
+    public static boolean validateTime(String time) {
+        return true;
+        //TODO: David add a time regex
+    }
+
+    public static boolean checkIfEmpty(String str) {
+        return str.isEmpty();
+    }
+
     private static boolean match(String strPattern, String str){
         Pattern pattern = Pattern.compile(strPattern);
         Matcher matcher = pattern.matcher(str);
