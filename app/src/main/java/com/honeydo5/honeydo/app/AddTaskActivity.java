@@ -180,6 +180,8 @@ public class AddTaskActivity extends AppCompatActivity {
 
             //validate input
 
+            boolean valid = true;
+
             String name = inputName.getText().toString(),
                    description = inputDescription.getText().toString(),
                    task_tag = inputTag.getSelectedItem().toString(),
@@ -192,7 +194,7 @@ public class AddTaskActivity extends AppCompatActivity {
             if(InputValidation.checkIfEmpty(name)){
                 Log.d(tag, "Name field is invalid : " + name);
                 labelName.setTextColor(getResources().getColor(R.color.colorError));
-                return null;
+                valid = false;
             } else {
                 labelName.setTextColor(getResources().getColor(R.color.colorText));
             }
@@ -200,7 +202,7 @@ public class AddTaskActivity extends AppCompatActivity {
             if(InputValidation.checkIfEmpty(task_tag)) {
                 Log.d(tag, "Tag field is invalid : " + task_tag);
                 imageButtonTime.setColorFilter(getResources().getColor(R.color.colorError));
-                return null;
+                valid = false;
             } else {
                 imageButtonTime.setColorFilter(getResources().getColor(R.color.colorText));
             }
@@ -208,7 +210,7 @@ public class AddTaskActivity extends AppCompatActivity {
             if(!InputValidation.validateDate(date)) {
                 Log.d(tag, "Date field is invalid : " + date);
                 imageButtonDate.setColorFilter(getResources().getColor(R.color.colorError));
-                return null;
+                valid = false;
             } else {
                 imageButtonDate.setColorFilter(getResources().getColor(R.color.colorIcon));
             }
@@ -216,10 +218,12 @@ public class AddTaskActivity extends AppCompatActivity {
             if(!InputValidation.validateTime(time)) {
                 Log.d(tag, "Time field is invalid : " + time);
                 imageButtonTime.setColorFilter(getResources().getColor(R.color.colorError));
-                return null;
+                valid = false;
             } else {
                 imageButtonTime.setColorFilter(getResources().getColor(R.color.colorIcon));
             }
+
+            if(!valid) return null;
 
             Log.d(tag, "Conforming JSON payload.");
 
