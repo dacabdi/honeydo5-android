@@ -78,9 +78,18 @@ public class MainScreenActivity extends AppCompatActivity {
     }
 
     void getTaskList() {
-        Log.d(tag, "Retrieving task list from server");
-        JsonObjectRequest taskRequest = new JsonObjectRequest (
-                Request.Method.GET, AppController.defaultBaseUrl + "/get_tasks", null,
+        final String endpoint = "get_tasks";
+        AppController.getInstance().cancelPendingRequests(tag + ":" + endpoint);
+        JSONObject postMessage = null;
+
+        Log.d(tag, "API /" + endpoint + " Request POST Body : [empty]");
+
+        // request object to be added to volley's request queue
+        Log.d(tag, "API /" + endpoint + " creating request object.");
+        JsonObjectRequest request = new JsonObjectRequest(
+                Request.Method.GET, // request method
+                AppController.defaultBaseUrl + "/" + endpoint, // target url
+                postMessage, // json object from hashmap
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -94,7 +103,7 @@ public class MainScreenActivity extends AppCompatActivity {
                 }
         );
 
-        AppController.getInstance().addToRequestQueue(taskRequest);
+        AppController.getInstance().addToRequestQueue(request);
     }
 
     void createNewTask()
