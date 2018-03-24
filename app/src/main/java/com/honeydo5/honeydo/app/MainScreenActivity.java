@@ -11,17 +11,22 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.honeydo5.honeydo.R;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
-public class MainScreenActivity extends AppCompatActivity {
+import java.util.HashMap;
+import java.util.Map;
 
-    RecyclerView taskListView;
+public class MainScreenActivity extends AppCompatActivity {
+    String tag = "MAINSCREEN";
+    RecyclerView listViewTasks;
     TaskAdapter adapter;
 
     @Override
@@ -33,14 +38,14 @@ public class MainScreenActivity extends AppCompatActivity {
         Button rewards = (Button) findViewById(R.id.MainScreenButtonRewards);
         Button add = (Button) findViewById(R.id.add);
 
-        taskListView = findViewById(R.id.MainScreenRecyclerTaskList);
-        taskListView.setHasFixedSize(true);
-        taskListView.setLayoutManager(new LinearLayoutManager(this));
+        listViewTasks = findViewById(R.id.MainScreenRecyclerTaskList);
+        listViewTasks.setHasFixedSize(true);
+        listViewTasks.setLayoutManager(new LinearLayoutManager(this));
 
         getTaskList();
 
         adapter = new TaskAdapter(this, TaskSystem.getTaskList());
-        taskListView.setAdapter(adapter);
+        listViewTasks.setAdapter(adapter);
         //taskListView.scrollTo(0,2);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.MainScreenButtonAddTask);
@@ -62,28 +67,55 @@ public class MainScreenActivity extends AppCompatActivity {
         adapter.notifyDataSetChanged();
     }
 
-    void parseResponseToAdapter(JSONObject response) {
+    void parseResponseToAdapter(JSONObject response) throws JSONException {
         // iterate addTask() with JSON data
-
     }
 
     void getTaskList() {
-        JsonObjectRequest taskRequest = new JsonObjectRequest (
-                Request.Method.GET, AppController.defaultBaseUrl + "/get_tasks", null,
+        final String endpoint = "get_tasks";
+        AppController.getInstance().cancelPendingRequests(tag + ":" + endpoint);
+        JSONObject postMessage = null;
+
+        Log.d(tag, "API /" + endpoint + " Request POST Body : " + postMessage.toString());
+
+        // request object to be added to volley's request queue
+        Log.d(tag, "API /" + endpoint + " creating request object.");
+        JsonObjectRequest request = new JsonObjectRequest(
+                Request.Method.POST, // request method
+                AppController.defaultBaseUrl + "/" + endpoint, // target url
+                postMessage, // json object from hashmap
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        parseResponseToAdapter(response);
+                        Log.d(tag, "API /" + endpoint + " raw response : " + response.toString());
+                        try {
+                            // TODO: on success, update local storage with latest server response (stringify json object)
+                            parseResponseToAdapter(response);
+                        } catch(JSONException e) {
+                            // TODO: parsing data error, try local
+                            // log and do a stack trace
+                            Log.e(tag, "API /" + endpoint + " error parsing response: " + e.getMessage());
+                            Log.getStackTraceString(e);
+                        }
                     }
                 }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.e("API-LOGIN-ERROR", "Something happened in the way of heaven : " + error.getMessage());
-                    }
-                }
-        );
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                // log the error
+                AppController.getInstance().requestNetworkError(error, tag, "/" + endpoint);
+                // TODO: pull from local storage
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<>(); // assumes <String, String> template params
+                headers.put("Content-Type", "application/json; charset=utf-8");
+                return headers;
+            }
+        };
 
-        AppController.getInstance().addToRequestQueue(taskRequest);
+        Log.d(tag, "API /" + endpoint + " adding request object to request queue.");
+        AppController.getInstance().addToRequestQueue(request, tag + ":" + endpoint);
     }
 
     void createNewTask()
