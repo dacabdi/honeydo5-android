@@ -36,8 +36,7 @@ public class SignUpActivity extends AppCompatActivity {
     //labels
     private TextView labelEmail,
                      labelName,
-                     labelPassword,
-                     labelPasswordRe;
+                     labelPassword;
 
     private TextView textMessage;
     private Button buttonSubmit;
@@ -87,6 +86,13 @@ public class SignUpActivity extends AppCompatActivity {
         try{
 
             boolean valid = true;
+            String errorMessage = "";
+
+            /*
+                "email"
+                "name"
+                "password"
+             */
 
             String  email = inputEmail.getText().toString(),
                     name = inputName.getText().toString(),
@@ -95,7 +101,7 @@ public class SignUpActivity extends AppCompatActivity {
 
             if(!InputValidation.validateEmail(email)){
                 Log.d(tag, "Invalid email: " + email);
-                textMessage.setText(getString(R.string.message_invalid_email));
+                errorMessage += getString(R.string.message_invalid_email);
                 labelEmail.setTextColor(getResources().getColor(R.color.colorError));
                 valid = false;
             } else {
@@ -104,24 +110,28 @@ public class SignUpActivity extends AppCompatActivity {
 
             if(!InputValidation.validateUsername(name)){
                 Log.d(tag, "Invalid username: " + name);
-                textMessage.setText(getString(R.string.message_invalid_username));
+                errorMessage += getString(R.string.message_invalid_username);
                 labelName.setTextColor(getResources().getColor(R.color.colorError));
                 valid = false;
             } else {
-                labelEmail.setTextColor(getResources().getColor(R.color.colorText));
+                labelName.setTextColor(getResources().getColor(R.color.colorText));
             }
 
-            if(!password.equals(passwordRe)){
+            if(!password.equals(passwordRe) || InputValidation.checkIfEmpty(password)){
                 Log.d(tag, "Password fields do not match : " + password + "->" + passwordRe);
                 labelPassword.setTextColor(getResources().getColor(R.color.colorError));
-                textMessage.setText(getString(R.string.message_passwords_do_not_match));
+                errorMessage += getString(R.string.message_passwords_do_not_match);
                 valid = false;
+            }else{
+                labelPassword.setTextColor(getResources().getColor(R.color.colorText));
             }
 
             if(!valid) {
+                textMessage.setText(errorMessage);
                 textMessage.setVisibility(View.VISIBLE);
                 return null;
             }else{
+                textMessage.setText("");
                 textMessage.setVisibility(View.INVISIBLE);
                 Log.d(tag, "All input fields are valid.");
             }
