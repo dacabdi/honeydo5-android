@@ -1,5 +1,6 @@
 package com.honeydo5.honeydo.app;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -23,6 +24,7 @@ import com.honeydo5.honeydo.util.TaskSystem;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.FileOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -101,8 +103,9 @@ public class MainScreenActivity extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         Log.d(tag, "API /" + endpoint + " raw response : " + response.toString());
                         try {
-                            // TODO: on success, update local storage with latest server response (stringify json object)
+                            // TODO: test local storage
                             parseResponseToAdapter(response);
+                            AppController.getInstance().writeLocalFile("tasks.json", response.toString(4));
                         } catch(JSONException e) {
                             // TODO: parsing data error, try local
                             // log and do a stack trace
@@ -115,7 +118,17 @@ public class MainScreenActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 // log the error
                 AppController.getInstance().requestNetworkError(error, tag, "/" + endpoint);
-                // TODO: pull from local storage
+
+                Log.d(tag, "Reading from local storage tasks.json");
+                String localData = AppController.getInstance().readLocalFile("tasks.json");
+
+                try {
+                    parseResponseToAdapter(new JSONObject(localData));
+                } catch(JSONException e) {
+                    // log and do a stack trace
+                    Log.e(tag, "Error parsing local file:" + e.getMessage());
+                    Log.getStackTraceString(e);
+                }
             }
         }) {
             @Override
