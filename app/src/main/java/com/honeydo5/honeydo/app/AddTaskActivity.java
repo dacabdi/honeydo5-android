@@ -228,8 +228,11 @@ public class AddTaskActivity extends AppCompatActivity {
             json.put("description", description);
             json.put("tag", task_tag);
             json.put("priority", priority);
-            json.put("date", date);
-            json.put("time", time);
+            json.put("due_date", date);
+            json.put("due_time", time);
+            // NOTE: using 'due_date' and 'due_time' for the task request
+            //       because backend uses 'date' and 'time' for creation timestamp
+
         } catch (JSONException e){
             Log.e(tag, e.getMessage());
             Log.e(tag, Log.getStackTraceString(e));
