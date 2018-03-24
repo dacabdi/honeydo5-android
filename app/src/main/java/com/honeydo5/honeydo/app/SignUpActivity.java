@@ -26,12 +26,21 @@ import java.util.Map;
 
 public class SignUpActivity extends AppCompatActivity {
     private String tag = "SIGNUPACTIVITY";
-    private Button buttonSubmit;
+
+    //input fields
     private EditText inputEmail,
-                     inputName,
-                     inputPassword,
-                     inputPasswordRe;
+            inputName,
+            inputPassword,
+            inputPasswordRe;
+
+    //labels
+    private TextView labelEmail,
+                     labelName,
+                     labelPassword,
+                     labelPasswordRe;
+
     private TextView textMessage;
+    private Button buttonSubmit;
 
 
     @Override
@@ -47,6 +56,12 @@ public class SignUpActivity extends AppCompatActivity {
         inputPassword = findViewById(R.id.SignUpEditTextPassword);
         inputPasswordRe = findViewById(R.id.SignUpEditTextPasswordRe);
         textMessage = findViewById(R.id.SignUpTextViewMessage);
+
+        //labels (for validation highlighting)
+        labelEmail = findViewById(R.id.SignUpTextViewLabelEmail);
+        labelName = findViewById(R.id.SignUpTextViewLabelName);
+        labelPassword = findViewById(R.id.SignUpTextViewLabelPassword);
+
 
         // set event handlers --------------------------------------
         Log.d(tag, "Attaching event handlers.");
@@ -70,39 +85,51 @@ public class SignUpActivity extends AppCompatActivity {
         Log.d(tag, "Gathering input data.");
 
         try{
-            Log.d(tag, "Validating email field.");
-            String email = inputEmail.getText().toString();
+
+            boolean valid = true;
+
+            String  email = inputEmail.getText().toString(),
+                    name = inputName.getText().toString(),
+                    password = inputPassword.getText().toString(),
+                    passwordRe = inputPasswordRe.getText().toString();
+
             if(!InputValidation.validateEmail(email)){
                 Log.d(tag, "Invalid email: " + email);
                 textMessage.setText(getString(R.string.message_invalid_email));
-                textMessage.setVisibility(View.VISIBLE);
-                return null;
+                labelEmail.setTextColor(getResources().getColor(R.color.colorError));
+                valid = false;
+            } else {
+                labelEmail.setTextColor(getResources().getColor(R.color.colorText));
             }
 
-            Log.d(tag, "Validating username field.");
-            String username = inputName.getText().toString();
-            if(!InputValidation.validateUsername(username)){
-                Log.d(tag, "Invalid username: " + username);
+            if(!InputValidation.validateUsername(name)){
+                Log.d(tag, "Invalid username: " + name);
                 textMessage.setText(getString(R.string.message_invalid_username));
-                textMessage.setVisibility(View.VISIBLE);
-                return null;
+                labelName.setTextColor(getResources().getColor(R.color.colorError));
+                valid = false;
+            } else {
+                labelEmail.setTextColor(getResources().getColor(R.color.colorText));
             }
 
-            String password = inputPassword.getText().toString();
-            String passwordRe = inputPasswordRe.getText().toString();
             if(!password.equals(passwordRe)){
                 Log.d(tag, "Password fields do not match : " + password + "->" + passwordRe);
+                labelPassword.setTextColor(getResources().getColor(R.color.colorError));
                 textMessage.setText(getString(R.string.message_passwords_do_not_match));
-                textMessage.setVisibility(View.VISIBLE);
-                return null;
+                valid = false;
             }
 
-            Log.d(tag, "All input fields are valid.");
+            if(!valid) {
+                textMessage.setVisibility(View.VISIBLE);
+                return null;
+            }else{
+                textMessage.setVisibility(View.INVISIBLE);
+                Log.d(tag, "All input fields are valid.");
+            }
 
             Log.d(tag, "Adding fields to JSON object.");
-            json.put("email", inputEmail.getText().toString());
-            json.put("name", inputName.getText().toString());
-            json.put("password", inputPassword.getText().toString());
+            json.put("email", email);
+            json.put("name", name);
+            json.put("password", password);
         } catch (JSONException e){
             Log.e(tag, e.getMessage());
             Log.e(tag, Log.getStackTraceString(e));
