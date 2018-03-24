@@ -85,12 +85,12 @@ public class MainScreenActivity extends AppCompatActivity {
         AppController.getInstance().cancelPendingRequests(tag + ":" + endpoint);
         JSONObject postMessage = null;
 
-        Log.d(tag, "API /" + endpoint + " Request POST Body : " + postMessage.toString());
+        Log.d(tag, "API /" + endpoint + " Request POST Body : [empty]");
 
         // request object to be added to volley's request queue
         Log.d(tag, "API /" + endpoint + " creating request object.");
         JsonObjectRequest request = new JsonObjectRequest(
-                Request.Method.POST, // request method
+                Request.Method.GET, // request method
                 AppController.defaultBaseUrl + "/" + endpoint, // target url
                 postMessage, // json object from hashmap
                 new Response.Listener<JSONObject>() {
