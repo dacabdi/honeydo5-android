@@ -21,57 +21,64 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.honeydo5.honeydo.R;
-import com.honeydo5.honeydo.util.DateHelper;
+import com.honeydo5.honeydo.util.Task;
+import com.honeydo5.honeydo.util.TaskSystem;
 
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-public class AddTask extends AppCompatActivity {
+public class AddTaskActivity extends AppCompatActivity {
     private String tag = "ADDTASK";
 
-    int y, m, d, hr, min;
+    Calendar date;
+    //int y, m, d, hr, min;
     static final int date_dialog_id = 0;
     static final int time_dialog_id = 1;
 
-    EditText nameText, descriptionText;
+    EditText textName, textDescription;
 
-    ImageButton dateBtn, timeBtn;
-    Button addBtn;
-    EditText timeText, dateText;
+    ImageButton buttonDate, buttonTime;
+    Button buttonAdd;
+    EditText inputTime, inputDate;
 
-    Switch prioritySwitch;
+    Switch switchPriority;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_task);
 
-        nameText = (EditText) findViewById(R.id.addTaskEditViewName);
-        descriptionText = (EditText) findViewById(R.id.addTaskEditTextDescription);
+        textName = findViewById(R.id.addTaskEditViewName);
+        textDescription = findViewById(R.id.addTaskEditTextDescription);
 
-        dateBtn = (ImageButton) findViewById(R.id.addTaskDatePickerDate);
-        timeBtn = (ImageButton) findViewById(R.id.addTaskTimePickerTime);
+        buttonDate = findViewById(R.id.addTaskDatePickerDate);
+        buttonTime = findViewById(R.id.addTaskTimePickerTime);
 
-        addBtn = (Button) findViewById(R.id.addTaskButtonAdd);
+        buttonAdd = findViewById(R.id.addTaskButtonAdd);
 
-        timeText = (EditText) findViewById(R.id.addTaskEditTextTimeText);
-        dateText = (EditText) findViewById(R.id.addTaskEditTextDateText);
 
-        prioritySwitch = (Switch) findViewById(R.id.addTaskSwitchPriority);
+        date = Calendar.getInstance();
+        date.set(Calendar.HOUR_OF_DAY, date.get(Calendar.HOUR_OF_DAY + 1));
+
+        inputTime = findViewById(R.id.addTaskEditTextTimeText);
+        inputDate = findViewById(R.id.addTaskEditTextDateText);
+
+        inputTime.setText(android.text.format.DateFormat.format("hh:mm a", date));
+        inputDate.setText(android.text.format.DateFormat.format("MM/dd/yyyy", date));
+
+        switchPriority = (Switch) findViewById(R.id.addTaskSwitchPriority);
 
         showDate();
         showTime();
 
-        addBtn.setOnClickListener(new View.OnClickListener() {
+        buttonAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Date due = DateHelper.getDate(y, m, d, hr, min);
-                Task t = new Task(descriptionText.getText().toString(), nameText.getText().toString(), prioritySwitch.isChecked(), null, due, null);
+                Task t = new Task(textDescription.getText().toString(), textName.getText().toString(), switchPriority.isChecked(), null, date, null);
                 sendNewTaskToServer(t);
                 TaskSystem.addTask(t);
 
@@ -84,7 +91,7 @@ public class AddTask extends AppCompatActivity {
 
     // Set click listeners for diaglogs
     public void showDate(){
-        dateBtn.setOnClickListener(
+        buttonDate.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -93,7 +100,7 @@ public class AddTask extends AppCompatActivity {
                 }
         );
 
-        dateText.setOnClickListener(
+        inputDate.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -106,13 +113,12 @@ public class AddTask extends AppCompatActivity {
     // Creates dialogs
     @Override
     public Dialog onCreateDialog(int id){
-        Calendar current = Calendar.getInstance();
         if(id == 0){
-            return new DatePickerDialog(this, dplistener, current.get(Calendar.YEAR), current.get(Calendar.MONTH), current.get(Calendar.DAY_OF_MONTH));
+            return new DatePickerDialog(this, dplistener, date.get(Calendar.YEAR), date.get(Calendar.MONTH), date.get(Calendar.DAY_OF_MONTH));
             //Current day
         }
         if(id == 1){
-            return new TimePickerDialog(this, tplistener, current.get(Calendar.HOUR_OF_DAY)+ 1, current.get(Calendar.MINUTE), false);
+            return new TimePickerDialog(this, tplistener, date.get(Calendar.HOUR_OF_DAY)+ 1, 0, false);
             //One hour from "now"
         }
         return null;
@@ -122,15 +128,15 @@ public class AddTask extends AppCompatActivity {
     private DatePickerDialog.OnDateSetListener dplistener = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker datePicker, int year, int monthOfYear, int dayOfMonth) {
-            y = year;
-            m = monthOfYear;
-            d = dayOfMonth;
+            Log.d(tag, "Set date to: " + date.get(Calendar.MONTH) + "/" + date.get(Calendar.DAY_OF_MONTH) + "/" + date.get(Calendar.YEAR));
+            date.set(year, monthOfYear, dayOfMonth);
+            inputDate.setText(android.text.format.DateFormat.format("MM/dd/yyyy", date));
         }
     };
 
 
     public void showTime(){
-        timeBtn.setOnClickListener(
+        buttonTime.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -139,7 +145,7 @@ public class AddTask extends AppCompatActivity {
                 }
         );
 
-        timeText.setOnClickListener(
+        inputTime.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -152,17 +158,17 @@ public class AddTask extends AppCompatActivity {
     private TimePickerDialog.OnTimeSetListener tplistener = new TimePickerDialog.OnTimeSetListener() {
         @Override
         public void onTimeSet(TimePicker timePicker, int hour, int minute) {
-            Log.d(tag, "Set time to: " + hr + ":" + min + "");
-            timeText.setText(hour + ":" + minute);
-            hr = hour;
-            min = minute;
+            Log.d(tag, "Set time to: " + date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE) + "");
+            date.set(Calendar.HOUR, hour);
+            date.set(Calendar.MINUTE, minute);
+            inputTime.setText(android.text.format.DateFormat.format("hh:mm a", date));
         }
     };
 
     @Override
     public void onBackPressed() {
         //super.onBackPressed();
-        Intent intent = new Intent(this, MainScreen.class);
+        Intent intent = new Intent(this, MainScreenActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_TASK_ON_HOME);
         startActivity(intent);
         this.finish();

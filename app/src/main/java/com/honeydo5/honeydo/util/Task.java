@@ -1,21 +1,23 @@
-package com.honeydo5.honeydo.app;
+package com.honeydo5.honeydo.util;
+
+import com.honeydo5.honeydo.util.Tag;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
 
 public class Task {
 
     private String header, body;
     private boolean priority;
     private ArrayList<Tag> tags;
-    private Date due, reminder;
+    private Calendar date, reminder;
 
-    public Task(String body, String header, boolean priority, ArrayList<Tag> tags, Date due, Date reminder) {
+    public Task(String body, String header, boolean priority, ArrayList<Tag> tags, Calendar date, Calendar reminder) {
         this.body = body;
         this.header = header;
         this.priority = priority;
         this.tags = tags;
-        this.due = due;
+        this.date = date;
         this.reminder = reminder;
     }
 
@@ -51,19 +53,19 @@ public class Task {
         this.tags = tags;
     }
 
-    public Date getDue() {
-        return due;
+    public Calendar getDate() {
+        return date;
     }
 
-    public void setDue(Date due) {
-        this.due = due;
+    public void setDate(Calendar date) {
+        this.date = date;
     }
 
-    public Date getReminder() {
+    public Calendar getReminder() {
         return reminder;
     }
 
-    public void setReminder(Date reminder) {
+    public void setReminder(Calendar reminder) {
         this.reminder = reminder;
     }
 }

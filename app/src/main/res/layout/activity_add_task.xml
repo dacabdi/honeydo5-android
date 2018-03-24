@@ -12,7 +12,9 @@
             android:id="@+id/addTaskTextViewHeader"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
             android:text="Add Task"
+            android:textColor="@color/col4"
             android:textSize="36sp" />
 
         <EditText
@@ -69,6 +71,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_alignTop="@+id/addTaskEditTextDateText"
+                android:layout_gravity="bottom"
                 android:layout_toEndOf="@+id/addTaskEditTextDateText"
                 android:layout_toRightOf="@+id/addTaskEditTextDateText"
                 android:scaleType="fitStart"
@@ -92,6 +95,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_alignBottom="@+id/addTaskEditTextTimeText"
+                android:layout_gravity="bottom"
                 android:layout_toEndOf="@+id/addTaskEditTextTimeText"
                 android:layout_toRightOf="@+id/addTaskEditTextTimeText"
                 android:scaleType="fitStart"

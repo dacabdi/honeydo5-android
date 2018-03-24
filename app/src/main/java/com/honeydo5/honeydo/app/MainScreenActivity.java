@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -16,12 +17,15 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.honeydo5.honeydo.R;
-import com.honeydo5.honeydo.util.DateHelper;
+import com.honeydo5.honeydo.util.TaskAdapter;
+import com.honeydo5.honeydo.util.TaskSystem;
 
 import org.json.JSONObject;
 
-public class MainScreen extends AppCompatActivity {
+public class MainScreenActivity extends AppCompatActivity {
+    private String tag = "MAINSCREEN";
 
+    DividerItemDecoration separatorDecoration;
     RecyclerView taskListView;
     TaskAdapter adapter;
 
@@ -37,6 +41,11 @@ public class MainScreen extends AppCompatActivity {
         taskListView = findViewById(R.id.MainScreenRecyclerTaskList);
         taskListView.setHasFixedSize(true);
         taskListView.setLayoutManager(new LinearLayoutManager(this));
+
+        //add separators
+        separatorDecoration = new DividerItemDecoration(taskListView.getContext(),
+                getResources().getConfiguration().orientation);
+        taskListView.addItemDecoration(separatorDecoration);
 
         getTaskList();
 
@@ -59,16 +68,17 @@ public class MainScreen extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
+        Log.d(tag, "Resuming Main Screen");
         adapter.notifyDataSetChanged();
     }
 
     void parseResponseToAdapter(JSONObject response) {
         // iterate addTask() with JSON data
-
+        //TODO: parse data from response into individual tasks
     }
 
     void getTaskList() {
+        Log.d(tag, "Retrieving task list from server");
         JsonObjectRequest taskRequest = new JsonObjectRequest (
                 Request.Method.GET, AppController.defaultBaseUrl + "/get_tasks", null,
                 new Response.Listener<JSONObject>() {
@@ -89,7 +99,8 @@ public class MainScreen extends AppCompatActivity {
 
     void createNewTask()
     {
-        Intent intent = new Intent(this, AddTask.class);
+        Log.d(tag, "Go to AddTaskActivity");
+        Intent intent = new Intent(this, AddTaskActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME);
         startActivity(intent);
     }

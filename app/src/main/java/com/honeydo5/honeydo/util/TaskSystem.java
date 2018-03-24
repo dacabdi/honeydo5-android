@@ -1,4 +1,6 @@
-package com.honeydo5.honeydo.app;
+package com.honeydo5.honeydo.util;
+
+import com.honeydo5.honeydo.util.Task;
 
 import java.util.ArrayList;
 

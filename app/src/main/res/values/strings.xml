@@ -21,8 +21,11 @@
     <string name="message_communication_problem">Communication problems.</string>
     <string name="message_endpoint_200">Endpoint alive and OK.</string>
 
-  
-  
+    <!-- time and date formats -->
+    <string name="standard_date_format">MM-dd-yyyy</string>
+    <string name="standard_time_format">hh:mm a</string>
+    <string name="standard_time24_format">HH:mm a</string>
+
     <!-- Strings related to Settings -->
 
     <!-- Example General settings -->

@@ -22,7 +22,7 @@ public class SettingsActivity extends PreferenceActivity {
     @Override
     public void onBackPressed() {
         //super.onBackPressed();
-        Intent i = new Intent(SettingsActivity.this, MainScreen.class);
+        Intent i = new Intent(SettingsActivity.this, MainScreenActivity.class);
         startActivity(i);
     }
 }
