@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -16,6 +17,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -25,9 +27,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.honeydo5.honeydo.R;
+import com.honeydo5.honeydo.util.InputValidation;
 import com.honeydo5.honeydo.util.Task;
 import com.honeydo5.honeydo.util.TaskSystem;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
@@ -43,7 +47,8 @@ public class AddTaskActivity extends AppCompatActivity {
     static final int date_dialog_id = 0;
     static final int time_dialog_id = 1;
 
-    EditText textName, textDescription;
+    EditText inputName, inputDescription;
+    TextView textName, textDescription;
 
     ImageButton buttonDate, buttonTime;
     Button buttonAdd;
@@ -58,8 +63,11 @@ public class AddTaskActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_task);
 
-        textName = findViewById(R.id.addTaskEditViewName);
-        textDescription = findViewById(R.id.addTaskEditTextDescription);
+        inputName = findViewById(R.id.addTaskEditViewName);
+        inputDescription = findViewById(R.id.addTaskEditTextDescription);
+
+        textName = findViewById(R.id.addTaskTextViewNameLabel);
+        textDescription = findViewById(R.id.addTaskTextViewDiscLabel);
 
         buttonDate = findViewById(R.id.addTaskDatePickerDate);
         buttonTime = findViewById(R.id.addTaskTimePickerTime);
@@ -102,15 +110,66 @@ public class AddTaskActivity extends AppCompatActivity {
         buttonAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Task t = new Task(textDescription.getText().toString(), textName.getText().toString(), switchPriority.isChecked(), null, date, null);
-                sendNewTaskToServer(t);
-                TaskSystem.addTask(t);
+                Task t = new Task(inputDescription.getText().toString(), inputName.getText().toString(), switchPriority.isChecked(), null, date, null);
+                JSONObject json = getFieldsData(t);
+                if(!json.equals(null)) {
+                    sendNewTaskToServer(t);
+                    TaskSystem.addTask(t);
 
-                Log.d(tag, "Sent task to server and local task system");
+                    Log.d(tag, "Sent task to server and local task system");
 
-                onBackPressed();
+                    onBackPressed();
+                }
             }
         });
+    }
+
+    @Nullable
+    private JSONObject getFieldsData(Task t){
+        JSONObject json = new JSONObject();
+
+        Log.d(tag, "Gathering input data.");
+
+        try{
+            // check if required fields are filled
+            if(InputValidation.checkIfEmpty(inputName.getText().toString())){
+                Log.d(tag, "Name field is blank");
+                textName.setTextColor(getResources().getColor(R.color.textColor));
+                return null;
+            }
+            else {
+                textName.setTextColor(getResources().getColor(R.color.textColor));
+            }
+
+            if(!InputValidation.validateTime(inputTime.getText().toString())) {
+                Log.d(tag, "Time field empty");
+                buttonTime.setColorFilter(getResources().getColor(R.color.colorError));
+                return null;
+            }
+            else {
+                buttonTime.setColorFilter(getResources().getColor(R.color.colorIcon));
+            }
+
+            if(!InputValidation.validateDate(inputDate.getText().toString())) {
+                Log.d(tag, "Date field empty");
+                buttonDate.setColorFilter(getResources().getColor(R.color.colorError));
+                return null;
+            }
+            else {
+                buttonDate.setColorFilter(getResources().getColor(R.color.colorIcon));
+            }
+
+            json.put("name", t.getHeader());
+            json.put("description", t.getBody());
+            json.put("date", t.getDate().toString());
+            json.put("priority", t.isPriority()+"");
+        } catch (JSONException e){
+            Log.e(tag, e.getMessage());
+            Log.e(tag, Log.getStackTraceString(e));
+            return null;
+        }
+
+        return json;
     }
 
     // Set click listeners for diaglogs
@@ -200,10 +259,6 @@ public class AddTaskActivity extends AppCompatActivity {
 
     public void sendNewTaskToServer(Task t) {
         HashMap<String, String> postMessage = new HashMap<>(); // assumes <String, String>
-        postMessage.put("name", t.getHeader());
-        //postMessage.put("description", t.getBody());
-        //postMessage.put("date", t.getDue().toString());
-        postMessage.put("priority", t.isPriority()+"");
 
         Log.d("API-LOGIN-POST", postMessage.toString());
         JsonObjectRequest loginReq = new JsonObjectRequest(
