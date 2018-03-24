@@ -15,6 +15,8 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 
 import java.io.UnsupportedEncodingException;
+import java.net.CookieHandler;
+import java.net.CookieManager;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -36,6 +38,10 @@ public class AppController extends Application {
     public void onCreate() {
         super.onCreate();
         mInstance = this;
+
+        // Use the default CookieManager
+        CookieManager manager = new CookieManager();
+        CookieHandler.setDefault(manager);
     }
 
     public static synchronized AppController getInstance() {
