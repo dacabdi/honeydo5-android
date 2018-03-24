@@ -191,10 +191,10 @@ public class AddTaskActivity extends AppCompatActivity {
 
             if(InputValidation.checkIfEmpty(name)){
                 Log.d(tag, "Name field is invalid : " + name);
-                labelName.setTextColor(getResources().getColor(R.color.textColor));
+                labelName.setTextColor(getResources().getColor(R.color.colorError));
                 return null;
             } else {
-                labelName.setTextColor(getResources().getColor(R.color.colorError));
+                labelName.setTextColor(getResources().getColor(R.color.colorText));
             }
 
             if(InputValidation.checkIfEmpty(task_tag)) {
@@ -202,7 +202,7 @@ public class AddTaskActivity extends AppCompatActivity {
                 imageButtonTime.setColorFilter(getResources().getColor(R.color.colorError));
                 return null;
             } else {
-                imageButtonTime.setColorFilter(getResources().getColor(R.color.colorIcon));
+                imageButtonTime.setColorFilter(getResources().getColor(R.color.colorText));
             }
 
             if(!InputValidation.validateDate(date)) {
