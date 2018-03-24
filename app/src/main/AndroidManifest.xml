@@ -36,5 +36,15 @@
             android:label="@string/title_activity_signup">
         </activity>
 
+        <activity
+            android:name=".app.NotificationActivity"
+            android:label="Notification"/>
+
+        <receiver android:name=".util.AlarmReceiver">
+            <intent-filter>
+                <action android:name="DisplayNotification"/>
+            </intent-filter>
+        </receiver>
+
     </application>
 </manifest>
