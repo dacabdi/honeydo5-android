@@ -26,30 +26,37 @@ import java.util.Map;
 
 public class MainScreenActivity extends AppCompatActivity {
     String tag = "MAINSCREEN";
+
+    Button buttonSettings, buttonRewards, buttonAddTask;
+    FloatingActionButton FAButtonAddTask;
     RecyclerView listViewTasks;
     TaskAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Log.d(tag, "Setting MainScreenActivity activity content view.");
         setContentView(R.layout.activity_main_screen);
 
-        Button settings = (Button) findViewById(R.id.MainScreenButtonSettings);
-        Button rewards = (Button) findViewById(R.id.MainScreenButtonRewards);
-        Button add = (Button) findViewById(R.id.add);
-
+        // grab in order top to bottom of page
+        Log.d(tag, "Finding components and views.");
+        buttonSettings = findViewById(R.id.MainScreenButtonSettings);
+        buttonRewards = findViewById(R.id.MainScreenButtonRewards);
+        FAButtonAddTask = findViewById(R.id.MainScreenButtonAddTask);
         listViewTasks = findViewById(R.id.MainScreenRecyclerTaskList);
+
+        Log.d(tag, "Setting listViewTasks formatting and layout.");
         listViewTasks.setHasFixedSize(true);
         listViewTasks.setLayoutManager(new LinearLayoutManager(this));
 
+        Log.d(tag, "Calling /get_tasks to refresh the view.");
         getTaskList();
 
         adapter = new TaskAdapter(this, TaskSystem.getTaskList());
         listViewTasks.setAdapter(adapter);
-        //taskListView.scrollTo(0,2);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.MainScreenButtonAddTask);
-        fab.setOnClickListener(new View.OnClickListener() {
+        FAButtonAddTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
@@ -60,16 +67,18 @@ public class MainScreenActivity extends AppCompatActivity {
         });
     }
 
+
     @Override
     protected void onResume() {
         super.onResume();
-
         adapter.notifyDataSetChanged();
     }
+
 
     void parseResponseToAdapter(JSONObject response) throws JSONException {
         // iterate addTask() with JSON data
     }
+
 
     void getTaskList() {
         final String endpoint = "get_tasks";
@@ -124,5 +133,4 @@ public class MainScreenActivity extends AppCompatActivity {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME);
         startActivity(intent);
     }
-
 }
