@@ -28,13 +28,10 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.honeydo5.honeydo.R;
 import com.honeydo5.honeydo.util.InputValidation;
-import com.honeydo5.honeydo.util.Task;
-import com.honeydo5.honeydo.util.TaskSystem;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -51,7 +48,7 @@ public class AddTaskActivity extends AppCompatActivity {
 
     //fields
     EditText inputName, inputDescription, inputDate, inputTime;
-    Switch switchPriority;
+    Switch inputPriority;
     Spinner inputTag;
     //labels
     TextView labelName, labelDescription, labelTag;
@@ -70,7 +67,8 @@ public class AddTaskActivity extends AppCompatActivity {
         Log.d(tag, "Finding components and views.");
         //fields
         inputName = findViewById(R.id.addTaskEditViewName);
-        inputDescription = findViewById(R.id.addTaskMultilineTextDescription);
+        inputDescription = findViewById(R.id.addTaskMultiLineTaskDesc);
+        inputPriority = findViewById(R.id.addTaskSwitchPriority);
         inputTag = findViewById(R.id.addTaskSpinnerTags);
         inputDate = findViewById(R.id.addTaskEditTextDateText);
         inputTime = findViewById(R.id.addTaskEditTextTimeText);
@@ -88,7 +86,7 @@ public class AddTaskActivity extends AppCompatActivity {
 
         //get date
         calendarDate = Calendar.getInstance();
-        calendarDate.set(Calendar.HOUR_OF_DAY, date.get(Calendar.HOUR_OF_DAY + 1));
+        calendarDate.set(Calendar.HOUR_OF_DAY, calendarDate.get(Calendar.HOUR_OF_DAY + 1));
 
         //init date and time fields using calendarDate
         inputTime.setText(android.text.format.DateFormat.format("hh:mm a", calendarDate));
@@ -164,7 +162,7 @@ public class AddTaskActivity extends AppCompatActivity {
 
 
     @Nullable
-    private JSONObject getFieldsData(Task t){
+    private JSONObject getFieldsData(){
         JSONObject json = new JSONObject();
 
         Log.d(tag, "Gathering input data.");
@@ -183,10 +181,11 @@ public class AddTaskActivity extends AppCompatActivity {
             //validate input
 
             String name = inputName.getText().toString(),
+                   description = inputDescription.getText().toString(),
                    task_tag = inputTag.getSelectedItem().toString(),
-                   priority = Boolean.toString(switchPriority.isChecked()),
+                   priority = Boolean.toString(inputPriority.isChecked()),
                    date = inputDate.getText().toString(),
-                   time = inputDate.getText().toString();
+                   time = inputTime.getText().toString();
 
             Log.d(tag, "Validating add task entries.");
 
@@ -195,18 +194,10 @@ public class AddTaskActivity extends AppCompatActivity {
                 labelName.setTextColor(getResources().getColor(R.color.textColor));
                 return null;
             } else {
-                labelName.setTextColor(getResources().getColor(R.color.errorColor));
+                labelName.setTextColor(getResources().getColor(R.color.colorError));
             }
 
-            if(!InputValidation.checkIfEmpty(task_tag)) {
-                Log.d(tag, "Tag field is invalid : " + task_tag);
-                imageButtonTime.setColorFilter(getResources().getColor(R.color.colorError));
-                return null;
-            } else {
-                imageButtonTime.setColorFilter(getResources().getColor(R.color.colorIcon));
-            }
-
-            if(!InputValidation.checkIfEmpty(task_tag)) {
+            if(InputValidation.checkIfEmpty(task_tag)) {
                 Log.d(tag, "Tag field is invalid : " + task_tag);
                 imageButtonTime.setColorFilter(getResources().getColor(R.color.colorError));
                 return null;
@@ -233,12 +224,12 @@ public class AddTaskActivity extends AppCompatActivity {
             Log.d(tag, "Conforming JSON payload.");
 
             // make json payload for the request
-            json.put("name", inputName.getText().toString());
-            json.put("description", inputDescription.getText().toString());
-            json.put("tag", inputTag.getSelectedItem().toString());
-            json.put("priority", Boolean.toString(switchPriority.isChecked()));
-            json.put("date", inputDate.getText().toString());
-            json.put("time", inputDate.getText().toString());
+            json.put("name", name);
+            json.put("description", description);
+            json.put("tag", task_tag);
+            json.put("priority", priority);
+            json.put("date", date);
+            json.put("time", time);
         } catch (JSONException e){
             Log.e(tag, e.getMessage());
             Log.e(tag, Log.getStackTraceString(e));
@@ -325,7 +316,9 @@ public class AddTaskActivity extends AppCompatActivity {
                         Log.d(tag, "API /" + endpoint + " raw response : " + response.toString());
                         try {
                             // TODO: response treatment
-                            onBackPressed();
+                            // TODO: talk to backend about endpoint status signaling
+                            if(response.get("success") == "true")
+                                onBackPressed();
                         } catch(JSONException e) {
                             // TODO: show parsing error on UI
                             // log and do a stack trace
