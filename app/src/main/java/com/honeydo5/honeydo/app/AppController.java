@@ -5,6 +5,8 @@ import com.android.volley.toolbox.RequestFuture;
 import com.android.volley.toolbox.StringRequest;
 import com.honeydo5.honeydo.util.LruBitmapCache;
 import android.app.Application;
+import android.content.Context;
+import android.os.Environment;
 import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
@@ -14,6 +16,11 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.CookieHandler;
 import java.net.CookieManager;
@@ -33,6 +40,8 @@ public class AppController extends Application {
     private ImageLoader mImageLoader;
 
     private static AppController mInstance;
+
+    private Context context = this;
 
     @Override
     public void onCreate() {
@@ -155,6 +164,52 @@ public class AppController extends Application {
         Log.e(tag,"Network Response at "+ endpoint +": (STATUS:" +
                 String.valueOf(error.networkResponse.statusCode)
                 + ") " + responseBody);
+    }
+
+    public void writeLocalFile(String fileName, String data) {
+        try {
+            File file = new File(context.getFilesDir(), fileName);
+            FileOutputStream out = new FileOutputStream(file, false);
+            byte[] contents = data.getBytes();
+            out.write(contents);
+            out.flush();
+            out.close();
+        } catch(FileNotFoundException e){
+            Log.e(TAG, "writeLocalFile : " + e.getMessage());
+            e.printStackTrace();
+        } catch(IOException e){
+            Log.e(TAG, "writeLocalFile : " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public String readLocalFile(String fileName) {
+        String result = null;
+
+        File file = new File(context.getFilesDir(), fileName);
+        if(file.exists()){
+            FileInputStream fis = null;
+            try {
+                fis = new FileInputStream(file);
+                char current;
+                result = "";
+                while (fis.available() > 0) {
+                    current = (char) fis.read();
+                    result = result + String.valueOf(current);
+                }
+            } catch (Exception e) {
+                Log.e(TAG, "Reading local file : " + e.toString());
+            } finally {
+                if (fis != null)
+                    try {
+                        fis.close();
+                    } catch (IOException e) {
+                        Log.w(TAG, "Error closing local file : " + e.toString());
+                    }
+            }
+        }
+
+        return result;
     }
 
     public void cancelPendingRequests(Object tag) {
