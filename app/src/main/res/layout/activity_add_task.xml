@@ -69,7 +69,7 @@
             android:layout_alignStart="@+id/addTaskTextViewDiscLabel"
             android:layout_below="@+id/addTaskTextViewDiscLabel"
             android:ems="10"
-            android:hint="@string/label_description"
+            android:hint="@string/placeholder_input_description"
             android:inputType="textMultiLine" />
 
         <Switch
