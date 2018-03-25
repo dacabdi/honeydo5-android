@@ -1,5 +1,9 @@
 package com.honeydo5.honeydo.app;
 
+
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.nfc.Tag;
 import android.os.Bundle;
@@ -28,7 +32,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+
 import java.util.ArrayList;
+import java.io.FileOutputStream;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -60,6 +67,15 @@ public class MainScreenActivity extends AppCompatActivity implements RecyclerIte
 
         adapter = new TaskAdapter(this, TaskSystem.getTaskList());
         listViewTasks.setAdapter(adapter);
+
+        //Alarm Manager
+        Calendar calendarMili = Calendar.getInstance();
+        calendarMili.add(Calendar.SECOND, 1);
+
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        Intent intent = new Intent("notification");
+        PendingIntent broadcast = PendingIntent.getBroadcast(this, 100, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendarMili.getTimeInMillis(), broadcast); //had to raise min SDK
 
         FAButtonAddTask.setOnClickListener(new View.OnClickListener() {
             @Override
