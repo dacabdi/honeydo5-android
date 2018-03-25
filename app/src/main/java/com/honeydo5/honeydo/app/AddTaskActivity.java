@@ -1,7 +1,6 @@
 package com.honeydo5.honeydo.app;
 
 import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -29,9 +28,11 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.honeydo5.honeydo.R;
 import com.honeydo5.honeydo.util.InputValidation;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -39,20 +40,25 @@ import java.util.Map;
 public class AddTaskActivity extends AppCompatActivity {
     private String tag = "ADDTASK";
 
-    Calendar calendarDate;
+    private Calendar calendarDate;
     //int y, m, d, hr, min;
-    static final int date_dialog_id = 0;
-    static final int time_dialog_id = 1;
+
+    private DatePickerDialog datePicker;
+    private TimePickerDialog timePicker;
+
+    //TODO eliminate this
+    /*static final int date_dialog_id = 0;
+    static final int time_dialog_id = 1;*/
   
-    ArrayAdapter<CharSequence> adapter;
+    private ArrayAdapter<CharSequence> adapter;
 
     //fields
-    EditText inputName, inputDescription, inputDate, inputTime;
-    Switch inputPriority;
-    Spinner inputTag;
+    private EditText inputName, inputDescription, inputDate, inputTime;
+    private Switch inputPriority;
+    private Spinner inputTag;
     //labels
-    TextView labelName, labelDescription, labelTag;
-    ImageButton imageButtonDate, imageButtonTime;
+    private TextView labelName, labelDescription, labelTag;
+    private ImageButton imageButtonDate, imageButtonTime;
 
     Button buttonAdd;
 
@@ -97,41 +103,72 @@ public class AddTaskActivity extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         inputTag.setAdapter(adapter);
 
+
+        // create dialogs (date|time pickers) ----------------------
+
+        datePicker = new DatePickerDialog(
+                this,
+                datePickerHandler,
+                calendarDate.get(Calendar.YEAR),
+                calendarDate.get(Calendar.MONTH),
+                calendarDate.get(Calendar.DAY_OF_MONTH));
+
+        timePicker = new TimePickerDialog(
+                this,
+                timePickerHandler,
+                calendarDate.get(Calendar.HOUR_OF_DAY)+ 1,
+                0, false);
+
+
         // set event handlers components ---------------------------
 
         //date and time
-        imageButtonDate.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        showDialog(date_dialog_id);
-                    }
+        imageButtonDate.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view) {
+                datePicker.show();
+            }
+        });
+        inputDate.setShowSoftInputOnFocus(false);
+        inputDate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean hasFocus) {
+                if(hasFocus) {
+                    datePicker.show();
+                } else {
+                    datePicker.hide();
                 }
-        );
-        inputDate.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        showDialog(date_dialog_id);
-                    }
+            }
+        });
+        inputDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                datePicker.show();
+            }
+        });
+        imageButtonTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                timePicker.show();
+            }
+        });
+
+        inputTime.setShowSoftInputOnFocus(false);
+        inputTime.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean hasFocus) {
+                if(hasFocus) {
+                    timePicker.show();
+                } else {
+                    timePicker.hide();
                 }
-        );
-        imageButtonTime.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        showDialog(time_dialog_id);
-                    }
-                }
-        );
-        inputTime.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        showDialog(time_dialog_id);
-                    }
-                }
-        );
+            }
+        });
+        inputTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                timePicker.show();
+            }
+        });
 
         //tags spinner
         inputTag.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -145,6 +182,7 @@ public class AddTaskActivity extends AppCompatActivity {
 
             }
         });
+
 
         //add task button
         buttonAdd.setOnClickListener(new View.OnClickListener() {
@@ -160,7 +198,6 @@ public class AddTaskActivity extends AppCompatActivity {
     }
 
 
-
     @Nullable
     private JSONObject getFieldsData(){
         JSONObject json = new JSONObject();
@@ -172,7 +209,7 @@ public class AddTaskActivity extends AppCompatActivity {
             /*
                  name,        (string)
                  description, (string)
-                 tag,         (string)
+                 tag,         (array of strings)
                  priority,    (bool string)
                  date,        (mm/dd/yyyy string)
                  time         (hh:mm am|pm string)
@@ -227,10 +264,14 @@ public class AddTaskActivity extends AppCompatActivity {
 
             Log.d(tag, "Conforming JSON payload.");
 
+            // put tags on an array (backend expects)
+            ArrayList<String> tags = new ArrayList<>();
+            tags.add(task_tag); JSONArray tagsJSON = new JSONArray(tags);
+
             // make json payload for the request
             json.put("name", name);
             json.put("description", description);
-            json.put("tag", task_tag);
+            json.put("tags", tagsJSON);
             json.put("priority", priority);
             json.put("due_date", date);
             json.put("due_time", time);
@@ -245,33 +286,6 @@ public class AddTaskActivity extends AppCompatActivity {
 
         return json;
     }
-
-    // date/time dialogs
-    @Override
-    public Dialog onCreateDialog(int id){
-
-        if(id == date_dialog_id){
-            // set to current day
-            return new DatePickerDialog(
-                    this, datePickerHandler,
-                    calendarDate.get(Calendar.YEAR),
-                    calendarDate.get(Calendar.MONTH),
-                    calendarDate.get(Calendar.DAY_OF_MONTH));
-
-        }
-
-        if(id == time_dialog_id){
-            // set to one hour from "now"
-            return new TimePickerDialog(
-                    this, timePickerHandler,
-                    calendarDate.get(Calendar.HOUR_OF_DAY)+ 1,
-                    0,
-                    false);
-        }
-
-        return null;
-    }
-
 
     private DatePickerDialog.OnDateSetListener datePickerHandler = new DatePickerDialog.OnDateSetListener() {
         @Override
@@ -322,9 +336,21 @@ public class AddTaskActivity extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         Log.d(tag, "API /" + endpoint + " raw response : " + response.toString());
                         try {
+
+                            /* Possible endpoint responses
+
+                                {‘status’: ‘success’}
+                                {‘status’: ‘not logged in’},
+                                {‘status’: ‘must specify name, priority’},
+                                {‘status’: ‘invalid request’},
+                                {‘status’: ‘cannot add dup task’},
+                                {‘status’: ‘invalid request’}
+
+                             */
+
                             // TODO: response treatment
                             // TODO: talk to backend about endpoint status signaling
-                            if(response.get("success") == "true")
+                            if(response.get("status") == "success")
                                 onBackPressed();
                         } catch(JSONException e) {
                             // TODO: show parsing error on UI

@@ -143,7 +143,7 @@ public class LoginScreenActivity extends AppCompatActivity {
                             {‘status’: ‘logged in’},
                             {‘status’: ‘already logged in’},
                             {‘status’: ‘wrong email/password’},
-                            {‘status’: ‘you must specify email and password’}
+                            {‘status’: ‘you must specify email and password’},
                             {‘status’: ‘invalid request’}
                          */
 
