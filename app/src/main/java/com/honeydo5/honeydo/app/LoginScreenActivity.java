@@ -137,10 +137,20 @@ public class LoginScreenActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d(tag, "API /" + endpoint + " raw response : " + response.toString());
+
+                        /*  Possible endpoint responses
+
+                            {‘status’: ‘logged in’},
+                            {‘status’: ‘already logged in’},
+                            {‘status’: ‘wrong email/password’},
+                            {‘status’: ‘you must specify email and password’},
+                            {‘status’: ‘invalid request’}
+                         */
+
                         try {
                             switch (response.get("status").toString())
                             {
-                                case "success" : case "logged in" :
+                                case "already logged in" : case "logged in" :
                                     // login success or already on session (no need for method,
                                     // this code is only called from one place)
                                     Log.d(tag, "Successful Login, intent onto MainScreenActivity, finish LoginScreenActivity");
@@ -155,7 +165,7 @@ public class LoginScreenActivity extends AppCompatActivity {
                                     textMessage.setVisibility(View.VISIBLE);
                                 break;
 
-                                case "you must specify email and password" :
+                                case "you must specify email and password" :case "invalid request" :
                                     textMessage.setText(R.string.message_specify_email_password);
                                     textMessage.setVisibility(View.VISIBLE);
                                 break;

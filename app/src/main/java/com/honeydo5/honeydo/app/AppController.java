@@ -28,6 +28,10 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.CookieHandler;
 import java.net.CookieManager;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -214,6 +218,18 @@ public class AppController extends Application {
         }
 
         return result;
+    }
+
+    public Calendar parseDateTimeString(String str)
+    {
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyyhh:mm aa", Locale.US);
+        try {
+            cal.setTime(sdf.parse(str));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return cal;
     }
 
     public void cancelPendingRequests(Object tag) {
