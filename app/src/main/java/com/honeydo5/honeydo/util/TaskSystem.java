@@ -1,7 +1,5 @@
 package com.honeydo5.honeydo.util;
 
-import com.honeydo5.honeydo.util.Task;
-
 import java.util.ArrayList;
 
 public class TaskSystem {
@@ -11,8 +9,7 @@ public class TaskSystem {
         return taskList;
     }
 
-    public static void addTask(Task t)
-    {
+    public static void addTask(Task t) {
         taskList.add(t);
     }
 }

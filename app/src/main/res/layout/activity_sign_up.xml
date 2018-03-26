@@ -4,37 +4,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="5dp"
     tools:context="com.honeydo5.honeydo.app.SignUpActivity">
 
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp">
+        tools:layout_editor_absoluteX="5dp"
+        tools:layout_editor_absoluteY="223dp">
 
         <TextView
-            android:id="@+id/SignUpTextViewMessage"
-            android:layout_width="match_parent"
+            android:id="@+id/SignUpTextViewTitle"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/SignUpButtonSubmit"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/SignUpEditTextPasswordRe"
-            android:layout_marginTop="28dp" />
 
-        <EditText
-            android:id="@+id/SignUpEditTextPassword"
-            android:layout_width="206dp"
-            android:layout_height="43dp"
-            android:layout_alignBottom="@+id/labelSignupPassword"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginEnd="21dp"
-            android:layout_marginRight="21dp"
-            android:ems="10"
-            android:hint="@string/placeholder_password"
-            android:inputType="textPassword"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:text="@string/label_signup"
+            android:textColor="@color/col4"
+            android:textSize="36sp"
             app:layout_constraintBottom_toTopOf="parent"
             app:layout_constraintEnd_toStartOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -49,21 +38,6 @@
             android:layout_below="@+id/SignUpTextViewTitle"
             android:layout_marginTop="23dp"
             android:text="@string/label_email"
-            android:textSize="@dimen/dim_label_font_size"
-            app:layout_constraintBottom_toTopOf="parent"
-            app:layout_constraintEnd_toStartOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/labelSignupPassword"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/SignUpEditTextName"
-            android:layout_marginTop="27dp"
-            android:layout_toLeftOf="@+id/SignUpTextViewTitle"
-            android:layout_toStartOf="@+id/SignUpTextViewTitle"
-            android:text="@string/label_password"
             android:textSize="@dimen/dim_label_font_size"
             app:layout_constraintBottom_toTopOf="parent"
             app:layout_constraintEnd_toStartOf="parent"
@@ -89,27 +63,14 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/SignUpTextViewTitle"
+            android:id="@+id/SignUpTextViewLabelName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:text="@string/label_signup"
-            android:textColor="@color/col4"
-            android:textSize="36sp"
-            app:layout_constraintBottom_toTopOf="parent"
-            app:layout_constraintEnd_toStartOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <Button
-            android:id="@+id/SignUpButtonSubmit"
-            android:layout_width="136dp"
-            android:layout_height="68dp"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:text="@string/label_submit"
+            android:layout_alignBottom="@+id/SignUpEditTextName"
+            android:layout_alignLeft="@+id/SignUpTextViewLabelPassword"
+            android:layout_alignStart="@+id/SignUpTextViewLabelPassword"
+            android:text="@string/label_name"
+            android:textSize="@dimen/dim_label_font_size"
             app:layout_constraintBottom_toTopOf="parent"
             app:layout_constraintEnd_toStartOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -131,14 +92,32 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/SignUpTextViewLabelName"
+            android:id="@+id/SignUpTextViewLabelPassword"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/SignUpEditTextName"
-            android:layout_alignLeft="@+id/labelSignupPassword"
-            android:layout_alignStart="@+id/labelSignupPassword"
-            android:text="@string/label_name"
+            android:layout_below="@+id/SignUpEditTextName"
+            android:layout_marginTop="27dp"
+            android:layout_toLeftOf="@+id/SignUpTextViewTitle"
+            android:layout_toStartOf="@+id/SignUpTextViewTitle"
+            android:text="@string/label_password"
             android:textSize="@dimen/dim_label_font_size"
+            app:layout_constraintBottom_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/SignUpEditTextPassword"
+            android:layout_width="206dp"
+            android:layout_height="43dp"
+            android:layout_alignBottom="@+id/SignUpTextViewLabelPassword"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginEnd="21dp"
+            android:layout_marginRight="21dp"
+            android:ems="10"
+            android:hint="@string/placeholder_password"
+            android:inputType="textPassword"
             app:layout_constraintBottom_toTopOf="parent"
             app:layout_constraintEnd_toStartOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -159,7 +138,31 @@
             app:layout_constraintEnd_toStartOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-    </RelativeLayout><![CDATA[
+
+        <TextView
+            android:id="@+id/SignUpTextViewMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/SignUpButtonSubmit"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/SignUpEditTextPasswordRe"
+            android:layout_marginTop="28dp" />
+
+        <Button
+            android:id="@+id/SignUpButtonSubmit"
+            android:layout_width="136dp"
+            android:layout_height="68dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:text="@string/label_submit"
+            app:layout_constraintBottom_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </RelativeLayout>
+    <![CDATA[
 
 
         tools:layout_editor_absoluteX="131dp"
