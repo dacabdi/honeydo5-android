@@ -68,6 +68,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
             holder.date.setTextColor(ContextCompat.getColor(context, R.color.textOld));
             holder.time.setTextColor(ContextCompat.getColor(context, R.color.textOld));
         }
+
     }
 
     public void removeItem(int position) {
