@@ -44,16 +44,13 @@ public class AddTaskActivity extends HoneyDoActivity {
     private DatePickerDialog datePicker;
     private TimePickerDialog timePicker;
 
-    //TODO eliminate this
-    /*static final int date_dialog_id = 0;
-    static final int time_dialog_id = 1;*/
-  
     private ArrayAdapter<CharSequence> adapter;
 
     //fields
     private EditText inputName, inputDescription, inputDate, inputTime;
     private Switch inputPriority;
     private Spinner inputTag;
+
     //labels
     private TextView labelName, labelDescription, labelTag;
     private ImageButton imageButtonDate, imageButtonTime;
