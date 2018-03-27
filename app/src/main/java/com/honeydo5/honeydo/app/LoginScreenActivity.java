@@ -122,7 +122,7 @@ public class LoginScreenActivity extends HoneyDoActivity implements ILogin {
                 this.finish();
             break;
 
-            case "wrong username/password" :
+            case "wrong email/password" :
                 errorMessage = getString(R.string.message_wrong_credentials);
             break;
 

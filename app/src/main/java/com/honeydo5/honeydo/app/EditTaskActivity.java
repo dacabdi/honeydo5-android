@@ -46,10 +46,6 @@ public class EditTaskActivity extends HoneyDoActivity {
     private DatePickerDialog datePicker;
     private TimePickerDialog timePicker;
 
-    //TODO eliminate this
-    /*static final int date_dialog_id = 0;
-    static final int time_dialog_id = 1;*/
-
     private ArrayAdapter<CharSequence> adapter;
 
     //fields
