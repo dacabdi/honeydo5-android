@@ -23,6 +23,7 @@ public class RecyclerItemTouchHelper extends ItemTouchHelper.SimpleCallback {
     public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int state) {
         if(viewHolder != null) {
             View foregroundView = ((TaskAdapter.TaskViewHolder) viewHolder).layoutForeground;
+            getDefaultUIUtil().onSelected(foregroundView);
         }
     }
 
@@ -31,13 +32,13 @@ public class RecyclerItemTouchHelper extends ItemTouchHelper.SimpleCallback {
                                 RecyclerView.ViewHolder viewHolder, float dx, float dy,
                                 int actionState, boolean isCurrentlyActive) {
         final View foregroundView = ((TaskAdapter.TaskViewHolder) viewHolder).layoutForeground;
+        View backgroundDeleteView = ((TaskAdapter.TaskViewHolder) viewHolder).layoutBackgroundDelete;
 
         if(dx > 0)
         {
-            View backgroundDeleteView = ((TaskAdapter.TaskViewHolder) viewHolder).layoutBackgroundDelete;
             backgroundDeleteView.setVisibility(View.INVISIBLE);
         } else {
-            View backgroundEditView = ((TaskAdapter.TaskViewHolder) viewHolder).layoutBackgroundEdit;
+            backgroundDeleteView.setVisibility(View.VISIBLE);
         }
 
         getDefaultUIUtil().onDrawOver(c, recyclerView, foregroundView, dx, dy, actionState, isCurrentlyActive);
@@ -53,16 +54,16 @@ public class RecyclerItemTouchHelper extends ItemTouchHelper.SimpleCallback {
     @Override
     public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dx, float dy, int state, boolean currentlyActive) {
         View foregroundView = ((TaskAdapter.TaskViewHolder) viewHolder).layoutForeground;
+        View backgroundDeleteView = ((TaskAdapter.TaskViewHolder) viewHolder).layoutBackgroundDelete;
 
         if(dx > 0)
         {
-            View backgroundDeleteView = ((TaskAdapter.TaskViewHolder) viewHolder).layoutBackgroundDelete;
             backgroundDeleteView.setVisibility(View.INVISIBLE);
         } else {
-            View backgroundEditView = ((TaskAdapter.TaskViewHolder) viewHolder).layoutBackgroundEdit;
+            backgroundDeleteView.setVisibility(View.VISIBLE);
         }
 
-        getDefaultUIUtil().onDrawOver(c, recyclerView, foregroundView, dx, dy, state, currentlyActive);
+        getDefaultUIUtil().onDraw(c, recyclerView, foregroundView, dx, dy, state, currentlyActive);
 
     }
 

@@ -37,11 +37,9 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
-public class AddTaskActivity extends AppCompatActivity {
-    private String tag = "ADDTASK";
+public class AddTaskActivity extends HoneyDoActivity {
 
     private Calendar calendarDate;
-    //int y, m, d, hr, min;
 
     private DatePickerDialog datePicker;
     private TimePickerDialog timePicker;
@@ -65,6 +63,9 @@ public class AddTaskActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        this.setTag("ADDTASK");
+
         Log.d(tag, "Setting AddTaskActivity content view.");
         setContentView(R.layout.activity_add_task);
       

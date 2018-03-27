@@ -15,36 +15,32 @@
         <activity android:name=".app.LoginScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".app.MainScreenActivity"
-            android:label="@string/title_activity_main_screen"
             android:alwaysRetainTaskState="true"
-            android:launchMode="singleInstance">
-        </activity>
-
+            android:label="@string/title_activity_main_screen"
+            android:launchMode="singleInstance"></activity>
         <activity
             android:name=".app.AddTaskActivity"
-            android:label="Add Task">
-        </activity>
-
+            android:label="Add Task"></activity>
         <activity
             android:name=".app.SignUpActivity"
-            android:label="@string/title_activity_signup">
-        </activity>
-
+            android:label="@string/title_activity_signup"></activity>
         <activity
             android:name=".app.NotificationActivity"
-            android:label="Notification"/>
+            android:label="Notification" />
 
         <receiver android:name=".util.AlarmReceiver">
             <intent-filter>
-                <action android:name="DisplayNotification"/>
+                <action android:name="DisplayNotification" />
             </intent-filter>
         </receiver>
 
+        <activity android:name=".app.EditTaskActivity"></activity>
     </application>
+
 </manifest>
