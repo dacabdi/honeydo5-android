@@ -1,15 +1,10 @@
 package com.honeydo5.honeydo.app;
 
-
 import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.GradientDrawable;
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -35,16 +30,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-
 import java.util.ArrayList;
-import java.io.FileOutputStream;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MainScreenActivity extends AppCompatActivity implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
-    String tag = "MAINSCREEN";
-
+public class MainScreenActivity extends HoneyDoActivity implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
     Button buttonSettings, buttonRewards, buttonAddTask;
     FloatingActionButton FAButtonAddTask;
     RecyclerView listViewTasks;
@@ -53,6 +44,8 @@ public class MainScreenActivity extends AppCompatActivity implements RecyclerIte
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.setTag("MAINSCREEN");
+
 
         Log.d(tag, "Setting MainScreenActivity activity content view.");
         setContentView(R.layout.activity_main_screen);
@@ -122,7 +115,6 @@ public class MainScreenActivity extends AppCompatActivity implements RecyclerIte
                 try {
                     // clear the list first
                     // adapter.clearAll();
-
                     JSONArray tasks = response.getJSONArray("tasks");
                     for (int i = 0; i < tasks.length(); i++) {
                         JSONObject task = tasks.getJSONObject(i);
@@ -177,13 +169,25 @@ public class MainScreenActivity extends AppCompatActivity implements RecyclerIte
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d(tag, "API /" + endpoint + " raw response : " + response.toString());
+                        Log.d(tag, "API /" + endpoint + " response is back.");
                         try {
-                            // TODO: test local storage
-                            parseResponseToAdapter(response);
-                            AppController.getInstance().writeLocalFile("tasks.json", response.toString(4));
+                            Log.d(tag, "API /" + endpoint + " raw response : " + response.toString());
+
+                            String status = response.get("status").toString();
+                            switch(status)
+                            {
+                                case "not logged in" :
+
+                                    AppController.getInstance().sessionExpired(MainScreenActivity.this);
+                                    break;
+
+                                //TODO: get Mitch to do this
+                                //case "success" :
+                                default :
+                                    parseResponseToAdapter(response);
+                                    break;
+                            }
                         } catch(JSONException e) {
-                            // TODO: parsing data error, try local
                             // log and do a stack trace
                             Log.e(tag, "API /" + endpoint + " error parsing response: " + e.getMessage());
                             Log.getStackTraceString(e);
@@ -194,17 +198,7 @@ public class MainScreenActivity extends AppCompatActivity implements RecyclerIte
             public void onErrorResponse(VolleyError error) {
                 // log the error
                 AppController.getInstance().requestNetworkError(error, tag, "/" + endpoint);
-
-                Log.d(tag, "Reading from local storage tasks.json");
-                String localData = AppController.getInstance().readLocalFile("tasks.json");
-
-                try {
-                    parseResponseToAdapter(new JSONObject(localData));
-                } catch(JSONException e) {
-                    // log and do a stack trace
-                    Log.e(tag, "Error parsing local file:" + e.getMessage());
-                    Log.getStackTraceString(e);
-                }
+                //TODO: treat this error!
             }
         }) {
             @Override

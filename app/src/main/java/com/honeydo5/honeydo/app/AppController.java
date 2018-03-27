@@ -10,6 +10,7 @@ import com.honeydo5.honeydo.util.LruBitmapCache;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
@@ -301,5 +302,13 @@ public class AppController extends Application {
 
         Log.d(activityTag, "API /" + endpoint + " adding request object to request queue.");
         AppController.getInstance().addToRequestQueue(request, activityTag + ":" + endpoint);
+    }
+
+    public void sessionExpired(HoneyDoActivity from_activity)
+    {
+        Log.d(from_activity.getTag(), "Session expired, intent to LoginScreenActivity");
+        Intent intent = new Intent(from_activity, LoginScreenActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME);
+        startActivity(intent);
     }
 }
