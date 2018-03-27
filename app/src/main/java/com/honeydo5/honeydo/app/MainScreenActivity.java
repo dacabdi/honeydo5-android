@@ -48,7 +48,6 @@ public class MainScreenActivity extends HoneyDoActivity implements RecyclerItemT
         super.onCreate(savedInstanceState);
         this.setTag("MAINSCREEN");
 
-
         Log.d(tag, "Setting MainScreenActivity activity content view.");
         setContentView(R.layout.activity_main_screen);
 
@@ -98,10 +97,9 @@ public class MainScreenActivity extends HoneyDoActivity implements RecyclerItemT
     @Override
     protected void onResume(){
         super.onResume();
-        Log.d(tag, "Calling /get_tasks to refresh the view.");
+        Log.d(tag, "Refreshing view on resume.");
 
         TaskSystem.clearEditTask();
-        getTaskList();
         adapter.notifyDataSetChanged();
     }
 
@@ -118,35 +116,10 @@ public class MainScreenActivity extends HoneyDoActivity implements RecyclerItemT
             @Override
             public void run() {
                 try {
-                    // clear the list first
-                    // adapter.clearAll();
+                    TaskSystem.clearAll();
                     JSONArray tasks = response.getJSONArray("tasks");
-                    for (int i = 0; i < tasks.length(); i++) {
-                        JSONObject task = tasks.getJSONObject(i);
-                        ArrayList<com.honeydo5.honeydo.util.Tag> tags = new ArrayList<>();
-
-                        try{
-                            JSONArray jsonTags = task.getJSONArray("tags");
-
-                            for(int j = 0; i < jsonTags.length(); j++)
-                                tags.add(new com.honeydo5.honeydo.util.Tag(jsonTags.getString(j)));
-                        }catch (JSONException e){
-                            // log and do a stack trace
-                            Log.e(tag, "Error parsing JSON:" + e.getMessage());
-                            Log.getStackTraceString(e);
-                        }
-
-                        TaskSystem.addTask(new Task(
-                                task.getString("name"),                 //name
-                                task.getString("description"),          //description
-                                task.getBoolean("priority"),            //priority
-                                tags, // TODO: can we use JSONArray?
-                                AppController.getInstance().parseDateTimeString(
-                                        task.getString("due_date") + task.getString("due_time")),
-                                null //TODO: @Aaron, what is reminder?!
-                        ));
-
-                        adapter.notifyDataSetChanged();
+                    for (int i=0; i < tasks.length(); i++) {
+                        TaskSystem.addTask(new Task(tasks.getJSONObject(i)));
                     }
                 } catch(JSONException e) {
                     // log and do a stack trace
@@ -155,8 +128,6 @@ public class MainScreenActivity extends HoneyDoActivity implements RecyclerItemT
                 }
             }
         });
-
-
     }
 
     void getTaskList() {
@@ -178,7 +149,7 @@ public class MainScreenActivity extends HoneyDoActivity implements RecyclerItemT
                         try {
                             Log.d(tag, "API /" + endpoint + " raw response : " + response.toString());
 
-                            String status = response.get("status").toString();
+                            /*String status = response.get("status").toString();
                             switch(status)
                             {
                                 case "not logged in" :
@@ -188,10 +159,10 @@ public class MainScreenActivity extends HoneyDoActivity implements RecyclerItemT
 
                                 //TODO: get Mitch to do this
                                 //case "success" :
-                                default :
+                                default :*/
                                     parseResponseToAdapter(response);
-                                    break;
-                            }
+                                    /*break;
+                            }*/
                         } catch(JSONException e) {
                             // log and do a stack trace
                             Log.e(tag, "API /" + endpoint + " error parsing response: " + e.getMessage());
