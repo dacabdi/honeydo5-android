@@ -1,21 +1,16 @@
 package com.honeydo5.honeydo.app;
 
+import com.android.volley.VolleyError;
 import com.honeydo5.honeydo.R;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.honeydo5.honeydo.util.DateHelper;
 import com.honeydo5.honeydo.util.Task;
 import com.honeydo5.honeydo.util.TaskSystem;
@@ -23,14 +18,7 @@ import com.honeydo5.honeydo.util.TaskSystem;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashMap;
-import java.util.Map;
-
-
-
-public class LoginScreenActivity extends AppCompatActivity {
-    private String tag = "LOGINSCREEN";
-
+public class LoginScreenActivity extends HoneyDoActivity implements ILogin {
     // views and components
     private EditText inputEmail, inputPassword;
     private Button buttonLogin, buttonSignup, buttonHitServer, buttonTestLogin;
@@ -39,6 +27,8 @@ public class LoginScreenActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        this.setTag("LOGINSCREEN");
 
         Log.d(tag, "Setting LoginScreenActivity activity content view.");
         setContentView(R.layout.activity_login_screen);
@@ -58,18 +48,22 @@ public class LoginScreenActivity extends AppCompatActivity {
 
         // attempt login
         buttonLogin.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) { attemptLogin(); }
+            @Override public void onClick(View v) {
+                String username = inputEmail.getText().toString(),
+                       password = inputPassword.getText().toString();
+                AppController.getInstance().login(LoginScreenActivity.this, username, password);
+            }
         });
 
         // intent to sign up activity
         buttonSignup.setOnClickListener(new View.OnClickListener() {
               @Override
               public void onClick(View view) {
-                  Intent intent = new Intent(LoginScreenActivity.this, SignUpActivity.class);
-                  intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                  Log.d(tag, "Starting SignUpActivity.");
-                  startActivity(intent);
-                  // TODO: determine if we should finish the current activity?
+            Intent intent = new Intent(LoginScreenActivity.this, SignUpActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            Log.d(tag, "Starting SignUpActivity.");
+            startActivity(intent);
+            // TODO: determine if we should finish the current activity?
               }
         });
 
@@ -116,91 +110,49 @@ public class LoginScreenActivity extends AppCompatActivity {
         });
     }
 
-    private void attemptLogin() {
-        final String endpoint = "login";
-        AppController.getInstance().cancelPendingRequests(tag + ":" + endpoint);
+    @Override public void onLoginResponse(String loginStatus, Object ... args) {
+        String errorMessage = null;
 
-        // create request body (key : value) pairs
-        HashMap<String, String> postMessage = new HashMap<>(); // assumes <String, String>
-        postMessage.put("email", inputEmail.getText().toString());
-        postMessage.put("password", inputPassword.getText().toString());
+        switch(loginStatus)
+        {
+            case "already logged in" : case "logged in":
+                Log.d(this.tag, "Successful Login, intent onto MainScreenActivity, finish LoginScreenActivity");
+                Intent intent = new Intent(this, MainScreenActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME);
+                startActivity(intent);
+                this.finish();
+            break;
 
-        Log.d(tag, "API /" + endpoint + " Request POST Body : " + postMessage.toString());
+            case "wrong username/password" :
+                errorMessage = getString(R.string.message_wrong_credentials);
+            break;
 
-        // request object to be added to volley's request queue
-        Log.d(tag, "API /" + endpoint + " creating request object.");
-        JsonObjectRequest request = new JsonObjectRequest(
-                Request.Method.POST, // request method
-                AppController.defaultBaseUrl + "/" + endpoint, // target url
-                new JSONObject(postMessage), // json object from hashmap
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.d(tag, "API /" + endpoint + " raw response : " + response.toString());
+            case "you must specify email and password" :
+                errorMessage = getString(R.string.message_specify_email_password);
+            break;
 
-                        /*  Possible endpoint responses
+            default :
+                errorMessage = getString(R.string.message_unexpected_response);
+            break;
+        }
 
-                            {‘status’: ‘logged in’},
-                            {‘status’: ‘already logged in’},
-                            {‘status’: ‘wrong email/password’},
-                            {‘status’: ‘you must specify email and password’},
-                            {‘status’: ‘invalid request’}
-                         */
+        if(errorMessage != null){
+            textMessage.setText(errorMessage);
+            textMessage.setVisibility(View.VISIBLE);
+        }
+    }
 
-                        try {
-                            switch (response.get("status").toString())
-                            {
-                                case "already logged in" : case "logged in" :
-                                    // login success or already on session (no need for method,
-                                    // this code is only called from one place)
-                                    Log.d(tag, "Successful Login, intent onto MainScreenActivity, finish LoginScreenActivity");
-                                    Intent intent = new Intent(LoginScreenActivity.this, MainScreenActivity.class);
-                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME);
-                                    startActivity(intent);
-                                    LoginScreenActivity.this.finish();
-                                break;
+    @Override public void onLoginNetworkError(VolleyError e, Object ... args) {
+        // print a message for the user
+        String errorMessage = getString(R.string.message_communication_problem);
+        textMessage.setText(errorMessage);
+        textMessage.setVisibility(View.VISIBLE);
+    }
 
-                                case "wrong email/password" :
-                                    textMessage.setText(R.string.message_wrong_credentials);
-                                    textMessage.setVisibility(View.VISIBLE);
-                                break;
-
-                                case "you must specify email and password" :case "invalid request" :
-                                    textMessage.setText(R.string.message_specify_email_password);
-                                    textMessage.setVisibility(View.VISIBLE);
-                                break;
-                            }
-                        } catch(JSONException e) {
-                            // print a message for the user
-                            String errorMessage = getString(R.string.message_communication_problem);
-                            textMessage.setText(errorMessage);
-                            textMessage.setVisibility(View.VISIBLE);
-
-                            // log and do a stack trace
-                            Log.e(tag, "API /" + endpoint + " error parsing response: " + e.getMessage());
-                            Log.getStackTraceString(e);
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                // log the error
-                AppController.getInstance().requestNetworkError(error, tag, "/" + endpoint);
-                // print a message for the user
-                String errorMessage = getString(R.string.message_communication_problem);
-                textMessage.setText(errorMessage);
-                textMessage.setVisibility(View.VISIBLE);
-            }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> headers = new HashMap<>(); // assumes <String, String> template params
-                headers.put("Content-Type", "application/json; charset=utf-8");
-                return headers;
-            }
-        };
-
-        Log.d(tag, "API /" + endpoint + " adding request object to request queue.");
-        AppController.getInstance().addToRequestQueue(request, tag + ":" + endpoint);
+    @Override public void onLoginResponseParseError(JSONException e) {
+        // print a message for the user
+        String errorMessage = getString(R.string.message_communication_problem);
+        textMessage.setText(errorMessage);
+        textMessage.setVisibility(View.VISIBLE);
     }
 }

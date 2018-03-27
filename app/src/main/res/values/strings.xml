@@ -25,6 +25,7 @@
     <string name="message_wrong_credentials">Wrong email or password.</string>
     <string name="message_communication_problem">Communication problems.</string>
     <string name="message_endpoint_200">Endpoint alive and OK.</string>
+    <string name="message_unexpected_response">Unexpected response.</string>
 
     <!-- time and date formats -->
     <string name="standard_date_format">MM-dd-yyyy</string>
