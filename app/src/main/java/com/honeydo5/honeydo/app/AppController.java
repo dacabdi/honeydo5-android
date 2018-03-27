@@ -1,16 +1,15 @@
 package com.honeydo5.honeydo.app;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.RequestFuture;
 import com.android.volley.toolbox.StringRequest;
 import com.honeydo5.honeydo.util.LruBitmapCache;
 
-import android.app.AlarmManager;
 import android.app.Application;
-import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
-import android.os.Environment;
 import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
@@ -31,18 +30,23 @@ import java.net.CookieManager;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import android.os.NetworkOnMainThreadException;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 
 public class AppController extends Application {
 
     public static final String TAG = AppController.class.getSimpleName();
 
-    public static final String defaultBaseUrl = "http://api.honeydo5.com";
+    public static final String defaultBaseUrl = "http://10.136.26.189:5000";
 
     private RequestQueue mRequestQueue;
     private ImageLoader mImageLoader;
@@ -236,5 +240,66 @@ public class AppController extends Application {
         if (mRequestQueue != null) {
             mRequestQueue.cancelAll(tag);
         }
+    }
+
+    public void login(final ILogin activity, String login, String password) {
+        final String endpoint = "login";
+        final String activityTag = activity.getTag();
+
+        AppController.getInstance().cancelPendingRequests(activityTag + ":" + endpoint);
+
+        // create request body (key : value) pairs
+        HashMap<String, String> postMessage = new HashMap<>(); // assumes <String, String>
+        postMessage.put("email", login);
+        postMessage.put("password", password);
+
+        Log.d(activityTag, "API /" + endpoint + " Request POST Body : " + postMessage.toString());
+
+        // request object to be added to volley's request queue
+        Log.d(activityTag, "API /" + endpoint + " creating request object.");
+        JsonObjectRequest request = new JsonObjectRequest(
+                Request.Method.POST, // request method
+                AppController.defaultBaseUrl + "/" + endpoint, // target url
+                new JSONObject(postMessage), // json object from hashmap
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d(activityTag, "API /" + endpoint + " raw response : " + response.toString());
+                        /*  Possible endpoint responses :
+                                {‘status’: ‘logged in’},
+                                {‘status’: ‘already logged in’},
+                                {‘status’: ‘wrong email/password’},
+                                {‘status’: ‘you must specify email and password’},
+                                {‘status’: ‘invalid request’}
+                        */
+                        try {
+                            String status = response.get("status").toString();
+                            activity.onLoginResponse(status);
+                        } catch(JSONException e) {
+                            // log and do a stack trace
+                            Log.e(activityTag, "API /" + endpoint + " error parsing response: " + e.getMessage());
+                            Log.getStackTraceString(e);
+                            activity.onLoginResponseParseError(e);
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                // log the error
+                AppController.getInstance().requestNetworkError(error, activityTag, "/" + endpoint);
+                // print a message for the user
+                activity.onLoginNetworkError(error);
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<>(); // assumes <String, String> template params
+                headers.put("Content-Type", "application/json; charset=utf-8");
+                return headers;
+            }
+        };
+
+        Log.d(activityTag, "API /" + endpoint + " adding request object to request queue.");
+        AppController.getInstance().addToRequestQueue(request, activityTag + ":" + endpoint);
     }
 }
