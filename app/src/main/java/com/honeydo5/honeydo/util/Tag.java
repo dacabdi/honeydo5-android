@@ -1,6 +1,10 @@
 package com.honeydo5.honeydo.util;
 
 import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
+
+import com.honeydo5.honeydo.R;
+
 
 public class Tag {
     private Color color;
@@ -8,5 +12,7 @@ public class Tag {
 
     public Tag(String name) {
         this.name = name;
+        //TODO: add tag colors
+        //this.color = ContextCompat.getColor();
     }
 }

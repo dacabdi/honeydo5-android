@@ -9,6 +9,8 @@ public class TaskSystem {
         return taskList;
     }
 
+    public static Task getTask(int i) { return taskList.get(i); }
+
     public static void addTask(Task t) {
         taskList.add(t);
     }

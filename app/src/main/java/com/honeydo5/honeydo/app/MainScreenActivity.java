@@ -226,11 +226,22 @@ public class MainScreenActivity extends AppCompatActivity implements RecyclerIte
         startActivity(intent);
     }
 
+    void editTask(int position)
+    {
+        Intent intent = new Intent(this, EditTaskActivity.class);
+        intent.putExtra("task", TaskSystem.getTask(position));
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME);
+        startActivity(intent);
+    }
+
     // when item is swiped for deletion
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
         if(viewHolder instanceof TaskAdapter.TaskViewHolder) {
-            adapter.removeItem(viewHolder.getAdapterPosition());
+            if(direction == ItemTouchHelper.LEFT)
+                adapter.removeItem(viewHolder.getAdapterPosition());
+            else if(direction == ItemTouchHelper.RIGHT)
+                editTask(position);
         }
     }
 }
