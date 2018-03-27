@@ -28,11 +28,19 @@ public class RecyclerItemTouchHelper extends ItemTouchHelper.SimpleCallback {
 
     @Override
     public void onChildDrawOver(Canvas c, RecyclerView recyclerView,
-                                RecyclerView.ViewHolder viewHolder, float dX, float dY,
+                                RecyclerView.ViewHolder viewHolder, float dx, float dy,
                                 int actionState, boolean isCurrentlyActive) {
         final View foregroundView = ((TaskAdapter.TaskViewHolder) viewHolder).layoutForeground;
-        getDefaultUIUtil().onDrawOver(c, recyclerView, foregroundView, dX, dY,
-                actionState, isCurrentlyActive);
+
+        if(dx > 0)
+        {
+            View backgroundDeleteView = ((TaskAdapter.TaskViewHolder) viewHolder).layoutBackgroundDelete;
+            backgroundDeleteView.setVisibility(View.INVISIBLE);
+        } else {
+            View backgroundEditView = ((TaskAdapter.TaskViewHolder) viewHolder).layoutBackgroundEdit;
+        }
+
+        getDefaultUIUtil().onDrawOver(c, recyclerView, foregroundView, dx, dy, actionState, isCurrentlyActive);
     }
 
     @Override
@@ -46,7 +54,16 @@ public class RecyclerItemTouchHelper extends ItemTouchHelper.SimpleCallback {
     public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dx, float dy, int state, boolean currentlyActive) {
         View foregroundView = ((TaskAdapter.TaskViewHolder) viewHolder).layoutForeground;
 
-        getDefaultUIUtil().onDraw(c, recyclerView, foregroundView, dx, dy, state, currentlyActive);
+        if(dx > 0)
+        {
+            View backgroundDeleteView = ((TaskAdapter.TaskViewHolder) viewHolder).layoutBackgroundDelete;
+            backgroundDeleteView.setVisibility(View.INVISIBLE);
+        } else {
+            View backgroundEditView = ((TaskAdapter.TaskViewHolder) viewHolder).layoutBackgroundEdit;
+        }
+
+        getDefaultUIUtil().onDrawOver(c, recyclerView, foregroundView, dx, dy, state, currentlyActive);
+
     }
 
     @Override

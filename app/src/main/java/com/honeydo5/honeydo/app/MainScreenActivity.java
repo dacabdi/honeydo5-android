@@ -72,7 +72,7 @@ public class MainScreenActivity extends AppCompatActivity implements RecyclerIte
         listViewTasks.setAdapter(adapter);
 
         // Add touch helper
-        ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT, this);
+        ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT, this);
         new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(listViewTasks);
 
         // add divider line to recycleview
@@ -121,7 +121,7 @@ public class MainScreenActivity extends AppCompatActivity implements RecyclerIte
             public void run() {
                 try {
                     // clear the list first
-                    //adapter.clearAll();
+                    // adapter.clearAll();
 
                     JSONArray tasks = response.getJSONArray("tasks");
                     for (int i = 0; i < tasks.length(); i++) {
