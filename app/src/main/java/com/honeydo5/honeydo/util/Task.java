@@ -1,10 +1,12 @@
 package com.honeydo5.honeydo.util;
 
+import android.os.Parcelable;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class Task implements Serializable {
+public class Task  {
 
     private String name, description;
     private boolean priority;
