@@ -1,40 +1,38 @@
 package com.honeydo5.honeydo.util;
 
-import com.honeydo5.honeydo.util.Tag;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 
 public class Task {
 
-    private String header, body;
+    private String name, description;
     private boolean priority;
     private ArrayList<Tag> tags;
     private Calendar date, reminder;
 
-    public Task(String body, String header, boolean priority, ArrayList<Tag> tags, Calendar date, Calendar reminder) {
-        this.body = body;
-        this.header = header;
+    public Task(String name, String description, boolean priority, ArrayList<Tag> tags, Calendar date, Calendar reminder) {
+        this.name = name;
+        this.description = description;
         this.priority = priority;
         this.tags = tags;
         this.date = date;
         this.reminder = reminder;
     }
 
-    public String getHeader() {
-        return header;
+    public String getName() {
+        return this.name;
     }
 
-    public void setHeader(String header) {
-        this.header = header;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getBody() {
-        return body;
+    public String getDescription() {
+        return this.description;
     }
 
-    public void setBody(String body) {
-        this.body = body;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public boolean isPriority() {
@@ -54,7 +52,7 @@ public class Task {
     }
 
     public Calendar getDate() {
-        return date;
+        return this.date;
     }
 
     public void setDate(Calendar date) {

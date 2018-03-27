@@ -17,9 +17,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-/**
- * Created by aaron on 2/24/2018.
- */
 
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder>{
 
@@ -36,6 +33,12 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
         currentDate = GregorianCalendar.getInstance();
     }
 
+    public void clearAll()
+    {
+        while(this.getItemCount() != 0)
+            this.removeItem(0);
+    }
+
     @Override
     public TaskViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflator = LayoutInflater.from(context);
@@ -50,7 +53,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
 
         Task t = taskList.get(position);
 
-        holder.title.setText(t.getHeader());
+        holder.title.setText(t.getName());
         holder.date.setText(android.text.format.DateFormat.format("MM/dd/yyyy", t.getDate()));
         holder.time.setText(android.text.format.DateFormat.format("hh:mm a", t.getDate()));
 

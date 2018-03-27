@@ -9,7 +9,7 @@
     <color name="colorIcon">#cccccc</color>
 
     <color name="colorError">#ff6666</color>
-    <color name="textColor">#ffffff</color>
+    <color name="colorText">#ffffff</color>
 
     <color name="col1">#0DFF78</color>
     <color name="col2">#FFFFA4</color>

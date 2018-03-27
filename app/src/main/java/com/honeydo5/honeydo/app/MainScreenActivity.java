@@ -1,6 +1,11 @@
 package com.honeydo5.honeydo.app;
 
+
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -16,14 +21,21 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+
 import com.honeydo5.honeydo.R;
 import com.honeydo5.honeydo.util.RecyclerItemTouchHelper;
+import com.honeydo5.honeydo.util.Task;
 import com.honeydo5.honeydo.util.TaskAdapter;
 import com.honeydo5.honeydo.util.TaskSystem;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+
+import java.util.ArrayList;
+import java.io.FileOutputStream;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -53,41 +65,95 @@ public class MainScreenActivity extends AppCompatActivity implements RecyclerIte
         listViewTasks.setHasFixedSize(true);
         listViewTasks.setLayoutManager(new LinearLayoutManager(this));
 
-        Log.d(tag, "Calling /get_tasks to refresh the view.");
-        getTaskList();
-
         adapter = new TaskAdapter(this, TaskSystem.getTaskList());
         listViewTasks.setAdapter(adapter);
+
+        //Alarm Manager
+        Calendar calendarMili = Calendar.getInstance();
+        calendarMili.add(Calendar.SECOND, 1);
+
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        Intent intent = new Intent("notification");
+        PendingIntent broadcast = PendingIntent.getBroadcast(this, 100, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendarMili.getTimeInMillis(), broadcast); //had to raise min SDK
 
         FAButtonAddTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
 
-                createNewTask();
+            createNewTask();
             }
         });
     }
 
 
     @Override
-    protected void onResume() {
+    protected void onResume(){
         super.onResume();
-        adapter.notifyDataSetChanged();
+        Log.d(tag, "Calling /get_tasks to refresh the view.");
+        getTaskList();
+    }
+
+    @Override
+    protected void onStart(){
+        super.onStart();
+        Log.d(tag, "Calling /get_tasks to refresh the view.");
+        getTaskList();
     }
 
 
-    void parseResponseToAdapter(JSONObject response) throws JSONException {
-        // iterate addTask() with JSON data
+    void parseResponseToAdapter(final JSONObject response) throws JSONException {
+        runOnUiThread(new Runnable(){
+            @Override
+            public void run() {
+                try {
+                    // clear the list first
+                    adapter.clearAll();
+
+                    JSONArray tasks = response.getJSONArray("tasks");
+                    for (int i = 0; i < tasks.length(); i++) {
+                        JSONObject task = tasks.getJSONObject(i);
+                        ArrayList<com.honeydo5.honeydo.util.Tag> tags = new ArrayList<>();
+
+                        try{
+                            JSONArray jsonTags = task.getJSONArray("tags");
+
+                            for(int j = 0; i < jsonTags.length(); j++)
+                                tags.add(new com.honeydo5.honeydo.util.Tag(jsonTags.getString(j)));
+                        }catch (JSONException e){
+                            // log and do a stack trace
+                            Log.e(tag, "Error parsing JSON:" + e.getMessage());
+                            Log.getStackTraceString(e);
+                        }
+
+                        TaskSystem.addTask(new Task(
+                                task.getString("name"),                 //name
+                                task.getString("description"),          //description
+                                task.getBoolean("priority"),            //priority
+                                tags, // TODO: can we use JSONArray?
+                                AppController.getInstance().parseDateTimeString(
+                                        task.getString("due_date") + task.getString("due_time")),
+                                null //TODO: @Aaron, what is reminder?!
+                        ));
+
+                        adapter.notifyDataSetChanged();
+                    }
+                } catch(JSONException e) {
+                    // log and do a stack trace
+                    Log.e(tag, "Error parsing JSON:" + e.getMessage());
+                    Log.getStackTraceString(e);
+                }
+            }
+        });
+
+
     }
-
-
 
     void getTaskList() {
         final String endpoint = "get_tasks";
         AppController.getInstance().cancelPendingRequests(tag + ":" + endpoint);
-        JSONObject postMessage = null;
 
         Log.d(tag, "API /" + endpoint + " Request POST Body : [empty]");
 
@@ -96,14 +162,15 @@ public class MainScreenActivity extends AppCompatActivity implements RecyclerIte
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.GET, // request method
                 AppController.defaultBaseUrl + "/" + endpoint, // target url
-                postMessage, // json object from hashmap
+                null, // json object from hashmap
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d(tag, "API /" + endpoint + " raw response : " + response.toString());
                         try {
-                            // TODO: on success, update local storage with latest server response (stringify json object)
+                            // TODO: test local storage
                             parseResponseToAdapter(response);
+                            AppController.getInstance().writeLocalFile("tasks.json", response.toString(4));
                         } catch(JSONException e) {
                             // TODO: parsing data error, try local
                             // log and do a stack trace
@@ -116,7 +183,17 @@ public class MainScreenActivity extends AppCompatActivity implements RecyclerIte
             public void onErrorResponse(VolleyError error) {
                 // log the error
                 AppController.getInstance().requestNetworkError(error, tag, "/" + endpoint);
-                // TODO: pull from local storage
+
+                Log.d(tag, "Reading from local storage tasks.json");
+                String localData = AppController.getInstance().readLocalFile("tasks.json");
+
+                try {
+                    parseResponseToAdapter(new JSONObject(localData));
+                } catch(JSONException e) {
+                    // log and do a stack trace
+                    Log.e(tag, "Error parsing local file:" + e.getMessage());
+                    Log.getStackTraceString(e);
+                }
             }
         }) {
             @Override

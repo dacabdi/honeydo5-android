@@ -1,7 +1,6 @@
 package com.honeydo5.honeydo.app;
 
 import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -28,13 +27,12 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.honeydo5.honeydo.R;
 import com.honeydo5.honeydo.util.InputValidation;
-import com.honeydo5.honeydo.util.Task;
-import com.honeydo5.honeydo.util.TaskSystem;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -42,59 +40,138 @@ import java.util.Map;
 public class AddTaskActivity extends AppCompatActivity {
     private String tag = "ADDTASK";
 
-    Calendar date;
+    private Calendar calendarDate;
     //int y, m, d, hr, min;
-    static final int date_dialog_id = 0;
-    static final int time_dialog_id = 1;
 
-    EditText inputName, inputDescription;
-    TextView textName, textDescription;
+    private DatePickerDialog datePicker;
+    private TimePickerDialog timePicker;
 
-    ImageButton buttonDate, buttonTime;
+    //TODO eliminate this
+    /*static final int date_dialog_id = 0;
+    static final int time_dialog_id = 1;*/
+  
+    private ArrayAdapter<CharSequence> adapter;
+
+    //fields
+    private EditText inputName, inputDescription, inputDate, inputTime;
+    private Switch inputPriority;
+    private Spinner inputTag;
+    //labels
+    private TextView labelName, labelDescription, labelTag;
+    private ImageButton imageButtonDate, imageButtonTime;
+
     Button buttonAdd;
-    EditText inputTime, inputDate;
-    Spinner tagSpin;
-    ArrayAdapter<CharSequence> adapter;
-
-    Switch switchPriority;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(tag, "Setting AddTaskActivity content view.");
         setContentView(R.layout.activity_add_task);
+      
+        // get components -----------------------------------------
 
+        Log.d(tag, "Finding components and views.");
+        //fields
         inputName = findViewById(R.id.addTaskEditViewName);
-        inputDescription = findViewById(R.id.addTaskEditTextDescription);
-
-        textName = findViewById(R.id.addTaskTextViewNameLabel);
-        textDescription = findViewById(R.id.addTaskTextViewDiscLabel);
-
-        buttonDate = findViewById(R.id.addTaskDatePickerDate);
-        buttonTime = findViewById(R.id.addTaskTimePickerTime);
-
+        inputDescription = findViewById(R.id.addTaskMultiLineTaskDesc);
+        inputPriority = findViewById(R.id.addTaskSwitchPriority);
+        inputTag = findViewById(R.id.addTaskSpinnerTags);
+        inputDate = findViewById(R.id.addTaskEditTextDateText);
+        inputTime = findViewById(R.id.addTaskEditTextTimeText);
+        //labels (used for invalid input highlighting)
+        labelName = findViewById(R.id.addTaskTextViewNameLabel);
+        labelDescription = findViewById(R.id.addTaskTextViewDiscLabel);
+        labelTag = findViewById(R.id.addTaskTextViewTagsLabel);
+        imageButtonDate = findViewById(R.id.addTaskDatePickerDate);
+        imageButtonTime = findViewById(R.id.addTaskTimePickerTime);
+        //buttons
         buttonAdd = findViewById(R.id.addTaskButtonAdd);
 
 
-        date = Calendar.getInstance();
-        date.set(Calendar.HOUR_OF_DAY, date.get(Calendar.HOUR_OF_DAY + 1));
+        // set components -----------------------------------------
 
-        inputTime = findViewById(R.id.addTaskEditTextTimeText);
-        inputDate = findViewById(R.id.addTaskEditTextDateText);
+        //get date
+        calendarDate = Calendar.getInstance();
+        calendarDate.set(Calendar.HOUR_OF_DAY, calendarDate.get(Calendar.HOUR_OF_DAY + 1));
 
-        inputTime.setText(android.text.format.DateFormat.format("hh:mm a", date));
-        inputDate.setText(android.text.format.DateFormat.format("MM/dd/yyyy", date));
+        //init date and time fields using calendarDate
+        inputTime.setText(android.text.format.DateFormat.format("hh:mm a", calendarDate));
+        inputDate.setText(android.text.format.DateFormat.format("MM/dd/yyyy", calendarDate));
 
-        switchPriority = (Switch) findViewById(R.id.addTaskSwitchPriority);
-
-        showDate();
-        showTime();
-
-        // tag spinner
-        tagSpin = (Spinner) findViewById(R.id.addTaskSpinnerTags);
+        //put tags on spinner
         adapter = ArrayAdapter.createFromResource(this, R.array.tags, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        tagSpin.setAdapter(adapter);
-        tagSpin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        inputTag.setAdapter(adapter);
+
+
+        // create dialogs (date|time pickers) ----------------------
+
+        datePicker = new DatePickerDialog(
+                this,
+                datePickerHandler,
+                calendarDate.get(Calendar.YEAR),
+                calendarDate.get(Calendar.MONTH),
+                calendarDate.get(Calendar.DAY_OF_MONTH));
+
+        timePicker = new TimePickerDialog(
+                this,
+                timePickerHandler,
+                calendarDate.get(Calendar.HOUR_OF_DAY)+ 1,
+                0, false);
+
+
+        // set event handlers components ---------------------------
+
+        //date and time
+        imageButtonDate.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view) {
+                datePicker.show();
+            }
+        });
+        inputDate.setShowSoftInputOnFocus(false);
+        inputDate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean hasFocus) {
+                if(hasFocus) {
+                    datePicker.show();
+                } else {
+                    datePicker.hide();
+                }
+            }
+        });
+        inputDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                datePicker.show();
+            }
+        });
+        imageButtonTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                timePicker.show();
+            }
+        });
+
+        inputTime.setShowSoftInputOnFocus(false);
+        inputTime.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean hasFocus) {
+                if(hasFocus) {
+                    timePicker.show();
+                } else {
+                    timePicker.hide();
+                }
+            }
+        });
+        inputTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                timePicker.show();
+            }
+        });
+
+        //tags spinner
+        inputTag.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 Toast.makeText(getBaseContext(), adapterView.getItemAtPosition(i) + " selected", Toast.LENGTH_LONG).show();
@@ -106,63 +183,101 @@ public class AddTaskActivity extends AppCompatActivity {
             }
         });
 
-        // add button
+
+        //add task button
         buttonAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Task t = new Task(inputDescription.getText().toString(), inputName.getText().toString(), switchPriority.isChecked(), null, date, null);
-                JSONObject json = getFieldsData(t);
-                if(!json.equals(null)) {
-                    sendNewTaskToServer(t);
-                    TaskSystem.addTask(t);
-
-                    Log.d(tag, "Sent task to server and local task system");
-
-                    onBackPressed();
+                JSONObject json = getFieldsData();
+                if(json != null) {
+                    Log.d(tag, "Sending new task to server");
+                    submitNewTask(json);
                 }
             }
         });
     }
 
+
     @Nullable
-    private JSONObject getFieldsData(Task t){
+    private JSONObject getFieldsData(){
         JSONObject json = new JSONObject();
 
         Log.d(tag, "Gathering input data.");
 
         try{
-            // check if required fields are filled
-            if(InputValidation.checkIfEmpty(inputName.getText().toString())){
-                Log.d(tag, "Name field is blank");
-                textName.setTextColor(getResources().getColor(R.color.textColor));
-                return null;
-            }
-            else {
-                textName.setTextColor(getResources().getColor(R.color.textColor));
+
+            /*
+                 name,        (string)
+                 description, (string)
+                 tag,         (array of strings)
+                 priority,    (bool string)
+                 date,        (mm/dd/yyyy string)
+                 time         (hh:mm am|pm string)
+            */
+
+            //validate input
+
+            boolean valid = true;
+
+            String name = inputName.getText().toString(),
+                   description = inputDescription.getText().toString(),
+                   task_tag = inputTag.getSelectedItem().toString(),
+                   priority = Boolean.toString(inputPriority.isChecked()),
+                   date = inputDate.getText().toString(),
+                   time = inputTime.getText().toString();
+
+            Log.d(tag, "Validating add task entries.");
+
+            if(InputValidation.checkIfEmpty(name)){
+                Log.d(tag, "Name field is invalid : " + name);
+                labelName.setTextColor(getResources().getColor(R.color.colorError));
+                valid = false;
+            } else {
+                labelName.setTextColor(getResources().getColor(R.color.colorText));
             }
 
-            if(!InputValidation.validateTime(inputTime.getText().toString())) {
-                Log.d(tag, "Time field empty");
-                buttonTime.setColorFilter(getResources().getColor(R.color.colorError));
-                return null;
-            }
-            else {
-                buttonTime.setColorFilter(getResources().getColor(R.color.colorIcon));
-            }
-
-            if(!InputValidation.validateDate(inputDate.getText().toString())) {
-                Log.d(tag, "Date field empty");
-                buttonDate.setColorFilter(getResources().getColor(R.color.colorError));
-                return null;
-            }
-            else {
-                buttonDate.setColorFilter(getResources().getColor(R.color.colorIcon));
+            if(InputValidation.checkIfEmpty(task_tag)) {
+                Log.d(tag, "Tag field is invalid : " + task_tag);
+                imageButtonTime.setColorFilter(getResources().getColor(R.color.colorError));
+                valid = false;
+            } else {
+                imageButtonTime.setColorFilter(getResources().getColor(R.color.colorText));
             }
 
-            json.put("name", t.getHeader());
-            json.put("description", t.getBody());
-            json.put("date", t.getDate().toString());
-            json.put("priority", t.isPriority()+"");
+            if(!InputValidation.validateDate(date)) {
+                Log.d(tag, "Date field is invalid : " + date);
+                imageButtonDate.setColorFilter(getResources().getColor(R.color.colorError));
+                valid = false;
+            } else {
+                imageButtonDate.setColorFilter(getResources().getColor(R.color.colorIcon));
+            }
+
+            if(!InputValidation.validateTime(time)) {
+                Log.d(tag, "Time field is invalid : " + time);
+                imageButtonTime.setColorFilter(getResources().getColor(R.color.colorError));
+                valid = false;
+            } else {
+                imageButtonTime.setColorFilter(getResources().getColor(R.color.colorIcon));
+            }
+
+            if(!valid) return null;
+
+            Log.d(tag, "Conforming JSON payload.");
+
+            // put tags on an array (backend expects)
+            ArrayList<String> tags = new ArrayList<>();
+            tags.add(task_tag); JSONArray tagsJSON = new JSONArray(tags);
+
+            // make json payload for the request
+            json.put("name", name);
+            json.put("description", description);
+            json.put("tags", tagsJSON);
+            json.put("priority", priority);
+            json.put("due_date", date);
+            json.put("due_time", time);
+            // NOTE: using 'due_date' and 'due_time' for the task request
+            //       because backend uses 'date' and 'time' for creation timestamp
+
         } catch (JSONException e){
             Log.e(tag, e.getMessage());
             Log.e(tag, Log.getStackTraceString(e));
@@ -172,109 +287,84 @@ public class AddTaskActivity extends AppCompatActivity {
         return json;
     }
 
-    // Set click listeners for diaglogs
-    public void showDate(){
-        buttonDate.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        showDialog(date_dialog_id);
-                    }
-                }
-        );
-
-        inputDate.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        showDialog(date_dialog_id);
-                    }
-                }
-        );
-    }
-
-    // Creates dialogs
-    @Override
-    public Dialog onCreateDialog(int id){
-        if(id == 0){
-            return new DatePickerDialog(this, dplistener, date.get(Calendar.YEAR), date.get(Calendar.MONTH), date.get(Calendar.DAY_OF_MONTH));
-            //Current day
-        }
-        if(id == 1){
-            return new TimePickerDialog(this, tplistener, date.get(Calendar.HOUR_OF_DAY)+ 1, 0, false);
-            //One hour from "now"
-        }
-        return null;
-    }
-
-
-    private DatePickerDialog.OnDateSetListener dplistener = new DatePickerDialog.OnDateSetListener() {
+    private DatePickerDialog.OnDateSetListener datePickerHandler = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker datePicker, int year, int monthOfYear, int dayOfMonth) {
-            Log.d(tag, "Set date to: " + date.get(Calendar.MONTH) + "/" + date.get(Calendar.DAY_OF_MONTH) + "/" + date.get(Calendar.YEAR));
-            date.set(year, monthOfYear, dayOfMonth);
-            inputDate.setText(android.text.format.DateFormat.format("MM/dd/yyyy", date));
+            Log.d(tag, "Set date to: "
+                    +       calendarDate.get(Calendar.MONTH)
+                    + "/" + calendarDate.get(Calendar.DAY_OF_MONTH)
+                    + "/" + calendarDate.get(Calendar.YEAR));
+            calendarDate.set(year, monthOfYear, dayOfMonth);
+            inputDate.setText(android.text.format.DateFormat.format("MM/dd/yyyy", calendarDate));
         }
     };
 
-
-    public void showTime(){
-        buttonTime.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        showDialog(time_dialog_id);
-                    }
-                }
-        );
-
-        inputTime.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        showDialog(time_dialog_id);
-                    }
-                }
-        );
-    }
-
-    private TimePickerDialog.OnTimeSetListener tplistener = new TimePickerDialog.OnTimeSetListener() {
+    private TimePickerDialog.OnTimeSetListener timePickerHandler = new TimePickerDialog.OnTimeSetListener() {
         @Override
         public void onTimeSet(TimePicker timePicker, int hour, int minute) {
-            Log.d(tag, "Set time to: " + date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE) + "");
-            date.set(Calendar.HOUR, hour);
-            date.set(Calendar.MINUTE, minute);
-            inputTime.setText(android.text.format.DateFormat.format("hh:mm a", date));
+            Log.d(tag, "Set time to: "
+                    +       calendarDate.get(Calendar.HOUR_OF_DAY)
+                    + ":" + calendarDate.get(Calendar.MINUTE));
+            calendarDate.set(Calendar.HOUR, hour);
+            calendarDate.set(Calendar.MINUTE, minute);
+            inputTime.setText(android.text.format.DateFormat.format("hh:mm a", calendarDate));
         }
     };
 
     @Override
     public void onBackPressed() {
-        //super.onBackPressed();
         Intent intent = new Intent(this, MainScreenActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_TASK_ON_HOME);
         startActivity(intent);
         this.finish();
     }
 
-    public void sendNewTaskToServer(Task t) {
-        HashMap<String, String> postMessage = new HashMap<>(); // assumes <String, String>
+    public void submitNewTask(JSONObject postMessage) {
+        final String endpoint = "add_task";
+        AppController.getInstance().cancelPendingRequests(tag + ":" + endpoint);
 
-        Log.d("API-LOGIN-POST", postMessage.toString());
-        JsonObjectRequest loginReq = new JsonObjectRequest(
+        Log.d(tag, "API /" + endpoint + " Request POST Body : " + postMessage.toString());
+
+        // request object to be added to volley's request queue
+        Log.d(tag, "API /" + endpoint + " creating request object.");
+        JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.POST, // request method
-                AppController.defaultBaseUrl + "/add_task", // target url
-                new JSONObject(postMessage), // json object from hashmap
+                AppController.defaultBaseUrl + "/" + endpoint, // target url
+                postMessage, // json payload
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d("API-LOGIN-RESPONSE", response.toString());
-                        Log.d(tag, "Added task to server");
+                        Log.d(tag, "API /" + endpoint + " raw response : " + response.toString());
+                        try {
+
+                            /* Possible endpoint responses
+
+                                {‘status’: ‘success’}
+                                {‘status’: ‘not logged in’},
+                                {‘status’: ‘must specify name, priority’},
+                                {‘status’: ‘invalid request’},
+                                {‘status’: ‘cannot add dup task’},
+                                {‘status’: ‘invalid request’}
+
+                             */
+
+                            // TODO: response treatment
+                            // TODO: talk to backend about endpoint status signaling
+                            if(response.get("status") == "success")
+                                onBackPressed();
+                        } catch(JSONException e) {
+                            // TODO: show parsing error on UI
+                            // log and do a stack trace
+                            Log.e(tag, "API /" + endpoint + " error parsing response: " + e.getMessage());
+                            Log.getStackTraceString(e);
+                        }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e("API-LOGIN-ERROR", "Something happened in the way of heaven : " + error.getMessage());
+                // log the error
+                AppController.getInstance().requestNetworkError(error, tag, "/" + endpoint);
+                // TODO: show network error on UI
             }
         }) {
             @Override
@@ -285,13 +375,7 @@ public class AddTaskActivity extends AppCompatActivity {
             }
         };
 
-        try {
-            Log.d("API-LOGIN-BODY", new String(loginReq.getBody(), "UTF-8"));
-            Log.d("API-LOGIN-BODYCTYPE", loginReq.getBodyContentType());
-        } catch(UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-
-            AppController.getInstance().addToRequestQueue(loginReq, "add_task");
+        Log.d(tag, "API /" + endpoint + " adding request object to request queue.");
+        AppController.getInstance().addToRequestQueue(request, tag + ":" + endpoint);
     }
 }
