@@ -116,6 +116,7 @@
     <string name="label_submit">Submit</string>
     <string name="label_test_login">Test Login</string>
     <string name="title_add_task">Add Task</string>
+    <string name="title_edit_task">Edit Task</string>
     <string name="placeholder_input_task_name">Input new task name</string>
     <string name="label_description">Description</string>
     <string name="placeholder_input_description">Input a description for your task (optional)</string>
@@ -124,4 +125,5 @@
     <string name="placeholder_date_format">mm/dd/yyyy</string>
     <string name="placeholder_time_format">hh:mm am/pm</string>
     <string name="label_add">Add</string>
+    <string name="label_edit">Edit</string>
 </resources>

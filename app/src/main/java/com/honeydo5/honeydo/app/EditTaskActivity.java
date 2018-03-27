@@ -27,6 +27,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.honeydo5.honeydo.R;
 import com.honeydo5.honeydo.util.InputValidation;
+import com.honeydo5.honeydo.util.Task;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,7 +38,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
-public class AddTaskActivity extends HoneyDoActivity {
+public class EditTaskActivity extends HoneyDoActivity {
 
     private Calendar calendarDate;
 
@@ -47,7 +48,7 @@ public class AddTaskActivity extends HoneyDoActivity {
     //TODO eliminate this
     /*static final int date_dialog_id = 0;
     static final int time_dialog_id = 1;*/
-  
+
     private ArrayAdapter<CharSequence> adapter;
 
     //fields
@@ -58,42 +59,51 @@ public class AddTaskActivity extends HoneyDoActivity {
     private TextView labelName, labelDescription, labelTag;
     private ImageButton imageButtonDate, imageButtonTime;
 
-    Button buttonAdd;
+    private Task editableTask;
+
+    Button buttonEdit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        this.setTag("ADDTASK");
+        this.setTag("EDITTASK");
 
-        Log.d(tag, "Setting AddTaskActivity content view.");
-        setContentView(R.layout.activity_add_task);
-      
+        editableTask = (Task) getIntent().getSerializableExtra("task");
+
+        Log.d(tag, "Setting editTaskActivity content view.");
+        setContentView(R.layout.activity_edit_task);
+
         // get components -----------------------------------------
 
         Log.d(tag, "Finding components and views.");
         //fields
-        inputName = findViewById(R.id.addTaskEditViewName);
-        inputDescription = findViewById(R.id.addTaskMultiLineTaskDesc);
-        inputPriority = findViewById(R.id.addTaskSwitchPriority);
-        inputTag = findViewById(R.id.addTaskSpinnerTags);
-        inputDate = findViewById(R.id.addTaskEditTextDateText);
-        inputTime = findViewById(R.id.addTaskEditTextTimeText);
+        inputName = findViewById(R.id.editTaskEditViewName);
+        inputDescription = findViewById(R.id.editTaskMultiLineTaskDesc);
+        inputPriority = findViewById(R.id.editTaskSwitchPriority);
+        inputTag = findViewById(R.id.editTaskSpinnerTags);
+        inputDate = findViewById(R.id.editTaskEditTextDateText);
+        inputTime = findViewById(R.id.editTaskEditTextTimeText);
         //labels (used for invalid input highlighting)
-        labelName = findViewById(R.id.addTaskTextViewNameLabel);
-        labelDescription = findViewById(R.id.addTaskTextViewDiscLabel);
-        labelTag = findViewById(R.id.addTaskTextViewTagsLabel);
-        imageButtonDate = findViewById(R.id.addTaskDatePickerDate);
-        imageButtonTime = findViewById(R.id.addTaskTimePickerTime);
+        labelName = findViewById(R.id.editTaskTextViewNameLabel);
+        labelDescription = findViewById(R.id.editTaskTextViewDiscLabel);
+        labelTag = findViewById(R.id.editTaskTextViewTagsLabel);
+        imageButtonDate = findViewById(R.id.editTaskDatePickerDate);
+        imageButtonTime = findViewById(R.id.editTaskTimePickerTime);
         //buttons
-        buttonAdd = findViewById(R.id.addTaskButtonAdd);
+        buttonEdit = findViewById(R.id.editTaskButtonEdit);
 
 
         // set components -----------------------------------------
 
+        // set name / description / priority
+        inputName.setText(editableTask.getName());
+        inputDescription.setText(editableTask.getDescription());
+
+        inputPriority.setChecked(editableTask.isPriority());
+
         //get date
-        calendarDate = Calendar.getInstance();
-        calendarDate.set(Calendar.HOUR_OF_DAY, calendarDate.get(Calendar.HOUR_OF_DAY + 1));
+        calendarDate = editableTask.getDate();
 
         //init date and time fields using calendarDate
         inputTime.setText(android.text.format.DateFormat.format("hh:mm a", calendarDate));
@@ -117,7 +127,7 @@ public class AddTaskActivity extends HoneyDoActivity {
         timePicker = new TimePickerDialog(
                 this,
                 timePickerHandler,
-                calendarDate.get(Calendar.HOUR_OF_DAY)+ 1,
+                calendarDate.get(Calendar.HOUR_OF_DAY),
                 0, false);
 
 
@@ -184,8 +194,8 @@ public class AddTaskActivity extends HoneyDoActivity {
         });
 
 
-        //add task button
-        buttonAdd.setOnClickListener(new View.OnClickListener() {
+        //edit task button
+        buttonEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 JSONObject json = getFieldsData();
@@ -220,13 +230,13 @@ public class AddTaskActivity extends HoneyDoActivity {
             boolean valid = true;
 
             String name = inputName.getText().toString(),
-                   description = inputDescription.getText().toString(),
-                   task_tag = inputTag.getSelectedItem().toString(),
-                   priority = Boolean.toString(inputPriority.isChecked()),
-                   date = inputDate.getText().toString(),
-                   time = inputTime.getText().toString();
+                    description = inputDescription.getText().toString(),
+                    task_tag = inputTag.getSelectedItem().toString(),
+                    priority = Boolean.toString(inputPriority.isChecked()),
+                    date = inputDate.getText().toString(),
+                    time = inputTime.getText().toString();
 
-            Log.d(tag, "Validating add task entries.");
+            Log.d(tag, "Validating edit task entries.");
 
             if(InputValidation.checkIfEmpty(name)){
                 Log.d(tag, "Name field is invalid : " + name);
@@ -320,12 +330,12 @@ public class AddTaskActivity extends HoneyDoActivity {
     }
 
     public void submitNewTask(JSONObject postMessage) {
-        final String endpoint = "add_task";
+        /*final String endpoint = "edit_task";
         AppController.getInstance().cancelPendingRequests(tag + ":" + endpoint);
 
         Log.d(tag, "API /" + endpoint + " Request POST Body : " + postMessage.toString());
 
-        // request object to be added to volley's request queue
+        // request object to be edited to volley's request queue
         Log.d(tag, "API /" + endpoint + " creating request object.");
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.POST, // request method
@@ -346,7 +356,7 @@ public class AddTaskActivity extends HoneyDoActivity {
                                 {‘status’: ‘cannot add dup task’},
                                 {‘status’: ‘invalid request’}
 
-                             */
+
 
                             // TODO: response treatment
                             // TODO: talk to backend about endpoint status signaling
@@ -375,7 +385,7 @@ public class AddTaskActivity extends HoneyDoActivity {
             }
         };
 
-        Log.d(tag, "API /" + endpoint + " adding request object to request queue.");
-        AppController.getInstance().addToRequestQueue(request, tag + ":" + endpoint);
+        Log.d(tag, "API /" + endpoint + " editing request object to request queue.");
+        AppController.getInstance().addToRequestQueue(request, tag + ":" + endpoint);*/
     }
 }

@@ -1,14 +1,17 @@
 package com.honeydo5.honeydo.util;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class Task {
+public class Task implements Serializable {
 
     private String name, description;
     private boolean priority;
     private ArrayList<Tag> tags;
     private Calendar date, reminder;
+
+    private int ID;
 
     public Task(String name, String description, boolean priority, ArrayList<Tag> tags, Calendar date, Calendar reminder) {
         this.name = name;
@@ -65,5 +68,13 @@ public class Task {
 
     public void setReminder(Calendar reminder) {
         this.reminder = reminder;
+    }
+
+    public int getID() {
+        return ID;
+    }
+
+    public void setID(int ID) {
+        this.ID = ID;
     }
 }
