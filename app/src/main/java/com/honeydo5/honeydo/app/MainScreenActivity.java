@@ -5,13 +5,16 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.GradientDrawable;
 import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -68,6 +71,17 @@ public class MainScreenActivity extends AppCompatActivity implements RecyclerIte
         adapter = new TaskAdapter(this, TaskSystem.getTaskList());
         listViewTasks.setAdapter(adapter);
 
+        // Add touch helper
+        ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT, this);
+        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(listViewTasks);
+
+        // add divider line to recycleview
+        DividerItemDecoration verticalDecor = new DividerItemDecoration(
+                listViewTasks.getContext(),
+                DividerItemDecoration.VERTICAL
+        );
+        listViewTasks.addItemDecoration(verticalDecor);
+
         //Alarm Manager
         Calendar calendarMili = Calendar.getInstance();
         calendarMili.add(Calendar.SECOND, 1);
@@ -80,9 +94,6 @@ public class MainScreenActivity extends AppCompatActivity implements RecyclerIte
         FAButtonAddTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
-
             createNewTask();
             }
         });
@@ -110,7 +121,7 @@ public class MainScreenActivity extends AppCompatActivity implements RecyclerIte
             public void run() {
                 try {
                     // clear the list first
-                    adapter.clearAll();
+                    // adapter.clearAll();
 
                     JSONArray tasks = response.getJSONArray("tasks");
                     for (int i = 0; i < tasks.length(); i++) {

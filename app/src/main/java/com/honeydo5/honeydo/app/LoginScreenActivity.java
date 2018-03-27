@@ -93,11 +93,11 @@ public class LoginScreenActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // dummy tasks
-                TaskSystem.addTask(new Task("Test body", "Get Eggs", true, null, DateHelper.getDate(2018, 2, 5, 12, 15), null));
-                TaskSystem.addTask(new Task("Test body", "Do software engineering hw", false, null, DateHelper.getDate(2018, 2, 7, 7, 45), null));
-                TaskSystem.addTask(new Task("Test body", "Study COP", true, null, DateHelper.getDate(2018, 2, 23, 6, 30), null));
-                TaskSystem.addTask(new Task("Test body", "do laundry!!!!!", false, null, DateHelper.getDate(2018, 3, 5, 4, 0), null));
-                TaskSystem.addTask(new Task("Test body", "test this app (meta!)", true, null, DateHelper.getDate(2018, 4, 17, 2, 15), null));
+                TaskSystem.addTask(new Task( "Get Eggs","Test body", true, null, DateHelper.getDate(2018, 2, 5, 12, 15), null));
+                TaskSystem.addTask(new Task( "Do software engineering hw","Test body", false, null, DateHelper.getDate(2018, 2, 7, 7, 45), null));
+                TaskSystem.addTask(new Task( "Study COP","Test body", true, null, DateHelper.getDate(2018, 2, 23, 6, 30), null));
+                TaskSystem.addTask(new Task( "do laundry!!!!!","Test body", false, null, DateHelper.getDate(2018, 3, 5, 4, 0), null));
+                TaskSystem.addTask(new Task( "test this app (meta!)","Test body", true, null, DateHelper.getDate(2018, 4, 17, 2, 15), null));
 
                 Intent intent = new Intent(LoginScreenActivity.this, MainScreenActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME);

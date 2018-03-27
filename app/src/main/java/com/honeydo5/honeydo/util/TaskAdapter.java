@@ -68,6 +68,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
             holder.date.setTextColor(ContextCompat.getColor(context, R.color.textOld));
             holder.time.setTextColor(ContextCompat.getColor(context, R.color.textOld));
         }
+
     }
 
     public void removeItem(int position) {
@@ -84,7 +85,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
     public class TaskViewHolder extends RecyclerView.ViewHolder{
 
         TextView title, date, time;
-        LinearLayout layoutForeground, layoutBackground;
+        LinearLayout layoutForeground, layoutBackgroundDelete, layoutBackgroundEdit;
 
         public TaskViewHolder(View itemView) {
             super(itemView);
@@ -94,7 +95,8 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
             time = itemView.findViewById(R.id.taskListFragTextViewTime);
 
             layoutForeground = itemView.findViewById(R.id.taskListFragForeground);
-            layoutBackground = itemView.findViewById(R.id.taskListFragBackground);
+            layoutBackgroundDelete = itemView.findViewById(R.id.taskListFragBackgroundDelete);
+            layoutBackgroundEdit = itemView.findViewById(R.id.taskListFragBackgroundEdit);
         }
     }
 }

@@ -6,10 +6,10 @@
     android:layout_height="wrap_content">
 
     <LinearLayout
-        android:id="@+id/taskListFragBackground"
+        android:id="@+id/taskListFragBackgroundEdit"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/col4"
+        android:background="@android:color/holo_orange_light"
         android:orientation="horizontal">
 
 
@@ -20,7 +20,35 @@
             android:padding="15dp">
 
             <ImageView
-                android:id="@+id/imageView"
+                android:id="@+id/taskListFragImageViewEdit"
+                android:layout_width="@dimen/ic_delete"
+                android:layout_height="@dimen/ic_delete"
+                android:layout_alignParentRight="false"
+                android:layout_centerVertical="true"
+                android:layout_weight="0"
+                android:baselineAlignBottom="false"
+                android:tint="@color/colorIcon"
+                app:srcCompat="@drawable/ic_edit_black_24dp" />
+
+        </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/taskListFragBackgroundDelete"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorError"
+        android:orientation="horizontal">
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0"
+            android:padding="15dp">
+
+            <ImageView
+                android:id="@+id/taskListFragImageViewDelete"
                 android:layout_width="@dimen/ic_delete"
                 android:layout_height="@dimen/ic_delete"
                 android:layout_alignParentRight="true"
