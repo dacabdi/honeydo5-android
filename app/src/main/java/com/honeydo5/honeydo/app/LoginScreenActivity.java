@@ -11,10 +11,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.honeydo5.honeydo.util.DateHelper;
-import com.honeydo5.honeydo.util.Task;
-import com.honeydo5.honeydo.util.TaskSystem;
-
 import org.json.JSONException;
 
 public class LoginScreenActivity extends HoneyDoActivity implements ILogin {
@@ -79,23 +75,6 @@ public class LoginScreenActivity extends HoneyDoActivity implements ILogin {
 
                     Log.i(tag, message);
                 }}).start();
-            }
-        });
-
-        buttonTestLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // dummy tasks
-                TaskSystem.addTask(new Task( "Get Eggs","Test body", true, null, DateHelper.getDate(2018, 2, 5, 12, 15), null));
-                TaskSystem.addTask(new Task( "Do software engineering hw","Test body", false, null, DateHelper.getDate(2018, 2, 7, 7, 45), null));
-                TaskSystem.addTask(new Task( "Study COP","Test body", true, null, DateHelper.getDate(2018, 2, 23, 6, 30), null));
-                TaskSystem.addTask(new Task( "do laundry!!!!!","Test body", false, null, DateHelper.getDate(2018, 3, 5, 4, 0), null));
-                TaskSystem.addTask(new Task( "test this app (meta!)","Test body", true, null, DateHelper.getDate(2018, 4, 17, 2, 15), null));
-
-                Intent intent = new Intent(LoginScreenActivity.this, MainScreenActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME);
-                startActivity(intent);
-                LoginScreenActivity.this.finish();
             }
         });
 

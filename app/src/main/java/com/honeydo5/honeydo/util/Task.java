@@ -1,27 +1,48 @@
 package com.honeydo5.honeydo.util;
 
-import android.os.Parcelable;
+import com.honeydo5.honeydo.app.AppController;
 
-import java.io.Serializable;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class Task  {
 
+public class Task  {
     private String name, description;
     private boolean priority;
     private ArrayList<Tag> tags;
-    private Calendar date, reminder;
+    private Calendar dateAndTime;
+    private int id;
 
-    private int ID;
+    private Task(int id, String name, String description, boolean priority) {
+        setId(id);
+        setName(name);
+        setDescription(description);
+        setPriority(priority);
+    }
 
-    public Task(String name, String description, boolean priority, ArrayList<Tag> tags, Calendar date, Calendar reminder) {
-        this.name = name;
-        this.description = description;
-        this.priority = priority;
-        this.tags = tags;
-        this.date = date;
-        this.reminder = reminder;
+    public Task(int id, String name, String description, boolean priority, ArrayList<Tag> tags, Calendar dateAndTime) throws JSONException {
+        this(id, name, description, priority);
+        setTags(tags);
+        setDateAndTime(dateAndTime);
+    }
+
+    public Task(int id, String name, String description, boolean priority, JSONArray tags, String dateAndTime) throws JSONException {
+        this(id, name, description, priority);
+        setTags(tags);
+        setDateAndTime(dateAndTime);
+    }
+
+    public Task(JSONObject json) throws JSONException {
+        this(   json.getInt("task_id"),
+                json.getString("name"),
+                json.getString("description"),
+                json.getBoolean("priority"),
+                json.getJSONArray("tags"),
+                json.getString("due_date") + " " + json.getString("due_time")  );
     }
 
     public String getName() {
@@ -52,31 +73,44 @@ public class Task  {
         return tags;
     }
 
+    public JSONArray getTagsJSON(){
+        return new JSONArray(this.tags);
+    }
+
     public void setTags(ArrayList<Tag> tags) {
         this.tags = tags;
     }
 
-    public Calendar getDate() {
-        return this.date;
+    public void setTags(JSONArray tags) throws JSONException {
+        this.tags = extractTags(tags);
     }
 
-    public void setDate(Calendar date) {
-        this.date = date;
+    public Calendar getDateAndTime() {
+        return this.dateAndTime;
     }
 
-    public Calendar getReminder() {
-        return reminder;
+    public void setDateAndTime(Calendar date) {
+        this.dateAndTime = date;
     }
 
-    public void setReminder(Calendar reminder) {
-        this.reminder = reminder;
+    public void setDateAndTime(String date) {
+        this.dateAndTime = AppController.getInstance().parseDateTimeString(date);
     }
 
-    public int getID() {
-        return ID;
+    public int getId() {
+        return id;
     }
 
-    public void setID(int ID) {
-        this.ID = ID;
+    public void setId(int ID) {
+        this.id = ID;
+    }
+
+    private ArrayList<Tag> extractTags(JSONArray jsonTags) throws JSONException
+    {
+        ArrayList<Tag> tags = new ArrayList<>();
+        for(int i = 0; i < jsonTags.length(); i++)
+            tags.add(new Tag(jsonTags.getString(i)));
+
+        return tags;
     }
 }

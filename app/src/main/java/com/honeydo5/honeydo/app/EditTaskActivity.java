@@ -5,7 +5,6 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -18,7 +17,6 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -103,7 +101,7 @@ public class EditTaskActivity extends HoneyDoActivity {
         inputPriority.setChecked(editableTask.isPriority());
 
         //get date
-        calendarDate = editableTask.getDate();
+        calendarDate = editableTask.getDateAndTime();
 
         //init date and time fields using calendarDate
         inputTime.setText(android.text.format.DateFormat.format("hh:mm a", calendarDate));

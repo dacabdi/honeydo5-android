@@ -54,8 +54,8 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
         Task t = taskList.get(position);
 
         holder.title.setText(t.getName());
-        holder.date.setText(android.text.format.DateFormat.format("MM/dd/yyyy", t.getDate()));
-        holder.time.setText(android.text.format.DateFormat.format("hh:mm a", t.getDate()));
+        holder.date.setText(android.text.format.DateFormat.format("MM/dd/yyyy", t.getDateAndTime()));
+        holder.time.setText(android.text.format.DateFormat.format("hh:mm a", t.getDateAndTime()));
 
         // Underline priority tasks
         if(t.isPriority()) {
@@ -63,7 +63,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
         }
 
         // Dull out previous tasks
-        if(t.getDate().before(currentDate)) {
+        if(t.getDateAndTime().before(currentDate)) {
             holder.title.setTextColor(ContextCompat.getColor(context, R.color.textOld));
             holder.date.setTextColor(ContextCompat.getColor(context, R.color.textOld));
             holder.time.setTextColor(ContextCompat.getColor(context, R.color.textOld));
