@@ -121,6 +121,7 @@ public class MainScreenActivity extends HoneyDoActivity implements RecyclerItemT
                     for (int i=0; i < tasks.length(); i++) {
                         TaskSystem.addTask(new Task(tasks.getJSONObject(i)));
                     }
+                    adapter.notifyDataSetChanged();
                 } catch(JSONException e) {
                     // log and do a stack trace
                     Log.e(tag, "Error parsing JSON:" + e.getMessage());
