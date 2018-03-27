@@ -16,7 +16,6 @@ import com.honeydo5.honeydo.util.Task;
 import com.honeydo5.honeydo.util.TaskSystem;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
 public class LoginScreenActivity extends HoneyDoActivity implements ILogin {
     // views and components
