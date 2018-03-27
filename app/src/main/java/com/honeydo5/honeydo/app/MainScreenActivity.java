@@ -50,6 +50,8 @@ public class MainScreenActivity extends AppCompatActivity implements RecyclerIte
     RecyclerView listViewTasks;
     TaskAdapter adapter;
 
+    ItemTouchHelper.SimpleCallback itemTouchHelperCallback;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,7 +74,7 @@ public class MainScreenActivity extends AppCompatActivity implements RecyclerIte
         listViewTasks.setAdapter(adapter);
 
         // Add touch helper
-        ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT, this);
+        itemTouchHelperCallback = new RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT, this);
         new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(listViewTasks);
 
         // add divider line to recycleview
@@ -104,7 +106,10 @@ public class MainScreenActivity extends AppCompatActivity implements RecyclerIte
     protected void onResume(){
         super.onResume();
         Log.d(tag, "Calling /get_tasks to refresh the view.");
+
+        TaskSystem.clearEditTask();
         getTaskList();
+        adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -229,7 +234,7 @@ public class MainScreenActivity extends AppCompatActivity implements RecyclerIte
     void editTask(int position)
     {
         Intent intent = new Intent(this, EditTaskActivity.class);
-        intent.putExtra("task", TaskSystem.getTask(position));
+        TaskSystem.setEditTask(TaskSystem.getTask(position));
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME);
         startActivity(intent);
     }
@@ -240,8 +245,10 @@ public class MainScreenActivity extends AppCompatActivity implements RecyclerIte
         if(viewHolder instanceof TaskAdapter.TaskViewHolder) {
             if(direction == ItemTouchHelper.LEFT)
                 adapter.removeItem(viewHolder.getAdapterPosition());
-            else if(direction == ItemTouchHelper.RIGHT)
+            else if(direction == ItemTouchHelper.RIGHT) {
                 editTask(position);
+                itemTouchHelperCallback.clearView(listViewTasks, viewHolder);
+            }
         }
     }
 }

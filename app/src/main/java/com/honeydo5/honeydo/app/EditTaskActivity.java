@@ -28,6 +28,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.honeydo5.honeydo.R;
 import com.honeydo5.honeydo.util.InputValidation;
 import com.honeydo5.honeydo.util.Task;
+import com.honeydo5.honeydo.util.TaskSystem;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -61,6 +62,8 @@ public class EditTaskActivity extends HoneyDoActivity {
 
     private Task editableTask;
 
+    private String oldName;
+
     Button buttonEdit;
 
     @Override
@@ -69,7 +72,7 @@ public class EditTaskActivity extends HoneyDoActivity {
 
         this.setTag("EDITTASK");
 
-        editableTask = (Task) getIntent().getSerializableExtra("task");
+        editableTask = TaskSystem.getEditTask();
 
         Log.d(tag, "Setting editTaskActivity content view.");
         setContentView(R.layout.activity_edit_task);
@@ -97,6 +100,7 @@ public class EditTaskActivity extends HoneyDoActivity {
         // set components -----------------------------------------
 
         // set name / description / priority
+        oldName = editableTask.getName();
         inputName.setText(editableTask.getName());
         inputDescription.setText(editableTask.getDescription());
 
@@ -201,7 +205,7 @@ public class EditTaskActivity extends HoneyDoActivity {
                 JSONObject json = getFieldsData();
                 if(json != null) {
                     Log.d(tag, "Sending new task to server");
-                    submitNewTask(json);
+                    submitTaskEdit(json);
                 }
             }
         });
@@ -217,6 +221,7 @@ public class EditTaskActivity extends HoneyDoActivity {
         try{
 
             /*
+                 old_name      (string)
                  name,        (string)
                  description, (string)
                  tag,         (array of strings)
@@ -279,6 +284,7 @@ public class EditTaskActivity extends HoneyDoActivity {
             tags.add(task_tag); JSONArray tagsJSON = new JSONArray(tags);
 
             // make json payload for the request
+            json.put("old_name", oldName);
             json.put("name", name);
             json.put("description", description);
             json.put("tags", tagsJSON);
@@ -329,8 +335,8 @@ public class EditTaskActivity extends HoneyDoActivity {
         this.finish();
     }
 
-    public void submitNewTask(JSONObject postMessage) {
-        /*final String endpoint = "edit_task";
+    public void submitTaskEdit(JSONObject postMessage) {
+        final String endpoint = "edit_task";
         AppController.getInstance().cancelPendingRequests(tag + ":" + endpoint);
 
         Log.d(tag, "API /" + endpoint + " Request POST Body : " + postMessage.toString());
@@ -354,7 +360,7 @@ public class EditTaskActivity extends HoneyDoActivity {
                                 {‘status’: ‘must specify name, priority’},
                                 {‘status’: ‘invalid request’},
                                 {‘status’: ‘cannot add dup task’},
-                                {‘status’: ‘invalid request’}
+                                {‘status’: ‘invalid request’} */
 
 
 
@@ -386,6 +392,6 @@ public class EditTaskActivity extends HoneyDoActivity {
         };
 
         Log.d(tag, "API /" + endpoint + " editing request object to request queue.");
-        AppController.getInstance().addToRequestQueue(request, tag + ":" + endpoint);*/
+        AppController.getInstance().addToRequestQueue(request, tag + ":" + endpoint);
     }
 }
