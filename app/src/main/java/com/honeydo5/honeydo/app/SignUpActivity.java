@@ -2,7 +2,6 @@ package com.honeydo5.honeydo.app;
 
 import android.content.Intent;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -24,9 +23,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SignUpActivity extends AppCompatActivity {
-    private String tag = "SIGNUPACTIVITY";
-
+public class SignUpActivity extends HoneyDoActivity implements ILogin {
     //input fields
     private EditText inputEmail,
             inputName,
@@ -42,9 +39,13 @@ public class SignUpActivity extends AppCompatActivity {
     private Button buttonSubmit;
 
 
+    private String loginErrorMessagePrefix = "Could not login after SignUp : ";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.setTag("SIGNUPACTIVITY");
+
         Log.d(tag, "Setting SignUpActivity content view.");
         setContentView(R.layout.activity_sign_up);
 
@@ -101,7 +102,7 @@ public class SignUpActivity extends AppCompatActivity {
 
             if(!InputValidation.validateEmail(email)){
                 Log.d(tag, "Invalid email: " + email);
-                errorMessage += getString(R.string.message_invalid_email);
+                errorMessage += getString(R.string.message_invalid_email) + " ";
                 labelEmail.setTextColor(getResources().getColor(R.color.colorError));
                 valid = false;
             } else {
@@ -110,7 +111,7 @@ public class SignUpActivity extends AppCompatActivity {
 
             if(!InputValidation.validateUsername(name)){
                 Log.d(tag, "Invalid username: " + name);
-                errorMessage += getString(R.string.message_invalid_username);
+                errorMessage += getString(R.string.message_invalid_username) + " ";
                 labelName.setTextColor(getResources().getColor(R.color.colorError));
                 valid = false;
             } else {
@@ -118,10 +119,11 @@ public class SignUpActivity extends AppCompatActivity {
             }
 
             if(!password.equals(passwordRe) || InputValidation.checkIfEmpty(password)){
-                Log.d(tag, "Password fields do not match : " + password + "->" + passwordRe);
+                Log.d(tag, "Password fields do not match or are empty : " + password + "->" + passwordRe);
                 labelPassword.setTextColor(getResources().getColor(R.color.colorError));
                 errorMessage += getString(R.string.message_passwords_do_not_match);
                 valid = false;
+                //TODO: make it message also if empty
             }else{
                 labelPassword.setTextColor(getResources().getColor(R.color.colorText));
             }
@@ -137,6 +139,7 @@ public class SignUpActivity extends AppCompatActivity {
             }
 
             Log.d(tag, "Adding fields to JSON object.");
+
             json.put("email", email);
             json.put("name", name);
             json.put("password", password);
@@ -149,9 +152,10 @@ public class SignUpActivity extends AppCompatActivity {
         return json;
     }
 
-    private void submitSignUpRequest(JSONObject postMessage)
+    private void submitSignUpRequest(final JSONObject postMessage)
     {
         final String endpoint = "create_account";
+
         AppController.getInstance().cancelPendingRequests(tag + ":" + endpoint);
 
         Log.d(tag, "API /" + endpoint + " Request POST Body : " + postMessage.toString());
@@ -170,17 +174,41 @@ public class SignUpActivity extends AppCompatActivity {
                             Log.d(tag, "API /" + endpoint + " raw response : " + response.toString());
 
                             /*
-                            API specification responses:
+                                API specification responses:
 
-                            {‘status’: ‘success’}
-                            {‘status’: ‘cannot add dup account’}
-                            {‘status’: ‘you must specify name, email, password’}
+                                {‘status’: ‘success’}
+                                {‘status’: ‘cannot add dup account’}
+                                {‘status’: ‘you must specify name, email, password’}
                             */
 
-                            // TODO: set intents and make a decision on response...
                             String status = response.get("status").toString();
-                            textMessage.setText(status);
-                            textMessage.setVisibility(View.VISIBLE);
+                            String errorMessage = null;
+
+                            switch(status)
+                            {
+                                case "success" :
+                                    String email = postMessage.get("email").toString();
+                                    String password = postMessage.get("password").toString();
+                                    AppController.getInstance().login(SignUpActivity.this, email, password);
+                                    break;
+
+                                case "cannot add dup account" :
+                                    errorMessage = getString(R.string.message_account_exists);
+                                    break;
+
+                                case "you must specify name, email, password" :
+                                    errorMessage = getString(R.string.message_invalid_request);
+                                    break;
+
+                                default:
+                                    errorMessage = getString(R.string.message_unexpected_response);
+                                    break;
+                            }
+
+                            if(errorMessage != null) {
+                                textMessage.setText(status);
+                                textMessage.setVisibility(View.VISIBLE);
+                            }
                         } catch(JSONException e) {
                             // print a message for the user
                             textMessage.setText(getString(R.string.message_communication_problem));
@@ -211,5 +239,55 @@ public class SignUpActivity extends AppCompatActivity {
 
         Log.d(tag, "API /" + endpoint + " adding request object to request queue.");
         AppController.getInstance().addToRequestQueue(request, tag + ":" + endpoint);
+    }
+
+
+    @Override public void onLoginResponse(String loginStatus, Object ... args) {
+        String errorMessage = null;
+
+        switch(loginStatus)
+        {
+            case "already logged in" : case "logged in":
+            Log.d(this.tag, "Successful Login, intent onto MainScreenActivity, finish SignUActivity");
+            Intent intent = new Intent(this, MainScreenActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME);
+            startActivity(intent);
+            this.finish();
+            break;
+
+            case "wrong username/password" :
+                errorMessage = getString(R.string.message_wrong_credentials);
+                break;
+
+            case "you must specify email and password" :
+                errorMessage = getString(R.string.message_specify_email_password);
+                break;
+
+            default :
+                errorMessage = getString(R.string.message_unexpected_response);
+                break;
+        }
+
+        if(errorMessage != null) {
+            errorMessage = loginErrorMessagePrefix + errorMessage;
+            textMessage.setText(errorMessage);
+            textMessage.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override public void onLoginNetworkError(VolleyError e, Object ... args) {
+        // print a message for the user
+        String errorMessage = getString(R.string.message_communication_problem);
+        errorMessage = loginErrorMessagePrefix + errorMessage;
+        textMessage.setText(errorMessage);
+        textMessage.setVisibility(View.VISIBLE);
+    }
+
+    @Override public void onLoginResponseParseError(JSONException e) {
+        // print a message for the user
+        String errorMessage = getString(R.string.message_communication_problem);
+        errorMessage = loginErrorMessagePrefix + errorMessage;
+        textMessage.setText(errorMessage);
+        textMessage.setVisibility(View.VISIBLE);
     }
 }
