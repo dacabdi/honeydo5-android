@@ -126,4 +126,7 @@
     <string name="placeholder_time_format">hh:mm am/pm</string>
     <string name="label_add">Add</string>
     <string name="label_edit">Edit</string>
+
+    <string name="logo">logo</string>
+    <string name="copyright">© 2018 HoneyDo ALL RIGHTS RESERVED</string>
 </resources>
