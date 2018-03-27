@@ -15,6 +15,8 @@ public class TaskSystem {
         taskList.add(t);
     }
 
+    public static void clearAll() { taskList.clear(); }
+
     private static Task editTask = null;
     public static void setEditTask(Task t) { editTask = t; }
     public static Task getEditTask() { return editTask; }

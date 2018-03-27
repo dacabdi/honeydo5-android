@@ -27,6 +27,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.honeydo5.honeydo.R;
 import com.honeydo5.honeydo.util.InputValidation;
+import com.honeydo5.honeydo.util.Tag;
+import com.honeydo5.honeydo.util.Task;
+import com.honeydo5.honeydo.util.TaskSystem;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -316,7 +319,7 @@ public class AddTaskActivity extends HoneyDoActivity {
         this.finish();
     }
 
-    public void submitNewTask(JSONObject postMessage) {
+    public void submitNewTask(final JSONObject postMessage) {
         final String endpoint = "add_task";
         AppController.getInstance().cancelPendingRequests(tag + ":" + endpoint);
 
@@ -340,15 +343,33 @@ public class AddTaskActivity extends HoneyDoActivity {
                                 {‘status’: ‘not logged in’},
                                 {‘status’: ‘must specify name, priority’},
                                 {‘status’: ‘invalid request’},
-                                {‘status’: ‘cannot add dup task’},
+                                {‘status’: ‘cannot add dup task’}, //TODO: Mitch, we do allow this
                                 {‘status’: ‘invalid request’}
 
                              */
 
-                            // TODO: response treatment
-                            // TODO: talk to backend about endpoint status signaling
-                            if(response.get("status") == "success")
-                                onBackPressed();
+                            String status = response.get("status").toString();
+                            switch(status)
+                            {
+                                case "success" :
+                                    JSONObject taskJSON = new JSONObject(postMessage.toString());
+                                    taskJSON.put("task_id", Math.random() * Integer.MAX_VALUE);
+
+                                    Task new_task = new Task(taskJSON);
+                                    TaskSystem.addTask(new_task);
+                                    onBackPressed();
+
+                                    break;
+
+                                case "not logged in":
+                                    AppController.getInstance().sessionExpired(AddTaskActivity.this);
+                                    break;
+
+                                case "must specify name, priority" :
+                                    Log.e(tag, "API /" + endpoint + " response : invalid data.");
+                                    //TODO : show on activity body
+                                    break;
+                            }
                         } catch(JSONException e) {
                             // TODO: show parsing error on UI
                             // log and do a stack trace
