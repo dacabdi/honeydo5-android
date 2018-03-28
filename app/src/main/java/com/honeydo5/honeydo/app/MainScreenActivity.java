@@ -30,7 +30,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -210,12 +209,90 @@ public class MainScreenActivity extends HoneyDoActivity implements RecyclerItemT
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
         if(viewHolder instanceof TaskAdapter.TaskViewHolder) {
             //TODO: this is where I edit or remove tasks, DAVID adapter.removeItem(viewHolder.getAdapterPosition()) removes a task
-            if(direction == ItemTouchHelper.LEFT)
-                adapter.removeItem(viewHolder.getAdapterPosition());
+            if(direction == ItemTouchHelper.LEFT) {
+                try {
+                    Task task = TaskSystem.getTask(position);
+                    JSONObject postMessage = new JSONObject();
+                    postMessage.put("task_id", task.getId());
+                    requestRemoveTask(position, postMessage);
+                } catch (JSONException e) {
+                    Log.e(tag, "API /delete_task error composing message: " + e.getMessage());
+                    Log.getStackTraceString(e);
+                }
+            }
             else if(direction == ItemTouchHelper.RIGHT) {
                 editTask(position);
                 itemTouchHelperCallback.clearView(listViewTasks, viewHolder);
             }
         }
+    }
+
+
+    public void requestRemoveTask(final int position, JSONObject postMessage){
+        final String endpoint = "delete_task";
+        AppController.getInstance().cancelPendingRequests(tag + ":" + endpoint);
+
+        Log.d(tag, "API /" + endpoint + " Request POST Body : " + postMessage.toString());
+
+        // request object to be added to volley's request queue
+        Log.d(tag, "API /" + endpoint + " creating request object.");
+        JsonObjectRequest request = new JsonObjectRequest(
+                Request.Method.POST, // request method
+                AppController.defaultBaseUrl + "/" + endpoint, // target url
+                postMessage, // json payload
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d(tag, "API /" + endpoint + " raw response : " + response.toString());
+                        try {
+
+                            /* Possible endpoint responses
+
+                                {‘status’: ‘success’}
+                                ??? // TODO talk to backend!
+
+                             */
+                            String status = response.get("status").toString();
+
+                            switch(status)
+                            {
+                                case "success" :
+                                    adapter.removeItem(position);
+                                    break;
+
+                                case "not logged in":
+                                    AppController.getInstance().sessionExpired(MainScreenActivity.this);
+                                    break;
+
+                                case "must specify name, priority" :
+                                    Log.e(tag, "API /" + endpoint + " response : invalid data.");
+                                    //TODO : show on activity body
+                                    break;
+                            }
+                        } catch(JSONException e) {
+                            // TODO: show parsing error on UI
+                            // log and do a stack trace
+                            Log.e(tag, "API /" + endpoint + " error parsing response: " + e.getMessage());
+                            Log.getStackTraceString(e);
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                // log the error
+                AppController.getInstance().requestNetworkError(error, tag, "/" + endpoint);
+                // TODO: show network error on UI
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<>(); // assumes <String, String> template params
+                headers.put("Content-Type", "application/json; charset=utf-8");
+                return headers;
+            }
+        };
+
+        Log.d(tag, "API /" + endpoint + " adding request object to request queue.");
+        AppController.getInstance().addToRequestQueue(request, tag + ":" + endpoint);
     }
 }
