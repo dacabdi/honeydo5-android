@@ -358,8 +358,6 @@ public class AddTaskActivity extends HoneyDoActivity {
                                 {‘status’: ‘success’}
                                 {‘status’: ‘not logged in’},
                                 {‘status’: ‘must specify name, priority’},
-                                {‘status’: ‘invalid request’},
-                                {‘status’: ‘cannot add dup task’}, //TODO: Mitch, we do allow this
                                 {‘status’: ‘invalid request’}
 
                              */
@@ -371,7 +369,7 @@ public class AddTaskActivity extends HoneyDoActivity {
                             {
                                 case "success" :
                                     JSONObject taskJSON = new JSONObject(postMessage.toString());
-                                    taskJSON.put("task_id", Math.random() * Integer.MAX_VALUE);
+                                    taskJSON.put("task_id", response.getInt("task_id"));
 
                                     Task new_task = new Task(taskJSON);
                                     TaskSystem.addTask(new_task);

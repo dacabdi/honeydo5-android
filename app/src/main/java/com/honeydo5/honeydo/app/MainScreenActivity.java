@@ -1,7 +1,5 @@
 package com.honeydo5.honeydo.app;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -29,7 +27,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -149,20 +146,17 @@ public class MainScreenActivity extends HoneyDoActivity implements RecyclerItemT
                         try {
                             Log.d(tag, "API /" + endpoint + " raw response : " + response.toString());
 
-                            /*String status = response.get("status").toString();
+                            String status = response.get("status").toString();
                             switch(status)
                             {
                                 case "not logged in" :
-
                                     AppController.getInstance().sessionExpired(MainScreenActivity.this);
                                     break;
 
-                                //TODO: get Mitch to do this
-                                //case "success" :
-                                default :*/
+                                case "success" :
                                     parseResponseToAdapter(response);
-                                    /*break;
-                            }*/
+                                    break;
+                            }
                         } catch(JSONException e) {
                             // log and do a stack trace
                             Log.e(tag, "API /" + endpoint + " error parsing response: " + e.getMessage());
@@ -262,11 +256,6 @@ public class MainScreenActivity extends HoneyDoActivity implements RecyclerItemT
 
                                 case "not logged in":
                                     AppController.getInstance().sessionExpired(MainScreenActivity.this);
-                                    break;
-
-                                case "must specify name, priority" :
-                                    Log.e(tag, "API /" + endpoint + " response : invalid data.");
-                                    //TODO : show on activity body
                                     break;
                             }
                         } catch(JSONException e) {
