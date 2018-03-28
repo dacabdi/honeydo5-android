@@ -1,11 +1,8 @@
 package com.honeydo5.honeydo.app;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -30,8 +27,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -76,14 +71,15 @@ public class MainScreenActivity extends HoneyDoActivity implements RecyclerItemT
         );
         listViewTasks.addItemDecoration(verticalDecor);
 
+        //TODO talk to Nikos about this, seems like notification services
         //Alarm Manager
-        Calendar calendarMili = Calendar.getInstance();
+        /*Calendar calendarMili = Calendar.getInstance();
         calendarMili.add(Calendar.SECOND, 1);
 
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         Intent intent = new Intent("notification");
         PendingIntent broadcast = PendingIntent.getBroadcast(this, 100, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendarMili.getTimeInMillis(), broadcast); //had to raise min SDK
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendarMili.getTimeInMillis(), broadcast);*/ //had to raise min SDK
 
         FAButtonAddTask.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,12 +111,24 @@ public class MainScreenActivity extends HoneyDoActivity implements RecyclerItemT
         runOnUiThread(new Runnable(){
             @Override
             public void run() {
+                Log.d(tag, "Parsing /get_tasks to adapter on a new thread.");
                 try {
                     TaskSystem.clearAll();
                     JSONArray tasks = response.getJSONArray("tasks");
                     for (int i=0; i < tasks.length(); i++) {
-                        TaskSystem.addTask(new Task(tasks.getJSONObject(i)));
+                        Log.d(tag, "Obtaining task JSON object");
+                        JSONObject jsonTask = tasks.getJSONObject(i);
+                        Log.d(tag, "Data for taks : " + jsonTask.toString(4));
+
+                        Log.d(tag, "Making task object from its JSON object");
+                        Task task = new Task(jsonTask);
+
+                        Log.d(tag, "Adding task to adapter");
+                        TaskSystem.addTask(task);
                     }
+
+                    Log.d(tag, "Notifying adapter that data changed");
+                    adapter.notifyDataSetChanged();
                 } catch(JSONException e) {
                     // log and do a stack trace
                     Log.e(tag, "Error parsing JSON:" + e.getMessage());
@@ -149,20 +157,18 @@ public class MainScreenActivity extends HoneyDoActivity implements RecyclerItemT
                         try {
                             Log.d(tag, "API /" + endpoint + " raw response : " + response.toString());
 
-                            /*String status = response.get("status").toString();
+                            String status = response.get("status").toString();
                             switch(status)
                             {
                                 case "not logged in" :
-
                                     AppController.getInstance().sessionExpired(MainScreenActivity.this);
                                     break;
 
-                                //TODO: get Mitch to do this
-                                //case "success" :
-                                default :*/
+                                case "success" :
+                                    Log.d(tag, "API /" + endpoint + " successful, pasing response to parser");
                                     parseResponseToAdapter(response);
-                                    /*break;
-                            }*/
+                                    break;
+                            }
                         } catch(JSONException e) {
                             // log and do a stack trace
                             Log.e(tag, "API /" + endpoint + " error parsing response: " + e.getMessage());
@@ -191,6 +197,7 @@ public class MainScreenActivity extends HoneyDoActivity implements RecyclerItemT
 
     void createNewTask()
     {
+        Log.d(tag, "Moving to create task activity");
         Intent intent = new Intent(this, AddTaskActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME);
         startActivity(intent);
@@ -198,6 +205,7 @@ public class MainScreenActivity extends HoneyDoActivity implements RecyclerItemT
 
     void editTask(int position)
     {
+        Log.d(tag, "Moving to editing task activity");
         Intent intent = new Intent(this, EditTaskActivity.class);
         TaskSystem.setEditTask(TaskSystem.getTask(position));
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME);
@@ -208,12 +216,86 @@ public class MainScreenActivity extends HoneyDoActivity implements RecyclerItemT
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
         if(viewHolder instanceof TaskAdapter.TaskViewHolder) {
-            if(direction == ItemTouchHelper.LEFT)
-                adapter.removeItem(viewHolder.getAdapterPosition());
+            //TODO: this is where I edit or remove tasks, DAVID adapter.removeItem(viewHolder.getAdapterPosition()) removes a task
+            if(direction == ItemTouchHelper.LEFT) {
+                try {
+                    Task task = TaskSystem.getTask(position);
+                    JSONObject postMessage = new JSONObject();
+                    postMessage.put("task_id", task.getId());
+                    requestRemoveTask(position, postMessage);
+                } catch (JSONException e) {
+                    Log.e(tag, "API /delete_task error composing message: " + e.getMessage());
+                    Log.getStackTraceString(e);
+                }
+            }
             else if(direction == ItemTouchHelper.RIGHT) {
                 editTask(position);
                 itemTouchHelperCallback.clearView(listViewTasks, viewHolder);
             }
         }
+    }
+
+
+    public void requestRemoveTask(final int position, JSONObject postMessage){
+        final String endpoint = "delete_task";
+        AppController.getInstance().cancelPendingRequests(tag + ":" + endpoint);
+
+        Log.d(tag, "API /" + endpoint + " Request POST Body : " + postMessage.toString());
+
+        // request object to be added to volley's request queue
+        Log.d(tag, "API /" + endpoint + " creating request object.");
+        JsonObjectRequest request = new JsonObjectRequest(
+                Request.Method.POST, // request method
+                AppController.defaultBaseUrl + "/" + endpoint, // target url
+                postMessage, // json payload
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d(tag, "API /" + endpoint + " raw response : " + response.toString());
+                        try {
+
+                            /* Possible endpoint responses
+
+                                {‘status’: ‘success’}
+                                ??? // TODO talk to backend!
+
+                             */
+                            String status = response.get("status").toString();
+
+                            switch(status)
+                            {
+                                case "success" :
+                                    adapter.removeItem(position);
+                                    break;
+
+                                case "not logged in":
+                                    AppController.getInstance().sessionExpired(MainScreenActivity.this);
+                                    break;
+                            }
+                        } catch(JSONException e) {
+                            // TODO: show parsing error on UI
+                            // log and do a stack trace
+                            Log.e(tag, "API /" + endpoint + " error parsing response: " + e.getMessage());
+                            Log.getStackTraceString(e);
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                // log the error
+                AppController.getInstance().requestNetworkError(error, tag, "/" + endpoint);
+                // TODO: show network error on UI
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<>(); // assumes <String, String> template params
+                headers.put("Content-Type", "application/json; charset=utf-8");
+                return headers;
+            }
+        };
+
+        Log.d(tag, "API /" + endpoint + " adding request object to request queue.");
+        AppController.getInstance().addToRequestQueue(request, tag + ":" + endpoint);
     }
 }

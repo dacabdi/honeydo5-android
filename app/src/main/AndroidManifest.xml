@@ -3,6 +3,9 @@
     package="com.honeydo5.honeydo">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.VIBRATE"/>
+
 
     <application
         android:name=".app.AppController"
@@ -18,8 +21,7 @@
         <activity
             android:name=".app.MainScreenActivity"
             android:alwaysRetainTaskState="true"
-            android:label="@string/title_activity_main_screen"
-            android:launchMode="singleInstance" />
+            android:label="@string/title_activity_main_screen" />
         <activity
             android:name=".app.AddTaskActivity"
             android:label="Add Task" />
@@ -40,10 +42,10 @@
         <activity android:name=".app.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>

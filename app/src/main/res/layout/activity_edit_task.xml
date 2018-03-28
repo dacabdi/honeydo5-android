@@ -36,10 +36,8 @@
             android:id="@+id/editTaskEditViewName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/editTaskTextViewHeader"
             android:layout_alignStart="@+id/editTaskTextViewHeader"
             android:layout_below="@+id/editTaskTextViewHeader"
-            android:layout_marginLeft="23dp"
             android:layout_marginStart="23dp"
             android:layout_marginTop="21dp"
             android:ems="10"
@@ -159,6 +157,13 @@
             android:ems="10"
             android:inputType="time"
             android:text="@string/placeholder_time_format" />
+
+        <TextView
+            android:id="@+id/editTaskTextViewMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/addTaskTextViewHeader"
+            android:layout_centerHorizontal="true" />
 
     </RelativeLayout>
 

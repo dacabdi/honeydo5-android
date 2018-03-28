@@ -44,6 +44,8 @@ public class EditTaskActivity extends HoneyDoActivity {
     private DatePickerDialog datePicker;
     private TimePickerDialog timePicker;
 
+    private TextView textMessage;
+
     private ArrayAdapter<CharSequence> adapter;
 
     //fields
@@ -89,6 +91,8 @@ public class EditTaskActivity extends HoneyDoActivity {
         imageButtonTime = findViewById(R.id.editTaskTimePickerTime);
         //buttons
         buttonEdit = findViewById(R.id.editTaskButtonEdit);
+
+        textMessage = findViewById(R.id.editTaskTextViewMessage);
 
 
         // set components -----------------------------------------
@@ -227,6 +231,7 @@ public class EditTaskActivity extends HoneyDoActivity {
             //validate input
 
             boolean valid = true;
+            String errorMessage = "";
 
             String name = inputName.getText().toString(),
                     description = inputDescription.getText().toString(),
@@ -239,6 +244,7 @@ public class EditTaskActivity extends HoneyDoActivity {
 
             if(InputValidation.checkIfEmpty(name)){
                 Log.d(tag, "Name field is invalid : " + name);
+                errorMessage += getString(R.string.message_invalid_name) + " ";
                 labelName.setTextColor(getResources().getColor(R.color.colorError));
                 valid = false;
             } else {
@@ -255,6 +261,7 @@ public class EditTaskActivity extends HoneyDoActivity {
 
             if(!InputValidation.validateDate(date)) {
                 Log.d(tag, "Date field is invalid : " + date);
+                errorMessage += getString(R.string.message_invalid_date) + " ";
                 imageButtonDate.setColorFilter(getResources().getColor(R.color.colorError));
                 valid = false;
             } else {
@@ -263,13 +270,22 @@ public class EditTaskActivity extends HoneyDoActivity {
 
             if(!InputValidation.validateTime(time)) {
                 Log.d(tag, "Time field is invalid : " + time);
+                errorMessage += getString(R.string.message_invalid_time) + " ";
                 imageButtonTime.setColorFilter(getResources().getColor(R.color.colorError));
                 valid = false;
             } else {
                 imageButtonTime.setColorFilter(getResources().getColor(R.color.colorIcon));
             }
 
-            if(!valid) return null;
+            if(!valid) {
+                textMessage.setText(errorMessage);
+                textMessage.setVisibility(View.VISIBLE);
+                return null;
+            }else{
+                textMessage.setText("");
+                textMessage.setVisibility(View.INVISIBLE);
+                Log.d(tag, "All input fields are valid.");
+            }
 
             Log.d(tag, "Conforming JSON payload.");
 
@@ -360,7 +376,7 @@ public class EditTaskActivity extends HoneyDoActivity {
 
                             // TODO: response treatment
                             // TODO: talk to backend about endpoint status signaling
-                            if(response.get("status") == "success")
+                            if(response.getString("status").equals("success"))
                                 onBackPressed();
                         } catch(JSONException e) {
                             // TODO: show parsing error on UI
