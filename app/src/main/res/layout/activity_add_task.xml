@@ -160,6 +160,13 @@
             android:inputType="time"
             android:text="@string/placeholder_time_format" />
 
+        <TextView
+            android:id="@+id/addTaskTextViewMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/addTaskTextViewHeader"
+            android:layout_centerHorizontal="true" />
+
     </RelativeLayout>
 
     <Button

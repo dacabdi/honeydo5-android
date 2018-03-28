@@ -40,6 +40,11 @@
     <string name="message_invalid_username">Invalid username.</string>
     <string name="message_passwords_do_not_match">Passwords entered do not match.</string>
 
+    <!-- Add/EditActivity -->
+    <string name="message_invalid_name">Must provide name.</string>
+    <string name="message_invalid_date">Invalid date.</string>
+    <string name="message_invalid_time">Invalid time.</string>
+
     <!-- Strings related to Settings -->
 
     <!-- Example General settings -->
