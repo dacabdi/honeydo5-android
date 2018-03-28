@@ -9,6 +9,8 @@ import com.honeydo5.honeydo.R;
 
 public class SplashActivity extends HoneyDoActivity {
 
+    CountDownTimer splashAnimationDelay;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,11 +27,8 @@ public class SplashActivity extends HoneyDoActivity {
 
         setContentView(R.layout.activity_splash);
 
-        new CountDownTimer(3000, 1000) {
-
-            public void onTick(long millisUntilFinished) {
-            }
-
+        splashAnimationDelay = new CountDownTimer(3000, 1000) {
+            public void onTick(long millisUntilFinished) {}
             public void onFinish() {
                 goToLogin();
             }
@@ -38,6 +37,7 @@ public class SplashActivity extends HoneyDoActivity {
 
     @Override
     public void onBackPressed() {
+        splashAnimationDelay.cancel();
         Intent startMain = new Intent(Intent.ACTION_MAIN);
         startMain.addCategory(Intent.CATEGORY_HOME);
         startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
