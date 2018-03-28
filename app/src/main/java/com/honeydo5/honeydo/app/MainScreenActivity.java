@@ -111,12 +111,20 @@ public class MainScreenActivity extends HoneyDoActivity implements RecyclerItemT
         runOnUiThread(new Runnable(){
             @Override
             public void run() {
+                Log.d(tag, "Parsing /get_tasks to adapter on a new thread.");
                 try {
                     TaskSystem.clearAll();
                     JSONArray tasks = response.getJSONArray("tasks");
                     for (int i=0; i < tasks.length(); i++) {
-                        TaskSystem.addTask(new Task(tasks.getJSONObject(i)));
+                        Log.d(tag, "Obtaining task JSON object");
+                        JSONObject jsonTask = tasks.getJSONObject(i);
+                        Log.d(tag, "Making task object from its JSON object");
+                        Task task = new Task(jsonTask);
+                        Log.d(tag, "Adding task to adapter");
+                        TaskSystem.addTask(task);
                     }
+
+                    Log.d(tag, "Notifying adapter that data changed");
                     adapter.notifyDataSetChanged();
                 } catch(JSONException e) {
                     // log and do a stack trace
@@ -154,6 +162,7 @@ public class MainScreenActivity extends HoneyDoActivity implements RecyclerItemT
                                     break;
 
                                 case "success" :
+                                    Log.d(tag, "API /" + endpoint + " successful, pasing response to parser");
                                     parseResponseToAdapter(response);
                                     break;
                             }
@@ -185,6 +194,7 @@ public class MainScreenActivity extends HoneyDoActivity implements RecyclerItemT
 
     void createNewTask()
     {
+        Log.d(tag, "Moving to create task activity");
         Intent intent = new Intent(this, AddTaskActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME);
         startActivity(intent);
@@ -192,6 +202,7 @@ public class MainScreenActivity extends HoneyDoActivity implements RecyclerItemT
 
     void editTask(int position)
     {
+        Log.d(tag, "Moving to editing task activity");
         Intent intent = new Intent(this, EditTaskActivity.class);
         TaskSystem.setEditTask(TaskSystem.getTask(position));
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME);

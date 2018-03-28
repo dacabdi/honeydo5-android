@@ -376,7 +376,7 @@ public class EditTaskActivity extends HoneyDoActivity {
 
                             // TODO: response treatment
                             // TODO: talk to backend about endpoint status signaling
-                            if(response.get("status") == "success")
+                            if(response.getString("status").equals("success"))
                                 onBackPressed();
                         } catch(JSONException e) {
                             // TODO: show parsing error on UI
