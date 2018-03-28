@@ -5,7 +5,6 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -75,14 +74,15 @@ public class MainScreenActivity extends HoneyDoActivity implements RecyclerItemT
         );
         listViewTasks.addItemDecoration(verticalDecor);
 
+        //TODO talk to Nikos about this, seems like notification services
         //Alarm Manager
-        Calendar calendarMili = Calendar.getInstance();
+        /*Calendar calendarMili = Calendar.getInstance();
         calendarMili.add(Calendar.SECOND, 1);
 
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         Intent intent = new Intent("notification");
         PendingIntent broadcast = PendingIntent.getBroadcast(this, 100, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendarMili.getTimeInMillis(), broadcast); //had to raise min SDK
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendarMili.getTimeInMillis(), broadcast);*/ //had to raise min SDK
 
         FAButtonAddTask.setOnClickListener(new View.OnClickListener() {
             @Override
