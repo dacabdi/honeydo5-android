@@ -1,67 +1,122 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout
+        android:id="@+id/taskListFragBackgroundEdit"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="match_parent"
+        android:background="@android:color/holo_orange_light"
+        android:orientation="horizontal">
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0"
+            android:padding="15dp">
+
+            <ImageView
+                android:id="@+id/taskListFragImageViewEdit"
+                android:layout_width="@dimen/ic_delete"
+                android:layout_height="@dimen/ic_delete"
+                android:layout_alignParentRight="false"
+                android:layout_centerVertical="true"
+                android:layout_weight="0"
+                android:baselineAlignBottom="false"
+                android:tint="@color/colorIcon"
+                app:srcCompat="@drawable/ic_edit_black_24dp" />
+
+        </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/taskListFragBackgroundDelete"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorError"
+        android:orientation="horizontal">
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0"
+            android:padding="15dp">
+
+            <ImageView
+                android:id="@+id/taskListFragImageViewDelete"
+                android:layout_width="@dimen/ic_delete"
+                android:layout_height="@dimen/ic_delete"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_weight="0"
+                android:baselineAlignBottom="false"
+                android:tint="@color/colorIcon"
+                app:srcCompat="@drawable/ic_delete_black_24dp" />
+
+        </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/taskListFragForeground"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="?android:attr/colorBackground"
         android:orientation="horizontal">
 
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
             android:orientation="vertical">
 
             <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="8"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="2dp"
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/task_title"
+                    android:id="@+id/taskListFragTextViewTitle"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="end"
                     android:layout_weight="1"
-                    android:gravity="end"
                     android:text="Test Event Title"
-                    android:textAlignment="textEnd"
                     android:textSize="24sp" />
             </LinearLayout>
 
             <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="4"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="0dp"
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/task_date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:layout_weight="7"
-                    android:gravity="end"
-                    android:text="2/11"
-                    android:textAlignment="textEnd"
-                    android:textSize="24sp" />
-
-                <TextView
-                    android:id="@+id/task_time"
+                    android:id="@+id/taskListFragTextViewDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
                     android:layout_weight="1"
-                    android:gravity="end"
+                    android:text="2/11"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/taskListFragTextViewTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_weight="3"
                     android:text="12:30 PM"
-                    android:textAlignment="textEnd"
-                    android:textSize="24sp" />
+                    android:textSize="20sp" />
 
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
-</android.support.constraint.ConstraintLayout>
+
+</FrameLayout>

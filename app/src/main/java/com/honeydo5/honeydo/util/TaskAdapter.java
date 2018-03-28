@@ -1,36 +1,42 @@
-package com.honeydo5.honeydo.app;
+package com.honeydo5.honeydo.util;
 
 import android.content.Context;
+import android.graphics.Paint;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.honeydo5.honeydo.R;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-/**
- * Created by aaron on 2/24/2018.
- */
 
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder>{
 
     private Context context;
     private ArrayList<Task> taskList;
 
-    private Date currentDate;
+    private Calendar currentDate;
 
     public TaskAdapter(Context context, ArrayList<Task> taskList)
     {
         this.context = context;
         this.taskList = taskList;
 
-        currentDate = GregorianCalendar.getInstance().getTime();
+        currentDate = GregorianCalendar.getInstance();
+    }
+
+    public void clearAll()
+    {
+        while(this.getItemCount() != 0)
+            this.removeItem(0);
     }
 
     @Override
@@ -45,18 +51,30 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
     @Override
     public void onBindViewHolder(TaskViewHolder holder, int position) {
 
-
         Task t = taskList.get(position);
 
-        holder.title.setText(t.getHeader());
-        holder.date.setText(android.text.format.DateFormat.format("MM-dd-yyyy", t.getDue()));
-        holder.time.setText(android.text.format.DateFormat.format("hh:mm a", t.getDue()));
+        holder.title.setText(t.getName());
+        holder.date.setText(android.text.format.DateFormat.format("MM/dd/yyyy", t.getDateAndTime()));
+        holder.time.setText(android.text.format.DateFormat.format("hh:mm a", t.getDateAndTime()));
 
-        if(t.getDue().before(currentDate)) {
+        // Underline priority tasks
+        if(t.isPriority()) {
+            holder.title.setPaintFlags(holder.title.getPaintFlags() |   Paint.UNDERLINE_TEXT_FLAG);
+        }
+
+        // Dull out previous tasks
+        if(t.getDateAndTime().before(currentDate)) {
             holder.title.setTextColor(ContextCompat.getColor(context, R.color.textOld));
             holder.date.setTextColor(ContextCompat.getColor(context, R.color.textOld));
             holder.time.setTextColor(ContextCompat.getColor(context, R.color.textOld));
         }
+
+    }
+
+    public void removeItem(int position) {
+        Log.d("TASKADAPTER", "Removed item at " + position + " position");
+        taskList.remove(position);
+        notifyItemRemoved(position);
     }
 
     @Override
@@ -64,16 +82,21 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
         return taskList.size();
     }
 
-    class TaskViewHolder extends RecyclerView.ViewHolder{
+    public class TaskViewHolder extends RecyclerView.ViewHolder{
 
         TextView title, date, time;
+        LinearLayout layoutForeground, layoutBackgroundDelete, layoutBackgroundEdit;
 
         public TaskViewHolder(View itemView) {
             super(itemView);
 
-            title = itemView.findViewById(R.id.task_title);
-            date = itemView.findViewById(R.id.task_date);
-            time = itemView.findViewById(R.id.task_time);
+            title = itemView.findViewById(R.id.taskListFragTextViewTitle);
+            date = itemView.findViewById(R.id.taskListFragTextViewDate);
+            time = itemView.findViewById(R.id.taskListFragTextViewTime);
+
+            layoutForeground = itemView.findViewById(R.id.taskListFragForeground);
+            layoutBackgroundDelete = itemView.findViewById(R.id.taskListFragBackgroundDelete);
+            layoutBackgroundEdit = itemView.findViewById(R.id.taskListFragBackgroundEdit);
         }
     }
 }

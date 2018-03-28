@@ -3,6 +3,9 @@
     package="com.honeydo5.honeydo">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.VIBRATE"/>
+
 
     <application
         android:name=".app.AppController"
@@ -12,26 +15,37 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar">
-        <activity android:name=".app.LoginScreen">
+        <activity android:name=".app.LoginScreenActivity">
+
+        </activity>
+        <activity
+            android:name=".app.MainScreenActivity"
+            android:alwaysRetainTaskState="true"
+            android:label="@string/title_activity_main_screen" />
+        <activity
+            android:name=".app.AddTaskActivity"
+            android:label="Add Task" />
+        <activity
+            android:name=".app.SignUpActivity"
+            android:label="@string/title_activity_signup" />
+        <activity
+            android:name=".app.NotificationActivity"
+            android:label="Notification" />
+
+        <receiver android:name=".util.AlarmReceiver">
+            <intent-filter>
+                <action android:name="DisplayNotification" />
+            </intent-filter>
+        </receiver>
+
+        <activity android:name=".app.EditTaskActivity" />
+        <activity android:name=".app.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".app.MainScreen"
-            android:label="@string/title_activity_main_screen">
-        </activity>
-
-        <activity
-            android:name=".app.AddTask">
-        </activity>
-
-        <activity
-            android:name=".app.SignUpActivity"
-            android:label="@string/title_activity_signup">
-        </activity>
-
     </application>
+
 </manifest>

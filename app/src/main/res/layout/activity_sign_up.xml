@@ -4,139 +4,202 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="5dp"
     tools:context="com.honeydo5.honeydo.app.SignUpActivity">
 
 
-    <TextView
-        android:id="@+id/SignUpTextViewTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/label_signup"
-        android:textSize="36sp"
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="5dp"
+        tools:layout_editor_absoluteY="223dp">
 
-        app:layout_constraintBottom_toTopOf="parent"
-        app:layout_constraintEnd_toStartOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/SignUpTextViewTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:text="@string/label_signup"
+            android:textColor="@color/col4"
+            android:textSize="36sp"
+            app:layout_constraintBottom_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/SignUpTextViewLabelEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/SignUpTextViewLabelName"
+            android:layout_alignStart="@+id/SignUpTextViewLabelName"
+            android:layout_below="@+id/SignUpTextViewTitle"
+            android:layout_marginTop="23dp"
+            android:text="@string/label_email"
+            android:textSize="@dimen/dim_label_font_size"
+            app:layout_constraintBottom_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/SignUpEditTextName"
+            android:layout_width="258dp"
+            android:layout_height="45dp"
+            android:layout_below="@+id/SignUpEditTextEmail"
+            android:layout_marginLeft="13dp"
+            android:layout_marginStart="13dp"
+            android:layout_marginTop="13dp"
+            android:layout_toEndOf="@+id/SignUpTextViewLabelName"
+            android:layout_toRightOf="@+id/SignUpTextViewLabelName"
+            android:ems="10"
+            android:hint="@string/placeholder_username"
+            android:inputType="text"
+            app:layout_constraintBottom_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/SignUpTextViewLabelName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/SignUpEditTextName"
+            android:layout_alignLeft="@+id/SignUpTextViewLabelPassword"
+            android:layout_alignStart="@+id/SignUpTextViewLabelPassword"
+            android:text="@string/label_name"
+            android:textSize="@dimen/dim_label_font_size"
+            app:layout_constraintBottom_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/SignUpEditTextEmail"
+            android:layout_width="258dp"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/SignUpTextViewLabelEmail"
+            android:layout_alignLeft="@+id/SignUpEditTextName"
+            android:layout_alignStart="@+id/SignUpEditTextName"
+            android:ems="10"
+            android:hint="@string/placeholder_email"
+            android:inputType="textEmailAddress"
+            app:layout_constraintBottom_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/SignUpTextViewLabelPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/SignUpEditTextName"
+            android:layout_marginTop="27dp"
+            android:layout_toLeftOf="@+id/SignUpTextViewTitle"
+            android:layout_toStartOf="@+id/SignUpTextViewTitle"
+            android:text="@string/label_password"
+            android:textSize="@dimen/dim_label_font_size"
+            app:layout_constraintBottom_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/SignUpEditTextPassword"
+            android:layout_width="206dp"
+            android:layout_height="43dp"
+            android:layout_alignBottom="@+id/SignUpTextViewLabelPassword"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginEnd="21dp"
+            android:layout_marginRight="21dp"
+            android:ems="10"
+            android:hint="@string/placeholder_password"
+            android:inputType="textPassword"
+            app:layout_constraintBottom_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/SignUpEditTextPasswordRe"
+            android:layout_width="206dp"
+            android:layout_height="43dp"
+            android:layout_alignLeft="@+id/SignUpEditTextPassword"
+            android:layout_alignStart="@+id/SignUpEditTextPassword"
+            android:layout_below="@+id/SignUpEditTextPassword"
+            android:layout_marginTop="17dp"
+            android:ems="10"
+            android:hint="@string/placeholder_reenter_password"
+            android:inputType="textPassword"
+            app:layout_constraintBottom_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/SignUpTextViewMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/SignUpButtonSubmit"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/SignUpEditTextPasswordRe"
+            android:layout_marginTop="28dp"
+            android:textAlignment="center" />
+
+        <Button
+            android:id="@+id/SignUpButtonSubmit"
+            android:layout_width="136dp"
+            android:layout_height="68dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:text="@string/label_submit"
+            app:layout_constraintBottom_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </RelativeLayout>
+    <![CDATA[
+
+
         tools:layout_editor_absoluteX="131dp"
         tools:layout_editor_absoluteY="16dp" />
 
-    <TextView
-        android:id="@+id/SignUpTextViewLabelEmail"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:text="@string/label_email"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toTopOf="parent"
-        app:layout_constraintEnd_toStartOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-        tools:layout_editor_absoluteX="16dp"
+    tools:layout_editor_absoluteX="16dp"
         tools:layout_editor_absoluteY="97dp" />
 
-    <EditText
-        android:id="@+id/SignUpEditTextEmail"
-        android:layout_width="258dp"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="@string/placeholder_email"
-        android:inputType="textEmailAddress"
-        app:layout_constraintBottom_toTopOf="parent"
-        app:layout_constraintEnd_toStartOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+
         tools:layout_editor_absoluteX="110dp"
         tools:layout_editor_absoluteY="97dp" />
 
-    <TextView
-        android:id="@+id/SignUpTextViewLabelName"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:text="@string/label_name"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toTopOf="parent"
-        app:layout_constraintEnd_toStartOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+
         tools:layout_editor_absoluteX="16dp"
         tools:layout_editor_absoluteY="165dp" />
 
-    <EditText
-        android:id="@+id/SignUpEditTextName"
-        android:layout_width="258dp"
-        android:layout_height="45dp"
-        android:ems="10"
-        android:hint="@string/placeholder_username"
-        android:inputType="text"
-        app:layout_constraintBottom_toTopOf="parent"
-        app:layout_constraintEnd_toStartOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+
         tools:layout_editor_absoluteX="110dp"
         tools:layout_editor_absoluteY="166dp" />
 
-    <TextView
-        android:id="@+id/labelSignupPassword"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:text="@string/label_password"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toTopOf="parent"
-        app:layout_constraintEnd_toStartOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+
         tools:layout_editor_absoluteX="16dp"
         tools:layout_editor_absoluteY="235dp" />
 
-    <EditText
-        android:id="@+id/SignUpEditTextPassword"
-        android:layout_width="206dp"
-        android:layout_height="43dp"
-        android:ems="10"
-        android:hint="@string/placeholder_password"
-        android:inputType="textPassword"
-        app:layout_constraintBottom_toTopOf="parent"
-        app:layout_constraintEnd_toStartOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-        tools:layout_editor_absoluteX="162dp"
+    tools:layout_editor_absoluteX="162dp"
         tools:layout_editor_absoluteY="238dp" />
 
-    <EditText
-        android:id="@+id/SignUpEditTextPasswordRe"
-        android:layout_width="206dp"
-        android:layout_height="43dp"
-        android:ems="10"
-        android:hint="@string/placeholder_reenter_password"
-        android:inputType="textPassword"
-        app:layout_constraintBottom_toTopOf="parent"
-        app:layout_constraintEnd_toStartOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+
         tools:layout_editor_absoluteX="162dp"
         tools:layout_editor_absoluteY="295dp" />
 
-    <TextView
-        android:id="@+id/SignUpTextViewMessage"
-        android:layout_width="351dp"
-        android:layout_height="71dp"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toTopOf="parent"
-        app:layout_constraintEnd_toStartOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+
         tools:layout_editor_absoluteX="17dp"
         tools:layout_editor_absoluteY="378dp" />
 
-    <Button
-        android:id="@+id/SignUpButtonSubmit"
-        android:layout_width="136dp"
-        android:layout_height="68dp"
-        android:text="@string/label_submit"
-        app:layout_constraintBottom_toTopOf="parent"
-        app:layout_constraintEnd_toStartOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-        tools:layout_editor_absoluteX="124dp"
+    tools:layout_editor_absoluteX="124dp"
         tools:layout_editor_absoluteY="483dp" />
+]]>
 </android.support.constraint.ConstraintLayout>

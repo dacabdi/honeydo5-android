@@ -4,7 +4,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class DateHelper {
-    public static Date getDate(int year, int month, int day) {
+    public static Calendar getDate(int year, int month, int day) {
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.YEAR, year);
         cal.set(Calendar.MONTH, month);
@@ -13,10 +13,10 @@ public class DateHelper {
         cal.set(Calendar.MINUTE, 0);
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MILLISECOND, 0);
-        return cal.getTime();
+        return cal;
     }
 
-    public static Date getDate(int year, int month, int day, int hour, int minute) {
+    public static Calendar getDate(int year, int month, int day, int hour, int minute) {
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.YEAR, year);
         cal.set(Calendar.MONTH, month);
@@ -25,6 +25,6 @@ public class DateHelper {
         cal.set(Calendar.MINUTE, minute);
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MILLISECOND, 0);
-        return cal.getTime();
+        return cal;
     }
 }
