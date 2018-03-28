@@ -118,8 +118,11 @@ public class MainScreenActivity extends HoneyDoActivity implements RecyclerItemT
                     for (int i=0; i < tasks.length(); i++) {
                         Log.d(tag, "Obtaining task JSON object");
                         JSONObject jsonTask = tasks.getJSONObject(i);
+                        Log.d(tag, "Data for taks : " + jsonTask.toString(4));
+
                         Log.d(tag, "Making task object from its JSON object");
                         Task task = new Task(jsonTask);
+
                         Log.d(tag, "Adding task to adapter");
                         TaskSystem.addTask(task);
                     }
