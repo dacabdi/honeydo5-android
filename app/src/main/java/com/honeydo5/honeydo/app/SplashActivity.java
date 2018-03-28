@@ -27,6 +27,10 @@ public class SplashActivity extends HoneyDoActivity {
         }.start();
     }
 
+    @Override
+    public void onBackPressed() {
+    }
+
     private void goToLogin() {
         Log.d(this.tag, "Go to login activity");
         Intent intent = new Intent(this, LoginScreenActivity.class);
