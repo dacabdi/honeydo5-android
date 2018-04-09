@@ -50,7 +50,7 @@ public class AppController extends Application {
 
     public static final String TAG = AppController.class.getSimpleName();
 
-    public static final String defaultBaseUrl = "http://10.136.26.189:5000";
+    public static final String defaultBaseUrl = "http://api.honeydo5.com";
 
     private RequestQueue mRequestQueue;
     private ImageLoader mImageLoader;
