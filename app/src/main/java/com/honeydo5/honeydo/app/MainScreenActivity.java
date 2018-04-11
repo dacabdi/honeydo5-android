@@ -216,7 +216,6 @@ public class MainScreenActivity extends HoneyDoActivity implements RecyclerItemT
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
         if(viewHolder instanceof TaskAdapter.TaskViewHolder) {
-            //TODO: this is where I edit or remove tasks, DAVID adapter.removeItem(viewHolder.getAdapterPosition()) removes a task
             if(direction == ItemTouchHelper.LEFT) {
                 try {
                     Task task = TaskSystem.getTask(position);
