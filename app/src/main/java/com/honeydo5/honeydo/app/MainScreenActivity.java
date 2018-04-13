@@ -84,7 +84,24 @@ public class MainScreenActivity extends HoneyDoActivity implements RecyclerItemT
         FAButtonAddTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-            createNewTask();
+                createNewTask();
+            }
+        });
+
+        // go to settings
+        buttonSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(tag, "Moving to settings activity");
+                goToSettings();
+            }
+        });
+
+        // go to rewards
+        buttonRewards.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goToRewards();
             }
         });
     }
@@ -208,6 +225,22 @@ public class MainScreenActivity extends HoneyDoActivity implements RecyclerItemT
         Log.d(tag, "Moving to editing task activity");
         Intent intent = new Intent(this, EditTaskActivity.class);
         TaskSystem.setEditTask(TaskSystem.getTask(position));
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME);
+        startActivity(intent);
+    }
+
+    void goToSettings()
+    {
+        Log.d(tag, "Moving to Settings activity");
+        Intent intent = new Intent(this, SettingsActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME);
+        startActivity(intent);
+    }
+
+    void goToRewards()
+    {
+        Log.d(tag, "Moving to Rewards activity");
+        Intent intent = new Intent(this, RewardsActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME);
         startActivity(intent);
     }
