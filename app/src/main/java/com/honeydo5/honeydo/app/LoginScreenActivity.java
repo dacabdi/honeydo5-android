@@ -55,12 +55,13 @@ public class LoginScreenActivity extends HoneyDoActivity implements ILogin {
         NotificationSystem.initialize(this);
 
         // test broadcast
+        /*
         Calendar alarmTime = Calendar.getInstance();
         alarmTime.add(Calendar.SECOND, 1);
         Intent notifyIntent = new Intent(this, NotificationSystem.class);
         PendingIntent pend = PendingIntent.getBroadcast(this, 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
-        alarmManager.set(AlarmManager.RTC_WAKEUP, alarmTime.getTimeInMillis(), pend);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, alarmTime.getTimeInMillis(), pend);*/
 
         // set event handlers --------------------------------------
         Log.d(tag, "Attaching event handlers.");

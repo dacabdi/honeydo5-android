@@ -1,7 +1,10 @@
 package com.honeydo5.honeydo.app;
-
+import com.honeydo5.honeydo.util.NotificationSystem;
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -27,6 +30,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.honeydo5.honeydo.R;
 import com.honeydo5.honeydo.util.InputValidation;
+import com.honeydo5.honeydo.util.NotificationSystem;
 import com.honeydo5.honeydo.util.Tag;
 import com.honeydo5.honeydo.util.Task;
 import com.honeydo5.honeydo.util.TaskSystem;
@@ -55,7 +59,7 @@ public class AddTaskActivity extends HoneyDoActivity {
     private EditText inputName, inputDescription, inputDate, inputTime;
     private Switch inputPriority;
     private Spinner inputTag;
-
+    private Context context;
     //labels
     private TextView labelName, labelDescription, labelTag;
     private ImageButton imageButtonDate, imageButtonTime;
@@ -67,7 +71,7 @@ public class AddTaskActivity extends HoneyDoActivity {
         super.onCreate(savedInstanceState);
 
         this.setTag("ADDTASK");
-
+        context = this;
         Log.d(tag, "Setting AddTaskActivity content view.");
         setContentView(R.layout.activity_add_task);
       
@@ -374,6 +378,9 @@ public class AddTaskActivity extends HoneyDoActivity {
                                     Task new_task = new Task(taskJSON);
                                     TaskSystem.addTask(new_task);
                                     onBackPressed();
+
+                                    // test broadcast
+                                    NotificationSystem.setNotify(context, calendarDate);
 
                                     break;
 

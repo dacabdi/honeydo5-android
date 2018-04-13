@@ -1,6 +1,7 @@
 package com.honeydo5.honeydo.util;
 
 import android.annotation.TargetApi;
+import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -16,6 +17,8 @@ import android.support.v4.app.NotificationCompat;
 
 import com.honeydo5.honeydo.R;
 import com.honeydo5.honeydo.app.NotificationActivity;
+
+import java.util.Calendar;
 
 import static android.content.Context.NOTIFICATION_SERVICE;
 
@@ -74,4 +77,16 @@ public class NotificationSystem extends BroadcastReceiver{
         notifManager.notify(1, nb.build());
 
     }
+
+    public static void setNotify(Context context, Calendar calendarDate){
+        // test broadcast
+        Calendar alarmTime = Calendar.getInstance();
+        alarmTime.set(calendarDate.get(Calendar.YEAR), calendarDate.get(Calendar.MONTH), calendarDate.get(Calendar.DAY_OF_MONTH), calendarDate.get(Calendar.HOUR_OF_DAY), calendarDate.get(Calendar.MINUTE));
+        Intent notifyIntent = new Intent(context, NotificationSystem.class);
+        PendingIntent pend = PendingIntent.getBroadcast(context, 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, alarmTime.getTimeInMillis(), pend);
+    }
 }
+
+
