@@ -331,8 +331,9 @@ public class EditTaskActivity extends HoneyDoActivity {
             Log.d(tag, "Set time to: "
                     +       calendarDate.get(Calendar.HOUR_OF_DAY)
                     + ":" + calendarDate.get(Calendar.MINUTE));
-            calendarDate.set(Calendar.HOUR, hour);
+            calendarDate.set(Calendar.HOUR_OF_DAY, hour);
             calendarDate.set(Calendar.MINUTE, minute);
+            //calendarDate.set(Calendar.AM_PM, Calendar.HOUR_OF_DAY >= 12 ? Calendar.PM : Calendar.AM);
             inputTime.setText(android.text.format.DateFormat.format("hh:mm a", calendarDate));
         }
     };

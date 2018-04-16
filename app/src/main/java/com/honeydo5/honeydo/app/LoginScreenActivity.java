@@ -87,6 +87,13 @@ public class LoginScreenActivity extends HoneyDoActivity implements ILogin {
               }
         });
 
+        buttonTestLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                testLogin();
+            }
+        });
+
         buttonHitServer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -165,5 +172,11 @@ public class LoginScreenActivity extends HoneyDoActivity implements ILogin {
         String errorMessage = getString(R.string.message_communication_problem);
         textMessage.setText(errorMessage);
         textMessage.setVisibility(View.VISIBLE);
+    }
+
+    private void testLogin() {
+        Intent intent = new Intent(this, MainScreenActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME);
+        startActivity(intent);
     }
 }

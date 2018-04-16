@@ -102,6 +102,7 @@ public class AddTaskActivity extends HoneyDoActivity {
         //get date
         calendarDate = Calendar.getInstance();
         calendarDate.set(Calendar.HOUR_OF_DAY, calendarDate.get(Calendar.HOUR_OF_DAY + 1));
+        calendarDate.set(Calendar.SECOND, 0);
 
         //init date and time fields using calendarDate
         inputTime.setText(android.text.format.DateFormat.format("hh:mm a", calendarDate));
@@ -325,8 +326,9 @@ public class AddTaskActivity extends HoneyDoActivity {
             Log.d(tag, "Set time to: "
                     +       calendarDate.get(Calendar.HOUR_OF_DAY)
                     + ":" + calendarDate.get(Calendar.MINUTE));
-            calendarDate.set(Calendar.HOUR, hour);
+            calendarDate.set(Calendar.HOUR_OF_DAY, hour);
             calendarDate.set(Calendar.MINUTE, minute);
+            calendarDate.set(Calendar.AM_PM, Calendar.HOUR_OF_DAY >= 12 ? Calendar.PM : Calendar.AM);
             inputTime.setText(android.text.format.DateFormat.format("hh:mm a", calendarDate));
         }
     };
@@ -380,7 +382,7 @@ public class AddTaskActivity extends HoneyDoActivity {
                                     onBackPressed();
 
                                     // test broadcast
-                                    NotificationSystem.setNotify(context, calendarDate);
+                                    NotificationSystem.setNotify(calendarDate, taskJSON.getBoolean("priority"));
 
                                     break;
 

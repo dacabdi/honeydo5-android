@@ -28,9 +28,11 @@ public class NotificationSystem extends BroadcastReceiver{
 
 
     private static final String CHANNEL_ID = "ChannelDo";
+    private static Context context;
 
-    public static void initialize(Context context) {
+    public static void initialize(Context ctx) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            context = ctx;
             // Create the NotificationChannel
             CharSequence name = "HoneyDo";
             String description = "Channel for HoneyDo";
@@ -78,7 +80,17 @@ public class NotificationSystem extends BroadcastReceiver{
 
     }
 
-    public static void setNotify(Context context, Calendar calendarDate){
+    public static void setNotify(Calendar calendarDate, boolean priority){
+        if(priority)
+        {
+            Calendar alarmTimePriority = Calendar.getInstance();
+            alarmTimePriority.set(calendarDate.get(Calendar.YEAR), calendarDate.get(Calendar.MONTH), calendarDate.get(Calendar.DAY_OF_MONTH), calendarDate.get(Calendar.HOUR_OF_DAY), calendarDate.get(Calendar.MINUTE));
+            alarmTimePriority.add(calendarDate.MINUTE, -5);
+            Intent notifyIntent = new Intent(context, NotificationSystem.class);
+            PendingIntent pend = PendingIntent.getBroadcast(context, 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+            alarmManager.set(AlarmManager.RTC_WAKEUP, alarmTimePriority.getTimeInMillis(), pend);
+        }
         // test broadcast
         Calendar alarmTime = Calendar.getInstance();
         alarmTime.set(calendarDate.get(Calendar.YEAR), calendarDate.get(Calendar.MONTH), calendarDate.get(Calendar.DAY_OF_MONTH), calendarDate.get(Calendar.HOUR_OF_DAY), calendarDate.get(Calendar.MINUTE));
