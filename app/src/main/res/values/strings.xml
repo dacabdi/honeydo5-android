@@ -125,7 +125,10 @@
     <string name="settings_about_version_title">Version</string>
     <string name="settings_about_version_summary">2.3.0</string>
     <string name="settings_about_created_title">Created By</string>
-    <string name="settings_about_created_summary">Aaron Chambers</string>
+    <string name="settings_about_created_summary">Aaron Chambers, David Cabrera, Nikos Chouvalis, Katie Curley, Mitchell Artin, Mark Yo</string>
+
+    <string name="settings_delete_title">Delete Account</string>
+    <string name="settings_delete_summary">Delete your account</string>
 
     <string name="label_tasks">Tasks</string>
     <string name="label_signup">Sign Up</string>
