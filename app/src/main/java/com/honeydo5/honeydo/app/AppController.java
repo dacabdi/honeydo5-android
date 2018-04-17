@@ -48,7 +48,7 @@ import java.util.concurrent.TimeoutException;
 
 
 public class AppController extends Application {
-    private AppController mInstance;
+    private static AppController mInstance;
     private Context context = this;
 
     public static final String TAG = AppController.class.getSimpleName();
