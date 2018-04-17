@@ -30,7 +30,10 @@ import java.util.Calendar;
 public class LoginScreenActivity extends HoneyDoActivity implements ILogin {
     // views and components
     private EditText inputEmail, inputPassword;
-    private Button buttonLogin, buttonSignup, buttonHitServer, buttonTestLogin;
+    private Button  buttonLogin,
+                    buttonSignup,
+                    buttonHitServer,
+                    buttonTestLogin; // used for notification testing temporarily
     private TextView textMessage;
 
     @Override
@@ -51,17 +54,6 @@ public class LoginScreenActivity extends HoneyDoActivity implements ILogin {
         buttonSignup = findViewById(R.id.LoginScreenButtonSignup);
         buttonHitServer = findViewById(R.id.loginScreenButtonHitServer);
         buttonTestLogin = findViewById(R.id.loginScreenButtonTestLogin);
-
-        NotificationSystem.initialize(this);
-
-        // test broadcast
-        /*
-        Calendar alarmTime = Calendar.getInstance();
-        alarmTime.add(Calendar.SECOND, 1);
-        Intent notifyIntent = new Intent(this, NotificationSystem.class);
-        PendingIntent pend = PendingIntent.getBroadcast(this, 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
-        alarmManager.set(AlarmManager.RTC_WAKEUP, alarmTime.getTimeInMillis(), pend);*/
 
         // set event handlers --------------------------------------
         Log.d(tag, "Attaching event handlers.");
@@ -90,7 +82,8 @@ public class LoginScreenActivity extends HoneyDoActivity implements ILogin {
         buttonTestLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                testLogin();
+                /*testLogin();*/
+                testNotification();
             }
         });
 
@@ -174,9 +167,22 @@ public class LoginScreenActivity extends HoneyDoActivity implements ILogin {
         textMessage.setVisibility(View.VISIBLE);
     }
 
-    private void testLogin() {
+    /*private void testLogin() {
         Intent intent = new Intent(this, MainScreenActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME);
         startActivity(intent);
+    }*/
+
+    private void testNotification() {
+        /*AppController appController = AppController.getInstance();
+
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
+                AppController.getInstance(),  // context
+                AppController.notifChannelId) // notification channel id
+                .setSmallIcon(R.drawable.notification_icon)
+                .setContentTitle(textTitle)
+                .setContentText(textContent)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+                */
     }
 }

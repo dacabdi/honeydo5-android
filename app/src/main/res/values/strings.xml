@@ -135,7 +135,7 @@
     <string name="logo">logo</string>
     <string name="copyright">© 2018 HoneyDo ALL RIGHTS RESERVED</string>
 
-    <string name="notificationChannelName">HoneyDo</string>
-    <string name="notificationChannelDescription">Notification Channel for HoneyDo</string>
-    <string name="notificationChannelID">ChannelDo</string>
+    <string name="notification_channel_name">HoneyDo</string>
+    <string name="notification_channel_description">Notification Channel for HoneyDo</string>
+    <string name="notification_channel_id">HONEY-DO-NOTIFICATION</string>
 </resources>

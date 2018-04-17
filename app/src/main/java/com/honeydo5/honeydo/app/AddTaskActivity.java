@@ -311,24 +311,24 @@ public class AddTaskActivity extends HoneyDoActivity {
     private DatePickerDialog.OnDateSetListener datePickerHandler = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker datePicker, int year, int monthOfYear, int dayOfMonth) {
+            calendarDate.set(year, monthOfYear, dayOfMonth);
+            inputDate.setText(android.text.format.DateFormat.format("MM/dd/yyyy", calendarDate));
             Log.d(tag, "Set date to: "
                     +       calendarDate.get(Calendar.MONTH)
                     + "/" + calendarDate.get(Calendar.DAY_OF_MONTH)
                     + "/" + calendarDate.get(Calendar.YEAR));
-            calendarDate.set(year, monthOfYear, dayOfMonth);
-            inputDate.setText(android.text.format.DateFormat.format("MM/dd/yyyy", calendarDate));
         }
     };
 
     private TimePickerDialog.OnTimeSetListener timePickerHandler = new TimePickerDialog.OnTimeSetListener() {
         @Override
         public void onTimeSet(TimePicker timePicker, int hour, int minute) {
+            calendarDate.set(Calendar.HOUR_OF_DAY, hour);
+            calendarDate.set(Calendar.MINUTE, minute);
             Log.d(tag, "Set time to: "
                     +       calendarDate.get(Calendar.HOUR_OF_DAY)
                     + ":" + calendarDate.get(Calendar.MINUTE));
-            calendarDate.set(Calendar.HOUR_OF_DAY, hour);
-            calendarDate.set(Calendar.MINUTE, minute);
-            calendarDate.set(Calendar.AM_PM, Calendar.HOUR_OF_DAY >= 12 ? Calendar.PM : Calendar.AM);
+            //calendarDate.set(Calendar.AM_PM, Calendar.HOUR_OF_DAY >= 12 ? Calendar.PM : Calendar.AM);
             inputTime.setText(android.text.format.DateFormat.format("hh:mm a", calendarDate));
         }
     };
@@ -381,8 +381,8 @@ public class AddTaskActivity extends HoneyDoActivity {
                                     TaskSystem.addTask(new_task);
                                     onBackPressed();
 
-                                    // test broadcast
-                                    NotificationSystem.setNotify(calendarDate, taskJSON.getBoolean("priority"));
+                                    // register a notification for the task
+                                    NotificationSystem.setNotify(calendarDate, taskJSON);
 
                                     break;
 

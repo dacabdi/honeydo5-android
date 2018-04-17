@@ -28,9 +28,6 @@
         <activity
             android:name=".app.SignUpActivity"
             android:label="@string/title_activity_signup" />
-        <activity
-            android:name=".app.NotificationActivity"
-            android:label="Notification" />
 
         <receiver android:name=".util.NotificationSystem">
             <intent-filter>

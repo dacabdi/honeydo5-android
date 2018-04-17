@@ -1,25 +1,33 @@
 package com.honeydo5.honeydo.app;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.RequestFuture;
-import com.android.volley.toolbox.StringRequest;
-import com.honeydo5.honeydo.util.LruBitmapCache;
-
 import android.app.Application;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Looper;
+import android.os.NetworkOnMainThreadException;
+import android.support.v4.app.NotificationManagerCompat;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.RequestFuture;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.honeydo5.honeydo.util.Tag;
+import com.honeydo5.honeydo.R;
+import com.honeydo5.honeydo.util.LruBitmapCache;
+import com.honeydo5.honeydo.util.NotificationSystem;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -31,7 +39,6 @@ import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Locale;
@@ -39,34 +46,58 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-import android.os.NetworkOnMainThreadException;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 
 public class AppController extends Application {
+    private AppController mInstance;
+    private Context context = this;
 
     public static final String TAG = AppController.class.getSimpleName();
-
     public static final String defaultBaseUrl = "http://api.honeydo5.com";
-    //10.136.26.189:5000
+
+    public static String notifChannelId;
+    public static String notifChannelName;
+    public static String notifChannelDesc;
+
+    NotificationChannel nChannel;
+    NotificationManager nManager;
+
     private RequestQueue mRequestQueue;
     private ImageLoader mImageLoader;
-
-    private static AppController mInstance;
-
-    private Context context = this;
 
     @Override
     public void onCreate() {
         super.onCreate();
         mInstance = this;
 
+        NotificationSystem.initialize(this);
+
         // Use the default CookieManager
         CookieManager manager = new CookieManager();
         CookieHandler.setDefault(manager);
+
+        // register application's notification channel
+        notifChannelId   = getString(R.string.notification_channel_id);
+        notifChannelName = getString(R.string.notification_channel_name);
+        notifChannelDesc = getString(R.string.notification_channel_description);
+
+        nManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+
+        // if in the appropriate build, set the notification channel
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            // Create the NotificationChannel, but only on API 26+ because
+            // the NotificationChannel class is new and not in the support library
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            nChannel = new NotificationChannel(notifChannelId, notifChannelName, importance);
+            nChannel.setDescription(notifChannelDesc);
+            // register the channel with the system
+            try{nManager.createNotificationChannel(nChannel);}
+            catch(NullPointerException e){
+                Log.e(TAG, e.getMessage());
+            }
+        }
+
+
     }
 
     public static synchronized AppController getInstance() {
