@@ -10,6 +10,7 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -31,7 +32,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MainScreenActivity extends HoneyDoActivity implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
-    Button buttonSettings, buttonRewards, buttonAddTask;
+    ImageButton buttonSettings;
     FloatingActionButton FAButtonAddTask;
     RecyclerView listViewTasks;
     TaskAdapter adapter;
@@ -49,7 +50,7 @@ public class MainScreenActivity extends HoneyDoActivity implements RecyclerItemT
         // grab in order top to bottom of page
         Log.d(tag, "Finding components and views.");
         buttonSettings = findViewById(R.id.MainScreenButtonSettings);
-        buttonRewards = findViewById(R.id.MainScreenButtonRewards);
+        //buttonRewards = findViewById(R.id.MainScreenButtonRewards);
         FAButtonAddTask = findViewById(R.id.MainScreenButtonAddTask);
         listViewTasks = findViewById(R.id.MainScreenRecyclerTaskList);
 
@@ -84,9 +85,26 @@ public class MainScreenActivity extends HoneyDoActivity implements RecyclerItemT
         FAButtonAddTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-            createNewTask();
+                createNewTask();
             }
         });
+
+        // go to settings
+        buttonSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(tag, "Moving to settings activity");
+                goToSettings();
+            }
+        });
+
+        // go to rewards
+        /*buttonRewards.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goToRewards();
+            }
+        });*/
     }
 
 
@@ -208,6 +226,22 @@ public class MainScreenActivity extends HoneyDoActivity implements RecyclerItemT
         Log.d(tag, "Moving to editing task activity");
         Intent intent = new Intent(this, EditTaskActivity.class);
         TaskSystem.setEditTask(TaskSystem.getTask(position));
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME);
+        startActivity(intent);
+    }
+
+    void goToSettings()
+    {
+        Log.d(tag, "Moving to Settings activity");
+        Intent intent = new Intent(this, SettingsActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME);
+        startActivity(intent);
+    }
+
+    void goToRewards()
+    {
+        Log.d(tag, "Moving to Rewards activity");
+        Intent intent = new Intent(this, RewardsActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME);
         startActivity(intent);
     }

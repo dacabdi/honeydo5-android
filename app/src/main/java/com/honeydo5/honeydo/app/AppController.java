@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Looper;
 import android.os.NetworkOnMainThreadException;
-import android.support.v4.app.NotificationManagerCompat;
 import android.text.TextUtils;
 import android.util.Log;
 
