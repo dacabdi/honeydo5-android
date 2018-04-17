@@ -1,7 +1,10 @@
 package com.honeydo5.honeydo.app;
-
+import com.honeydo5.honeydo.util.NotificationSystem;
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -27,6 +30,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.honeydo5.honeydo.R;
 import com.honeydo5.honeydo.util.InputValidation;
+import com.honeydo5.honeydo.util.NotificationSystem;
 import com.honeydo5.honeydo.util.Tag;
 import com.honeydo5.honeydo.util.Task;
 import com.honeydo5.honeydo.util.TaskSystem;
@@ -55,7 +59,7 @@ public class AddTaskActivity extends HoneyDoActivity {
     private EditText inputName, inputDescription, inputDate, inputTime;
     private Switch inputPriority;
     private Spinner inputTag;
-
+    private Context context;
     //labels
     private TextView labelName, labelDescription, labelTag;
     private ImageButton imageButtonDate, imageButtonTime;
@@ -67,7 +71,7 @@ public class AddTaskActivity extends HoneyDoActivity {
         super.onCreate(savedInstanceState);
 
         this.setTag("ADDTASK");
-
+        context = this;
         Log.d(tag, "Setting AddTaskActivity content view.");
         setContentView(R.layout.activity_add_task);
       
@@ -98,6 +102,7 @@ public class AddTaskActivity extends HoneyDoActivity {
         //get date
         calendarDate = Calendar.getInstance();
         calendarDate.set(Calendar.HOUR_OF_DAY, calendarDate.get(Calendar.HOUR_OF_DAY + 1));
+        calendarDate.set(Calendar.SECOND, 0);
 
         //init date and time fields using calendarDate
         inputTime.setText(android.text.format.DateFormat.format("hh:mm a", calendarDate));
@@ -306,23 +311,24 @@ public class AddTaskActivity extends HoneyDoActivity {
     private DatePickerDialog.OnDateSetListener datePickerHandler = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker datePicker, int year, int monthOfYear, int dayOfMonth) {
+            calendarDate.set(year, monthOfYear, dayOfMonth);
+            inputDate.setText(android.text.format.DateFormat.format("MM/dd/yyyy", calendarDate));
             Log.d(tag, "Set date to: "
                     +       calendarDate.get(Calendar.MONTH)
                     + "/" + calendarDate.get(Calendar.DAY_OF_MONTH)
                     + "/" + calendarDate.get(Calendar.YEAR));
-            calendarDate.set(year, monthOfYear, dayOfMonth);
-            inputDate.setText(android.text.format.DateFormat.format("MM/dd/yyyy", calendarDate));
         }
     };
 
     private TimePickerDialog.OnTimeSetListener timePickerHandler = new TimePickerDialog.OnTimeSetListener() {
         @Override
         public void onTimeSet(TimePicker timePicker, int hour, int minute) {
+            calendarDate.set(Calendar.HOUR_OF_DAY, hour);
+            calendarDate.set(Calendar.MINUTE, minute);
             Log.d(tag, "Set time to: "
                     +       calendarDate.get(Calendar.HOUR_OF_DAY)
                     + ":" + calendarDate.get(Calendar.MINUTE));
-            calendarDate.set(Calendar.HOUR, hour);
-            calendarDate.set(Calendar.MINUTE, minute);
+            //calendarDate.set(Calendar.AM_PM, Calendar.HOUR_OF_DAY >= 12 ? Calendar.PM : Calendar.AM);
             inputTime.setText(android.text.format.DateFormat.format("hh:mm a", calendarDate));
         }
     };
@@ -374,6 +380,9 @@ public class AddTaskActivity extends HoneyDoActivity {
                                     Task new_task = new Task(taskJSON);
                                     TaskSystem.addTask(new_task);
                                     onBackPressed();
+
+                                    // register a notification for the task
+                                    NotificationSystem.setNotify(calendarDate, taskJSON);
 
                                     break;
 
