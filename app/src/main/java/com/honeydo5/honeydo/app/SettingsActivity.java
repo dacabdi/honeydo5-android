@@ -6,28 +6,19 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.honeydo5.honeydo.R;
-import com.honeydo5.honeydo.util.NotificationSystem;
-import com.honeydo5.honeydo.util.Task;
-import com.honeydo5.honeydo.util.TaskSystem;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.util.Log;
-import android.view.View;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
-
-/**
- * Created by aaron on 2/27/2018.
- */
 
 public class SettingsActivity extends PreferenceActivity implements IActivityTag {
     protected String tag = "";
@@ -47,7 +38,7 @@ public class SettingsActivity extends PreferenceActivity implements IActivityTag
             public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
                 // Set summary to be the user-description for the selected value
                 if(s == "pref_mute") {
-                    AppController.settingMute = sharedPreferences.getBoolean("pref_mute", false);
+                    AppController.muteNotifications = sharedPreferences.getBoolean("pref_mute", false);
                 }
 
             }
