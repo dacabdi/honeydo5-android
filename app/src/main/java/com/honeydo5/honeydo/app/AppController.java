@@ -61,6 +61,8 @@ public class AppController extends Application {
     NotificationChannel nChannel;
     NotificationManager nManager;
 
+    public static boolean settingMute;
+
     private RequestQueue mRequestQueue;
     private ImageLoader mImageLoader;
 
