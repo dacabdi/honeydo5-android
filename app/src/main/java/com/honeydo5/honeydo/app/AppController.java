@@ -79,8 +79,6 @@ public class AppController extends Application {
         super.onCreate();
         mInstance = this;
 
-        NotificationSystem.initialize(this);
-
         // Use the default CookieManager
         CookieManager manager = new CookieManager();
         CookieHandler.setDefault(manager);
