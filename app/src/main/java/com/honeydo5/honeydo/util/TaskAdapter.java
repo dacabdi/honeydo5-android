@@ -20,6 +20,7 @@ import java.util.GregorianCalendar;
 
 
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder>{
+    private static TaskAdapter mInstance;
 
     private Context context;
     private ArrayList<Task> taskList;
@@ -28,10 +29,26 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
 
     public TaskAdapter(Context context, ArrayList<Task> taskList)
     {
+        mInstance = this;
         this.context = context;
         this.taskList = taskList;
 
         currentDate = GregorianCalendar.getInstance();
+    }
+
+    public static synchronized TaskAdapter getInstance() {
+        return mInstance;
+    }
+
+
+    public Task getTaskById(int id)
+    {
+        for (Task task: taskList) {
+            if(task.getId() == id)
+                return task;
+        }
+
+        return null;
     }
 
     public void clearAll()

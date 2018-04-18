@@ -26,6 +26,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.honeydo5.honeydo.R;
 import com.honeydo5.honeydo.util.InputValidation;
 import com.honeydo5.honeydo.util.Task;
+import com.honeydo5.honeydo.util.TaskAdapter;
 import com.honeydo5.honeydo.util.TaskSystem;
 
 import org.json.JSONArray;
@@ -219,7 +220,8 @@ public class EditTaskActivity extends HoneyDoActivity {
         try{
 
             /*
-                 old_name      (string)
+                 id           (integer string)
+                 old_name     (string)
                  name,        (string)
                  description, (string)
                  tag,         (array of strings)
@@ -294,6 +296,7 @@ public class EditTaskActivity extends HoneyDoActivity {
             tags.add(task_tag); JSONArray tagsJSON = new JSONArray(tags);
 
             // make json payload for the request
+            json.put("task_id", Integer.toString(editableTask.getId()));
             json.put("old_name", oldName);
             json.put("name", name);
             json.put("description", description);
@@ -346,7 +349,7 @@ public class EditTaskActivity extends HoneyDoActivity {
         this.finish();
     }
 
-    public void submitTaskEdit(JSONObject postMessage) {
+    public void submitTaskEdit(final JSONObject postMessage) {
         final String endpoint = "edit_task";
         AppController.getInstance().cancelPendingRequests(tag + ":" + endpoint);
 
@@ -377,7 +380,10 @@ public class EditTaskActivity extends HoneyDoActivity {
                             // TODO: talk to backend about endpoint status signaling
                             if(response.getString("status").equals("success")) {
                                 // update alarm
-
+                                int id = postMessage.getInt("task_id");
+                                Task task = TaskAdapter.getInstance().getTaskById(id);
+                                AppController.getInstance().cancelTaskNotification(task);
+                                AppController.getInstance().scheduleTaskNotification(task);
                                 onBackPressed();
                             }
                         } catch(JSONException e) {
