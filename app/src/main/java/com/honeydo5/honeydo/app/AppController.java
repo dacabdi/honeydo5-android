@@ -67,14 +67,12 @@ public class AppController extends Application {
     NotificationChannel nChannel;
     public NotificationManager nManager;
 
-    public static boolean settingMute;
-
     private RequestQueue mRequestQueue;
     private ImageLoader mImageLoader;
 
     public HashMap<Integer, PendingIntent> alarms = new HashMap<>();
 
-    public boolean muteNotifications = false;
+    public static boolean muteNotifications = false;
 
     @Override
     public void onCreate() {
