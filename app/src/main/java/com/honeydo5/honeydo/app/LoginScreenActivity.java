@@ -2,21 +2,11 @@ package com.honeydo5.honeydo.app;
 
 import com.android.volley.VolleyError;
 import com.honeydo5.honeydo.R;
-import com.honeydo5.honeydo.util.NotificationSystem;
 
-import android.app.AlarmManager;
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.TaskStackBuilder;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
@@ -27,7 +17,6 @@ import android.widget.TextView;
 
 import org.json.JSONException;
 
-import java.util.Calendar;
 
 public class LoginScreenActivity extends HoneyDoActivity implements ILogin {
     // views and components
