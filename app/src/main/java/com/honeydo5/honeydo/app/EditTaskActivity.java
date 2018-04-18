@@ -373,12 +373,13 @@ public class EditTaskActivity extends HoneyDoActivity {
                                 {‘status’: ‘cannot add dup task’},
                                 {‘status’: ‘invalid request’} */
 
-
-
                             // TODO: response treatment
                             // TODO: talk to backend about endpoint status signaling
-                            if(response.getString("status").equals("success"))
+                            if(response.getString("status").equals("success")) {
+                                // update alarm
+
                                 onBackPressed();
+                            }
                         } catch(JSONException e) {
                             // TODO: show parsing error on UI
                             // log and do a stack trace

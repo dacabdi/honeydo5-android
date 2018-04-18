@@ -14,6 +14,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
@@ -174,15 +176,25 @@ public class LoginScreenActivity extends HoneyDoActivity implements ILogin {
     }*/
 
     private void testNotification() {
-        /*AppController appController = AppController.getInstance();
+        Log.d(tag, "Test notification.");
+
+        Intent intent = new Intent(this, MainScreenActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
 
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
                 AppController.getInstance(),  // context
                 AppController.notifChannelId) // notification channel id
-                .setSmallIcon(R.drawable.notification_icon)
-                .setContentTitle(textTitle)
-                .setContentText(textContent)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-                */
+                .setSmallIcon(R.drawable.ic_honeydo_logo)
+                .setContentTitle("testing-title")
+                .setContentText("this is a notification")
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true);
+
+        Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        mBuilder.setSound(uri);
+
+        AppController.getInstance().nManager.notify(001, mBuilder.build());
     }
 }

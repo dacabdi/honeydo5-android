@@ -9,7 +9,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 
 import com.android.volley.AuthFailureError;
@@ -286,13 +285,6 @@ public class MainScreenActivity extends HoneyDoActivity implements RecyclerItemT
                     public void onResponse(JSONObject response) {
                         Log.d(tag, "API /" + endpoint + " raw response : " + response.toString());
                         try {
-
-                            /* Possible endpoint responses
-
-                                {‘status’: ‘success’}
-                                ??? // TODO talk to backend!
-
-                             */
                             String status = response.get("status").toString();
 
                             switch(status)

@@ -1,14 +1,10 @@
 package com.honeydo5.honeydo.app;
-import com.honeydo5.honeydo.util.NotificationSystem;
-import android.app.AlarmManager;
 import android.app.DatePickerDialog;
-import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -21,17 +17,15 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+
 import com.honeydo5.honeydo.R;
 import com.honeydo5.honeydo.util.InputValidation;
-import com.honeydo5.honeydo.util.NotificationSystem;
-import com.honeydo5.honeydo.util.Tag;
 import com.honeydo5.honeydo.util.Task;
 import com.honeydo5.honeydo.util.TaskSystem;
 
@@ -43,6 +37,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TimeZone;
 
 public class AddTaskActivity extends HoneyDoActivity {
 
@@ -101,8 +96,8 @@ public class AddTaskActivity extends HoneyDoActivity {
 
         //get date
         calendarDate = Calendar.getInstance();
-        calendarDate.set(Calendar.HOUR_OF_DAY, calendarDate.get(Calendar.HOUR_OF_DAY + 1));
-        calendarDate.set(Calendar.SECOND, 0);
+
+        Log.d(tag, "Current date:" + calendarDate.toString());
 
         //init date and time fields using calendarDate
         inputTime.setText(android.text.format.DateFormat.format("hh:mm a", calendarDate));
@@ -126,7 +121,7 @@ public class AddTaskActivity extends HoneyDoActivity {
         timePicker = new TimePickerDialog(
                 this,
                 timePickerHandler,
-                calendarDate.get(Calendar.HOUR_OF_DAY)+ 1,
+                calendarDate.get(Calendar.HOUR_OF_DAY),
                 0, false);
 
 
@@ -382,7 +377,7 @@ public class AddTaskActivity extends HoneyDoActivity {
                                     onBackPressed();
 
                                     // register a notification for the task
-                                    NotificationSystem.setNotify(calendarDate, taskJSON);
+                                    AppController.getInstance().scheduleTaskNotification(new_task);
 
                                     break;
 

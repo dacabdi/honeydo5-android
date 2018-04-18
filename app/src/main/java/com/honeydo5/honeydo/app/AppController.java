@@ -1,15 +1,20 @@
 package com.honeydo5.honeydo.app;
 
+import android.app.AlarmManager;
 import android.app.Application;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Looper;
 import android.os.NetworkOnMainThreadException;
+import android.support.annotation.RequiresApi;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -21,16 +26,17 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.RequestFuture;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+
 import com.honeydo5.honeydo.R;
+import com.honeydo5.honeydo.util.AlarmReceiver;
 import com.honeydo5.honeydo.util.LruBitmapCache;
-import com.honeydo5.honeydo.util.NotificationSystem;
+import com.honeydo5.honeydo.util.Task;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -48,7 +54,7 @@ import java.util.concurrent.TimeoutException;
 
 
 public class AppController extends Application {
-    private AppController mInstance;
+    private static AppController mInstance;
     private Context context = this;
 
     public static final String TAG = AppController.class.getSimpleName();
@@ -59,10 +65,14 @@ public class AppController extends Application {
     public static String notifChannelDesc;
 
     NotificationChannel nChannel;
-    NotificationManager nManager;
+    public NotificationManager nManager;
 
     private RequestQueue mRequestQueue;
     private ImageLoader mImageLoader;
+
+    public HashMap<Integer, PendingIntent> alarms = new HashMap<>();
+
+    public boolean muteNotifications = false;
 
     @Override
     public void onCreate() {
@@ -220,10 +230,7 @@ public class AppController extends Application {
             out.write(contents);
             out.flush();
             out.close();
-        } catch(FileNotFoundException e){
-            Log.e(TAG, "writeLocalFile : " + e.getMessage());
-            e.printStackTrace();
-        } catch(IOException e){
+        } catch(IOException e) {
             Log.e(TAG, "writeLocalFile : " + e.getMessage());
             e.printStackTrace();
         }
@@ -343,5 +350,38 @@ public class AppController extends Application {
         Intent intent = new Intent(from_activity, LoginScreenActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME);
         startActivity(intent);
+    }
+
+    public void scheduleTaskNotification(Task task)
+    {
+        Long time = task.getDateAndTime().getTimeInMillis();
+
+        Intent intentAlarm = new Intent(this, AlarmReceiver.class);
+        intentAlarm.putExtra("id", task.getId());
+        intentAlarm.putExtra("name", task.getName());
+        intentAlarm.putExtra("desc", task.getDescription());
+
+        // Get the Alarm Service.
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+        // Set the alarm for a particular time.
+        PendingIntent pend = PendingIntent.getBroadcast(
+                this, task.getId(),
+                intentAlarm, PendingIntent.FLAG_UPDATE_CURRENT
+        );
+
+        alarmManager.set(AlarmManager.RTC_WAKEUP, time, pend);
+        alarms.put(task.getId(), pend);
+    }
+
+    public void cancelTaskNotification(Task task)
+    {
+        Integer id = task.getId();
+        PendingIntent toRemove = alarms.get(id);
+        if(toRemove != null) {
+            AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+            alarmManager.cancel(toRemove);
+            alarms.remove(id);
+        }
     }
 }

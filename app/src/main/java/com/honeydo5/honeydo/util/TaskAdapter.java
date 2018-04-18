@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.honeydo5.honeydo.R;
+import com.honeydo5.honeydo.app.AppController;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -73,6 +74,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
 
     public void removeItem(int position) {
         Log.d("TASKADAPTER", "Removed item at " + position + " position");
+        AppController.getInstance().cancelTaskNotification(taskList.get(position));
         taskList.remove(position);
         notifyItemRemoved(position);
     }

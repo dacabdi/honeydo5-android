@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.SET_ALARM" />
 
     <application
         android:name=".app.AppController"
@@ -29,11 +30,7 @@
             android:name=".app.SignUpActivity"
             android:label="@string/title_activity_signup" />
 
-        <receiver android:name=".util.NotificationSystem">
-            <intent-filter>
-                <action android:name="DisplayNotification" />
-            </intent-filter>
-        </receiver>
+        <receiver android:name=".util.AlarmReceiver"></receiver>
 
         <activity android:name=".app.EditTaskActivity" />
         <activity android:name=".app.SplashActivity">
