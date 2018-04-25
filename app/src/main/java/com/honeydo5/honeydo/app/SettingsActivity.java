@@ -1,18 +1,18 @@
 package com.honeydo5.honeydo.app;
 
+import android.os.Bundle;
+import android.preference.CheckBoxPreference;
+import android.preference.Preference;
+import android.preference.PreferenceActivity;
+import android.preference.PreferenceFragment;
+import android.util.Log;
+
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.honeydo5.honeydo.R;
-
-import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.preference.Preference;
-import android.preference.PreferenceActivity;
-import android.preference.PreferenceFragment;
-import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -22,8 +22,9 @@ import java.util.Map;
 
 public class SettingsActivity extends PreferenceActivity implements IActivityTag {
     protected String tag = "";
+    final Preference notifMute = (Preference) findPreference("pref_mute");
+    private Preference.OnPreferenceClickListener listener;
 
-    private SharedPreferences.OnSharedPreferenceChangeListener listener;
     private Preference.OnPreferenceClickListener clickListener;
 
     @Override
@@ -32,17 +33,6 @@ public class SettingsActivity extends PreferenceActivity implements IActivityTag
         this.setTag("SETTINGS");
 
         getFragmentManager().beginTransaction().replace(android.R.id.content, new PrefFragment()).commit();
-
-        listener = new SharedPreferences.OnSharedPreferenceChangeListener() {
-            @Override
-            public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
-                // Set summary to be the user-description for the selected value
-                if(s == "pref_mute") {
-                    AppController.muteNotifications = sharedPreferences.getBoolean("pref_mute", false);
-                }
-
-            }
-        };
 
         clickListener = new Preference.OnPreferenceClickListener() {
             @Override
@@ -107,10 +97,21 @@ public class SettingsActivity extends PreferenceActivity implements IActivityTag
 
 
     public static class PrefFragment extends PreferenceFragment {
+
         @Override
         public void onCreate(final Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.layout.preferences);
+
+            final CheckBoxPreference checkboxPref = (CheckBoxPreference) getPreferenceManager().findPreference("pref_mute");
+
+            checkboxPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    Log.d("NOTIFICATION", "Pref " + preference.getKey() + " changed to " + newValue.toString());
+                    AppController.getInstance().muteNotifications = (boolean) newValue;
+                    return true;
+                }
+            });
         }
     }
 

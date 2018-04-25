@@ -72,30 +72,4 @@
         app:layout_constraintTop_toBottomOf="@+id/LoginScreenEditTextPassword"
         tools:layout_editor_absoluteX="43dp" />
 
-    <Button
-        android:id="@+id/loginScreenButtonTestLogin"
-        style="?android:attr/borderlessButtonStyle"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="76dp"
-        android:text="@string/label_test_login"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintEnd_toStartOf="parent"
-        app:layout_constraintHorizontal_bias="0.676"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/LoginScreenButtonLogin" />
-
-    <Button
-        android:id="@+id/loginScreenButtonHitServer"
-        style="?android:attr/borderlessButtonStyle"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="80dp"
-        android:text="@string/label_test_server"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintEnd_toStartOf="parent"
-        app:layout_constraintHorizontal_bias="0.323"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/LoginScreenButtonLogin" />
-
 </android.support.constraint.ConstraintLayout>
