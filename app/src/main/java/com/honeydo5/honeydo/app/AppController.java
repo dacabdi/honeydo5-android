@@ -58,7 +58,7 @@ public class AppController extends Application {
     private Context context = this;
 
     public static final String TAG = AppController.class.getSimpleName();
-    public static final String defaultBaseUrl = "http://api.honeydo5.com";
+    public static final String defaultBaseUrl = "http://10.136.222.58:5000";
 
     public static String notifChannelId;
     public static String notifChannelName;
@@ -353,6 +353,8 @@ public class AppController extends Application {
     public void scheduleTaskNotification(Task task)
     {
         Long time = task.getDateAndTime().getTimeInMillis();
+
+
 
         Intent intentAlarm = new Intent(this, AlarmReceiver.class);
         intentAlarm.putExtra("id", task.getId());

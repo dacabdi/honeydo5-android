@@ -22,9 +22,7 @@ public class LoginScreenActivity extends HoneyDoActivity implements ILogin {
     // views and components
     private EditText inputEmail, inputPassword;
     private Button  buttonLogin,
-                    buttonSignup,
-                    buttonHitServer,
-                    buttonTestLogin; // used for notification testing temporarily
+                    buttonSignup;
     private TextView textMessage;
 
     @Override
@@ -43,8 +41,6 @@ public class LoginScreenActivity extends HoneyDoActivity implements ILogin {
         textMessage = findViewById(R.id.LoginScreenTextViewMessage);
         buttonLogin = findViewById(R.id.LoginScreenButtonLogin);
         buttonSignup = findViewById(R.id.LoginScreenButtonSignup);
-        buttonHitServer = findViewById(R.id.loginScreenButtonHitServer);
-        buttonTestLogin = findViewById(R.id.loginScreenButtonTestLogin);
 
         // set event handlers --------------------------------------
         Log.d(tag, "Attaching event handlers.");
@@ -68,30 +64,6 @@ public class LoginScreenActivity extends HoneyDoActivity implements ILogin {
             startActivity(intent);
             // TODO: determine if we should finish the current activity?
               }
-        });
-
-        buttonTestLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                /*testLogin();*/
-                testNotification();
-            }
-        });
-
-        buttonHitServer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // launch a new thread,
-                // the test request is sync (blocking)
-                // and we don't wanna block the main thread
-                new Thread(new Runnable() { public void run() {
-                    String message = getString(R.string.message_endpoint_200);
-                    if(!AppController.getInstance().tryEndpoint(tag)) //will land at baseUrl
-                        message = getString(R.string.message_communication_problem);
-
-                    Log.i(tag, message);
-                }}).start();
-            }
         });
 
         buttonSignup.setOnClickListener(new View.OnClickListener() {
@@ -158,11 +130,6 @@ public class LoginScreenActivity extends HoneyDoActivity implements ILogin {
         textMessage.setVisibility(View.VISIBLE);
     }
 
-    /*private void testLogin() {
-        Intent intent = new Intent(this, MainScreenActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME);
-        startActivity(intent);
-    }*/
 
     private void testNotification() {
         Log.d(tag, "Test notification.");
