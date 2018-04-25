@@ -3,8 +3,12 @@ package com.honeydo5.honeydo.app;
 import com.android.volley.VolleyError;
 import com.honeydo5.honeydo.R;
 
+import android.app.PendingIntent;
 import android.content.Intent;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -13,10 +17,12 @@ import android.widget.TextView;
 
 import org.json.JSONException;
 
+
 public class LoginScreenActivity extends HoneyDoActivity implements ILogin {
     // views and components
     private EditText inputEmail, inputPassword;
-    private Button buttonLogin, buttonSignup, buttonHitServer, buttonTestLogin;
+    private Button  buttonLogin,
+                    buttonSignup;
     private TextView textMessage;
 
     @Override
@@ -35,8 +41,6 @@ public class LoginScreenActivity extends HoneyDoActivity implements ILogin {
         textMessage = findViewById(R.id.LoginScreenTextViewMessage);
         buttonLogin = findViewById(R.id.LoginScreenButtonLogin);
         buttonSignup = findViewById(R.id.LoginScreenButtonSignup);
-        buttonHitServer = findViewById(R.id.loginScreenButtonHitServer);
-        buttonTestLogin = findViewById(R.id.loginScreenButtonTestLogin);
 
         // set event handlers --------------------------------------
         Log.d(tag, "Attaching event handlers.");
@@ -60,22 +64,6 @@ public class LoginScreenActivity extends HoneyDoActivity implements ILogin {
             startActivity(intent);
             // TODO: determine if we should finish the current activity?
               }
-        });
-
-        buttonHitServer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // launch a new thread,
-                // the test request is sync (blocking)
-                // and we don't wanna block the main thread
-                new Thread(new Runnable() { public void run() {
-                    String message = getString(R.string.message_endpoint_200);
-                    if(!AppController.getInstance().tryEndpoint(tag)) //will land at baseUrl
-                        message = getString(R.string.message_communication_problem);
-
-                    Log.i(tag, message);
-                }}).start();
-            }
         });
 
         buttonSignup.setOnClickListener(new View.OnClickListener() {
@@ -140,5 +128,29 @@ public class LoginScreenActivity extends HoneyDoActivity implements ILogin {
         String errorMessage = getString(R.string.message_communication_problem);
         textMessage.setText(errorMessage);
         textMessage.setVisibility(View.VISIBLE);
+    }
+
+
+    private void testNotification() {
+        Log.d(tag, "Test notification.");
+
+        Intent intent = new Intent(this, MainScreenActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
+                AppController.getInstance(),  // context
+                AppController.notifChannelId) // notification channel id
+                .setSmallIcon(R.drawable.ic_honeydo_logo)
+                .setContentTitle("testing-title")
+                .setContentText("this is a notification")
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true);
+
+        Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        mBuilder.setSound(uri);
+
+        AppController.getInstance().nManager.notify(001, mBuilder.build());
     }
 }

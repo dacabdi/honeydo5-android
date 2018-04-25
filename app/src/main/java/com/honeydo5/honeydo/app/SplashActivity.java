@@ -36,6 +36,20 @@ public class SplashActivity extends HoneyDoActivity {
     }
 
     @Override
+    public void onResume(){
+        super.onResume();
+
+        //setContentView(R.layout.activity_splash);
+
+        splashAnimationDelay = new CountDownTimer(3000, 1000) {
+            public void onTick(long millisUntilFinished) {}
+            public void onFinish() {
+                goToLogin();
+            }
+        }.start();
+    }
+
+    @Override
     public void onBackPressed() {
         splashAnimationDelay.cancel();
         Intent startMain = new Intent(Intent.ACTION_MAIN);

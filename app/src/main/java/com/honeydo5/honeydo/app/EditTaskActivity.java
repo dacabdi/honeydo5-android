@@ -26,6 +26,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.honeydo5.honeydo.R;
 import com.honeydo5.honeydo.util.InputValidation;
 import com.honeydo5.honeydo.util.Task;
+import com.honeydo5.honeydo.util.TaskAdapter;
 import com.honeydo5.honeydo.util.TaskSystem;
 
 import org.json.JSONArray;
@@ -219,7 +220,8 @@ public class EditTaskActivity extends HoneyDoActivity {
         try{
 
             /*
-                 old_name      (string)
+                 id           (integer string)
+                 old_name     (string)
                  name,        (string)
                  description, (string)
                  tag,         (array of strings)
@@ -294,6 +296,7 @@ public class EditTaskActivity extends HoneyDoActivity {
             tags.add(task_tag); JSONArray tagsJSON = new JSONArray(tags);
 
             // make json payload for the request
+            json.put("task_id", Integer.toString(editableTask.getId()));
             json.put("old_name", oldName);
             json.put("name", name);
             json.put("description", description);
@@ -316,23 +319,24 @@ public class EditTaskActivity extends HoneyDoActivity {
     private DatePickerDialog.OnDateSetListener datePickerHandler = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker datePicker, int year, int monthOfYear, int dayOfMonth) {
+            calendarDate.set(year, monthOfYear, dayOfMonth);
+            inputDate.setText(android.text.format.DateFormat.format("MM/dd/yyyy", calendarDate));
             Log.d(tag, "Set date to: "
                     +       calendarDate.get(Calendar.MONTH)
                     + "/" + calendarDate.get(Calendar.DAY_OF_MONTH)
                     + "/" + calendarDate.get(Calendar.YEAR));
-            calendarDate.set(year, monthOfYear, dayOfMonth);
-            inputDate.setText(android.text.format.DateFormat.format("MM/dd/yyyy", calendarDate));
         }
     };
 
     private TimePickerDialog.OnTimeSetListener timePickerHandler = new TimePickerDialog.OnTimeSetListener() {
         @Override
         public void onTimeSet(TimePicker timePicker, int hour, int minute) {
+            calendarDate.set(Calendar.HOUR_OF_DAY, hour);
+            calendarDate.set(Calendar.MINUTE, minute);
             Log.d(tag, "Set time to: "
                     +       calendarDate.get(Calendar.HOUR_OF_DAY)
                     + ":" + calendarDate.get(Calendar.MINUTE));
-            calendarDate.set(Calendar.HOUR, hour);
-            calendarDate.set(Calendar.MINUTE, minute);
+            //calendarDate.set(Calendar.AM_PM, Calendar.HOUR_OF_DAY >= 12 ? Calendar.PM : Calendar.AM);
             inputTime.setText(android.text.format.DateFormat.format("hh:mm a", calendarDate));
         }
     };
@@ -345,7 +349,7 @@ public class EditTaskActivity extends HoneyDoActivity {
         this.finish();
     }
 
-    public void submitTaskEdit(JSONObject postMessage) {
+    public void submitTaskEdit(final JSONObject postMessage) {
         final String endpoint = "edit_task";
         AppController.getInstance().cancelPendingRequests(tag + ":" + endpoint);
 
@@ -372,12 +376,16 @@ public class EditTaskActivity extends HoneyDoActivity {
                                 {‘status’: ‘cannot add dup task’},
                                 {‘status’: ‘invalid request’} */
 
-
-
                             // TODO: response treatment
                             // TODO: talk to backend about endpoint status signaling
-                            if(response.getString("status").equals("success"))
+                            if(response.getString("status").equals("success")) {
+                                // update alarm
+                                int id = postMessage.getInt("task_id");
+                                Task task = TaskAdapter.getInstance().getTaskById(id);
+                                AppController.getInstance().cancelTaskNotification(task);
+                                AppController.getInstance().scheduleTaskNotification(task);
                                 onBackPressed();
+                            }
                         } catch(JSONException e) {
                             // TODO: show parsing error on UI
                             // log and do a stack trace

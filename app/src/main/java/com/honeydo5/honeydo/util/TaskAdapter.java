@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.honeydo5.honeydo.R;
+import com.honeydo5.honeydo.app.AppController;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -19,6 +20,7 @@ import java.util.GregorianCalendar;
 
 
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder>{
+    private static TaskAdapter mInstance;
 
     private Context context;
     private ArrayList<Task> taskList;
@@ -27,10 +29,26 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
 
     public TaskAdapter(Context context, ArrayList<Task> taskList)
     {
+        mInstance = this;
         this.context = context;
         this.taskList = taskList;
 
         currentDate = GregorianCalendar.getInstance();
+    }
+
+    public static synchronized TaskAdapter getInstance() {
+        return mInstance;
+    }
+
+
+    public Task getTaskById(int id)
+    {
+        for (Task task: taskList) {
+            if(task.getId() == id)
+                return task;
+        }
+
+        return null;
     }
 
     public void clearAll()
@@ -73,6 +91,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
 
     public void removeItem(int position) {
         Log.d("TASKADAPTER", "Removed item at " + position + " position");
+        AppController.getInstance().cancelTaskNotification(taskList.get(position));
         taskList.remove(position);
         notifyItemRemoved(position);
     }
